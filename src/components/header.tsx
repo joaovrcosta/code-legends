@@ -15,8 +15,9 @@ export default function Header() {
             <li className="flex">
               <a
                 href=""
-                className="p-3 flex space-x-2 hover:bg-[#202024] rounded-xl hover:text-white px-8"
+                className="relative p-3 flex space-x-2 rounded-xl px-8 hover:text-white group"
               >
+                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500"></span>
                 <Image src={circleIcon} alt="" />
                 <span className="text-sm text-[#c4c4cc]">
                   Conteúdos gratuitos
@@ -26,16 +27,18 @@ export default function Header() {
             <li>
               <a
                 href=""
-                className="p-3 hover:bg-[#202024] rounded-xl hover:text-white px-8"
+                className="relative p-3 flex space-x-2 rounded-xl px-8 hover:text-white group"
               >
+                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500"></span>
                 <span className="text-sm text-[#c4c4cc]">Cursos</span>
               </a>
             </li>
             <li>
               <a
                 href=""
-                className="p-3 hover:bg-[#202024] rounded-xl hover:text-white px-8"
+                className="relative p-3 flex space-x-2 rounded-xl px-8 hover:text-white group"
               >
+                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500"></span>
                 <span className="text-sm text-[#c4c4cc]">Contato</span>
               </a>
             </li>
