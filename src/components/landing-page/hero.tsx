@@ -6,7 +6,7 @@ export default function Hero() {
     <section className="flex flex-col items-center space-y-8 mt-[10vh] w-full">
       <h1 className="text-5xl/[65px] text-center">
         Se especialize como desenvolvedor Front-end e{" "}
-        <span className="font-bold bg-blue-gradient-second bg-clip-text text-transparent">
+        <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent">
           conquiste vagas nacionais e internacionais
         </span>
       </h1>

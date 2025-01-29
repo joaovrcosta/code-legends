@@ -2,6 +2,7 @@ import Image from "next/image";
 import codeLegendsLogo from "../../public/code-legends-logo.svg";
 import { ChevronRight, User } from "lucide-react";
 import circleIcon from "../../public/circle.svg";
+import { PrimaryButton } from "./ui/primary-button";
 
 export default function Header() {
   return (
@@ -54,13 +55,10 @@ export default function Header() {
               </a>
             </li>
             <li>
-              <a
-                href=""
-                className="p-3 px-9 flex bg-blue-gradient rounded-full border border-[#25252A] items-center space-x-2"
-              >
-                <span className="font-semibold text-sm">INSCREVA-SE</span>
+              <PrimaryButton>
+                INSCREVA-SE
                 <ChevronRight />
-              </a>
+              </PrimaryButton>
             </li>
           </ul>
         </li>

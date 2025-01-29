@@ -52,9 +52,15 @@ export default {
         },
       },
       backgroundImage: {
-        "blue-gradient":
+        "gray-gradient-first":
+          "linear-gradient(0deg, rgba(32,32,32, 0.05) 40%, rgba(123,123,138, 0.39) 100%)",
+        "gray-gradient-second":
+          "linear-gradient(0deg, rgba(123,123,138, 0.39) 5%, rgba(32,32,32, 0.05) 100%)",
+        "blue-gradient-first":
           "linear-gradient(0deg, #0F0F10 0%, rgba(0,200,255,0.39) 100%)",
         "blue-gradient-second":
+          "linear-gradient(0deg, #0F0F10 0%, rgba(0,200,255,0.39) 100%)",
+        "blue-gradient-500":
           "linear-gradient(267deg, rgba(0,78,99,1) 0%, #00c8ff 100%)",
       },
       borderRadius: {
