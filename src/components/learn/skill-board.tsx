@@ -1,14 +1,60 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Progress } from "../ui/progress";
+import { cn } from "@/lib/utils"; // Função para combinar classes do Tailwind
 
 const skills = [
-  { name: "HTML & CSS", value: 47, color: "bg-orange-500" },
-  { name: "Styled Components", value: 72, color: "bg-purple-500" },
-  { name: "ReactJS", value: 38, color: "bg-cyan-500" },
-  { name: "Web Designer", value: 84, color: "bg-yellow-500" },
-  { name: "Patterns", value: 0, color: "bg-green-500" },
-  { name: "Performance", value: 0, color: "bg-red-500" },
+  {
+    name: "HTML & CSS",
+    value: 47,
+    nameColor: "orange-gradient-500",
+    color: "bg-[#FF4500]",
+  },
+  {
+    name: "Styled Components",
+    value: 72,
+    nameColor: "purple-gradient-500",
+    color: "bg-[#6600E5]",
+  },
+  {
+    name: "ReactJS",
+    value: 38,
+    nameColor: "blue-gradient-500",
+    color: "bg-[#00c8ff]",
+  },
+  {
+    name: "Web Designer",
+    value: 84,
+    nameColor: "yellow-gradient-500",
+    color: "bg-[#FFA600]",
+  },
+  {
+    name: "Patterns",
+    value: 0,
+    nameColor: "lemon-gradient-500",
+    color: "bg-[#BFF21A]",
+  },
+  {
+    name: "Performance",
+    value: 0,
+    nameColor: "red-gradient-500",
+    color: "bg-[#BD1C1C]",
+  },
 ];
+
+const gradientClasses: { [key: string]: string } = {
+  "blue-gradient-500":
+    "bg-[linear-gradient(267deg,#004e63_0%,#00c8ff_100%)] text-transparent bg-clip-text",
+  "orange-gradient-500":
+    "bg-[linear-gradient(267deg,#992900_0%,#FF4500_100%)] text-transparent bg-clip-text",
+  "red-gradient-500":
+    "bg-[linear-gradient(267deg,#570D0D_0%,#BD1C1C_100%)] text-transparent bg-clip-text",
+  "purple-gradient-500":
+    "bg-[linear-gradient(267deg,#39007F_0%,#6600E5_100%)] text-transparent bg-clip-text",
+  "yellow-gradient-500":
+    "bg-[linear-gradient(267deg,#996300_0%,#FFA600_100%)] text-transparent bg-clip-text",
+  "lemon-gradient-500":
+    "bg-[linear-gradient(267deg,#6F8C0F_0%,#BFF21A_100%)] text-transparent bg-clip-text",
+};
 
 export function SkillBoard() {
   return (
@@ -18,22 +64,27 @@ export function SkillBoard() {
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>JV</AvatarFallback>
         </Avatar>
-        <p className="text-lg font-semibold">João Victor</p>
+        <p className="text-lg">João Victor</p>
       </div>
-      <div className="mt-6 space-y-4">
+      <div className="mt-10 space-y-4">
         {skills.map((skill) => (
-          <div key={skill.name} className="flex items-center justify-between ">
-            <span className="text-sm" style={{ color: skill.color }}>
+          <div key={skill.name} className="flex items-center justify-between">
+            <span
+              className={cn(
+                "text-sm font-bold",
+                gradientClasses[skill.nameColor] || skill.color
+              )}
+            >
               {skill.name}
             </span>
             <div className="flex items-center space-x-2">
-              <Progress value={skill.value} className={skill.color} />
               <span className="text-xs">{skill.value}%</span>
+              <Progress value={skill.value} className={skill.color} />
             </div>
           </div>
         ))}
       </div>
-      <div className="mt-4 text-center text-sm text-gray-400 cursor-pointer hover:text-white">
+      <div className="mt-6 text-center text-sm text-gray-400 cursor-pointer hover:text-white">
         Mostrar mais &gt;
       </div>
     </div>

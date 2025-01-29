@@ -11,7 +11,7 @@ export default function LearnLayout({
   return (
     <>
       <LearnHeader />
-      <div className="max-w-7xl mx-auto flex mt-[8vh] space-x-2">
+      <div className="max-w-[1360px] mx-auto flex mt-[6vh] space-x-2">
         <div className="w-1/4 space-y-6">
           <SkillBoard />
           <UseCasesBoard />

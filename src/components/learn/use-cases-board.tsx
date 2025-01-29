@@ -7,23 +7,31 @@ export function UseCasesBoard() {
       <p>Casos de uso</p>
       <div className="w-full space-y-3 mt-4">
         <PrimaryButton
-          className="text-sm flex items-center justify-between"
+          className="text-sm flex items-center justify-between text-[#525252] h-[52px] px-3"
           variant="secondary"
         >
           Clothes E-commerce
-          <Lock />
+          <div className="bg-[#3D3D40] h-[32px] w-[32px] flex items-center justify-center rounded-full">
+            <Lock className="text-white" />
+          </div>
         </PrimaryButton>
         <PrimaryButton
-          className="text-sm flex items-center justify-between"
+          className="text-sm flex items-center justify-between text-[#525252] h-[52px] px-3"
           variant="secondary"
         >
-          Gambling Administration <Lock />
+          Gambling Administration{" "}
+          <div className="bg-[#3D3D40] h-[32px] w-[32px] flex items-center justify-center rounded-full">
+            <Lock className="text-white" />
+          </div>
         </PrimaryButton>
         <PrimaryButton
-          className="text-sm flex items-center justify-between"
+          className="text-sm flex items-center justify-between text-[#525252] h-[52px] px-3"
           variant="secondary"
         >
-          Soundify - Music Stream <Lock />
+          Soundify - Music Stream{" "}
+          <div className="bg-[#3D3D40] h-[32px] w-[32px] flex items-center justify-center rounded-full">
+            <Lock className="text-white" />
+          </div>
         </PrimaryButton>
       </div>
     </div>

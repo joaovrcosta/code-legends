@@ -18,7 +18,7 @@ export function Tabs() {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
 
   return (
-    <div className="w-full flex space-x-12 ml-10">
+    <div className="w-full flex space-x-[4.5rem] ml-10">
       {tabs.map((tab) => (
         <div key={tab.id} className="relative group">
           <Button
@@ -30,7 +30,7 @@ export function Tabs() {
             className={`relative z-10 px-4 py-2 rounded-xl transition duration-300 ${
               activeTab === tab.id
                 ? "text-white hover:bg-transparent hover:text-white"
-                : "text-white border-none bg-transparent hover:bg-transparent hover:text-white"
+                : "text-white border-none bg-transparent hover:bg-transparent hover:text-white font-normal"
             }`}
           >
             {tab.label}
