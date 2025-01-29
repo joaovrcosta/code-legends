@@ -57,7 +57,7 @@ export default {
         "gray-gradient-second":
           "linear-gradient(0deg, rgba(123,123,138, 0.39) 5%, rgba(32,32,32, 0.05) 100%)",
         "blue-gradient-first":
-          "linear-gradient(0deg, #0F0F10 0%, rgba(0,200,255,0.39) 100%)",
+          "linear-gradient(0deg, rgba(15,15,16, 0.05) 0%, rgba(0,200,255,0.39) 100%)",
         "blue-gradient-second":
           "linear-gradient(0deg, #0F0F10 0%, rgba(0,200,255,0.39) 100%)",
         "blue-gradient-500":
