@@ -11,14 +11,16 @@ export default function LearnLayout({
   return (
     <>
       <LearnHeader />
-      <div className="max-w-[1360px] mx-auto flex mt-[6vh] space-x-6">
+      <div className="max-w-[1560px] mx-auto flex mt-[6vh] gap-20">
         <div className="w-1/4 space-y-6">
           <SkillBoard />
           <UseCasesBoard />
         </div>
         <div className="w-3/4">
           <Tabs />
-          <main className="w-full mt-[6vh]">{children}</main>
+          <main className="max-w-[1020px] mt-[6vh] max-h-[702px] overflow-y-auto">
+            {children}
+          </main>
         </div>
       </div>
     </>
