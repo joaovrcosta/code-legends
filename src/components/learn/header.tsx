@@ -8,7 +8,11 @@ export default function LearnHeader() {
         <li>
           <Image src={codeLegendsLogo} alt="Code Legends" />
         </li>
-        <li className="flex space-x-12 items-center">Oi</li>
+        <li className="flex space-x-12 items-center">
+          <a href="" className="border px-2 py-2 border-[#25252A] rounded-lg">
+            João Victor Ribeiro Costa
+          </a>
+        </li>
       </ul>
     </div>
   );

@@ -21,9 +21,9 @@ export default function CoursesPage() {
           <CatalogCard name="Patterns" image={patternIcon} />
           <CatalogCard name="HTML & CSS" image={htmlcssIcon} />
           <CatalogCard name="Perfomance" image={perfomanceIcon} />
-          <CatalogCard className="bg-transparent" />
-          <CatalogCard className="bg-transparent" />
-          <CatalogCard className="bg-transparent" />
+          <CatalogCard className="bg-transparent" name="Inglês" />
+          <CatalogCard className="bg-transparent" name="Design System" />
+          <CatalogCard className="bg-transparent" name="Clean Code" />
         </div>
       </div>
     </div>

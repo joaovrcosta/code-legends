@@ -18,7 +18,7 @@ export default function LearnLayout({
         </div>
         <div className="w-3/4">
           <Tabs />
-          <main className="max-w-[1020px] mt-[6vh] max-h-[702px] overflow-y-auto">
+          <main className="w-full mt-[6vh] max-h-[702px] overflow-y-auto">
             {children}
           </main>
         </div>

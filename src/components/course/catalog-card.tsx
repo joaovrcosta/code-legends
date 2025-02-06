@@ -13,7 +13,7 @@ export function CatalogCard({ className, name, image }: CatalogCardProps) {
 
   return (
     <div
-      className={`w-full h-52 max-w-[312px] bg-[#1A1A1E] border border-[#25252A] pb-6 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:backdrop-blur-lg ${className} hover:bg-[#1A1A1E]/40`}
+      className={`w-full h-52 max-w-[316px] bg-[#1A1A1E] border border-[#25252A] pb-6 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:backdrop-blur-lg ${className} hover:bg-[#1A1A1E]/40`}
     >
       <div className="flex items-center justify-end">
         <Star />
@@ -33,10 +33,10 @@ export function CatalogCard({ className, name, image }: CatalogCardProps) {
       </div>
       <div className="flex items-center justify-end">
         <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
-          <ScrollText size={24} />
+          <ScrollText size={20} className="text-[#858585]" />
         </div>
         <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
-          <CirclePlay size={24} />
+          <CirclePlay size={28} className="text-white hover:text-[#35BED5]" />
         </div>
       </div>
     </div>

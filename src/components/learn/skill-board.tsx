@@ -1,6 +1,8 @@
+import { Crown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Progress } from "../ui/progress";
 import { cn } from "@/lib/utils"; // Função para combinar classes do Tailwind
+import Link from "next/link";
 
 const skills = [
   {
@@ -59,12 +61,11 @@ const gradientClasses: { [key: string]: string } = {
 export function SkillBoard() {
   return (
     <div className="border border-[#25252A] rounded-2xl p-4 bg-transparent text-white">
-      <div className="flex items-center space-x-3">
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>JV</AvatarFallback>
-        </Avatar>
-        <p className="text-lg">João Victor</p>
+      <div className="flex items-center space-x-3 border h-[52px] rounded-full mt-2 border-[#25252A] justify-center cursor-pointer hover:bg-[#25252A] hover:bg-opacity-10">
+        <Link href="/account" className="flex items-center space-x-2">
+          <p className="text-md">Minha conta</p>
+          <Crown className="text-[#FF9D00]" />
+        </Link>
       </div>
       <div className="mt-10 space-y-4">
         {skills.map((skill) => (

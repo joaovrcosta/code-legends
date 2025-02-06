@@ -18,7 +18,7 @@ export function Tabs() {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
 
   return (
-    <div className="w-full flex space-x-[4rem] ml-4">
+    <div className="w-full flex space-x-[5.4rem] ml-4">
       {tabs.map((tab) => (
         <div key={tab.id} className="relative group">
           <Button
