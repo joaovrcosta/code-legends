@@ -1,5 +1,4 @@
 import { Crown } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Progress } from "../ui/progress";
 import { cn } from "@/lib/utils"; // Função para combinar classes do Tailwind
 import Link from "next/link";

@@ -3,7 +3,6 @@ import codeLegendsLogo from "../../public/code-legends-logo.svg";
 import { ChevronRight, User } from "lucide-react";
 import circleIcon from "../../public/circle.svg";
 import { PrimaryButton } from "./ui/primary-button";
-import { SheetHeader } from "./learn/sheet-header";
 
 export default function Header() {
   return (

@@ -1,5 +1,5 @@
 import { CatalogCard } from "@/components/course/catalog-card";
-import patternIcon from "../../../../public/pattern-icon.png";
+import patternIcon from "../../../../public/pattern-iconsvg.svg";
 import htmlcssIcon from "../../../../public/htmlcss-icon.svg";
 import perfomanceIcon from "../../../../public/perfomance-icon.svg";
 
