@@ -51,6 +51,7 @@ export default {
           "5": "hsl(var(--chart-5))",
         },
       },
+
       backgroundImage: {
         "gray-gradient-first":
           "linear-gradient(0deg, rgba(32,32,32, 0.05) 40%, rgba(123,123,138, 0.39) 100%)",
@@ -64,6 +65,7 @@ export default {
           "linear-gradient(267deg, rgba(0,78,99,1) 0%, #00c8ff 100%)",
         "orange-gradient-500":
           "linear-gradient(267deg, rgba(153,41,0,1) 0%, #FF4500 100%)",
+        "red-gradient-500": "linear-gradient(267deg, #570D0D 0%, #BD1C1C 100%)",
       },
       borderRadius: {
         lg: "var(--radius)",

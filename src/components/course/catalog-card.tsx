@@ -13,7 +13,7 @@ export function CatalogCard({ className, name, image }: CatalogCardProps) {
 
   return (
     <div
-      className={`w-full h-52 max-w-[316px] bg-[#1A1A1E] border border-[#25252A] pb-6 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:backdrop-blur-lg ${className} hover:bg-[#1A1A1E]/40`}
+      className={`w-full h-52 lg:max-w-[316px] bg-[#1A1A1E] border border-[#25252A] pb-6 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:backdrop-blur-lg ${className} hover:bg-[#1A1A1E]/40`}
     >
       <div className="flex items-center justify-end">
         <Star />

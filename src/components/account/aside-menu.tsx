@@ -14,12 +14,12 @@ import { usePathname } from "next/navigation";
 const links = [
   { name: "Visão Geral", path: "/account", icon: <LayoutDashboard /> },
   {
-    name: "Certificates",
+    name: "Certificados",
     path: "/account/certificates",
     icon: <Medal />,
   },
-  { name: "Purchases", path: "/account/purchases", icon: <Crown /> },
-  { name: "Access", path: "/account/access", icon: <KeyRound /> },
+  { name: "Pedidos", path: "/account/purchases", icon: <Crown /> },
+  { name: "Dados", path: "/account/access", icon: <KeyRound /> },
   { name: "Sair", path: "/", icon: <LogOut /> },
 ];
 
@@ -27,7 +27,7 @@ export function AccountAsideMenu() {
   const pathName = usePathname();
 
   return (
-    <nav className="w-[338px] bg-transparent py-4 px-0 rounded-lg shadow-md border border-[#25252A]">
+    <nav className="lg:w-[338px] w-full max-h-[326px] bg-transparent py-4 px-0 rounded-lg shadow-md border border-[#25252A]">
       <ul className="space-y-2">
         {links.map((link) => (
           <li key={link.path}>
