@@ -34,7 +34,7 @@ export default function LearnHeader() {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="bg-[#1A1A1E] border border-[#25252A] rounded-[20px]"
+              className="bg-[#1A1A1E] border border-[#25252A] rounded-[20px] shadow-lg"
             >
               <DropdownMenuItem
                 asChild
