@@ -1,8 +1,4 @@
-import { CatalogCard } from "@/components/course/catalog-card";
-import patternIcon from "../../../../public/pattern-iconsvg.svg";
-import htmlcssIcon from "../../../../public/htmlcss-icon.svg";
-import perfomanceIcon from "../../../../public/perfomance-icon.svg";
-
+import { Catalog, CatalogCard } from "@/components/course/catalog-card";
 export default function CoursesPage() {
   return (
     <div>
@@ -10,20 +6,15 @@ export default function CoursesPage() {
         <div className=" w-full px-4 pb-6">
           <h4 className="text-base font-medium">Meu catálogo</h4>
         </div>
-        <div className="w-full flex flex-wrap justify-start gap-4">
-          <CatalogCard name="ReactJS" />
-          <CatalogCard name="Tailwind CSS Pro" />
+        <div className="w-full flex flex-wrap justify-start gap-6">
+          <CatalogCard name="ReactJS" url="/course/react-js" />
+          <CatalogCard name="Tailwind CSS Pro" url="/course/react-js" />
         </div>
         <div className=" w-full px-4 pb-6 pt-6">
           <h4 className="text-base font-medium">Catálogo</h4>
         </div>
-        <div className="w-full flex flex-wrap justify-start gap-4">
-          <CatalogCard name="Patterns" image={patternIcon} />
-          <CatalogCard name="HTML & CSS" image={htmlcssIcon} />
-          <CatalogCard name="Perfomance" image={perfomanceIcon} />
-          <CatalogCard className="bg-transparent" name="Inglês" />
-          <CatalogCard className="bg-transparent" name="Design System" />
-          <CatalogCard className="bg-transparent" name="Clean Code" />
+        <div className="w-full lg:gap-4">
+          <Catalog />
         </div>
       </div>
     </div>

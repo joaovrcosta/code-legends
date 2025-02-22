@@ -8,7 +8,7 @@ export function PrimaryButton({
   ...props
 }: {
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "ghost" | "yellow";
   className?: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
@@ -18,6 +18,7 @@ export function PrimaryButton({
         variant === "primary" && "bg-blue-gradient-first",
         variant === "secondary" &&
           "bg-gray-gradient-first hover:bg-gray-gradient-second",
+        variant === "yellow" && "bg-yellow-gradient-first",
         className
       )}
       {...props}

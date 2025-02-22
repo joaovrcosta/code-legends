@@ -13,10 +13,11 @@ export default function LearnLayout({
     <>
       <LearnHeader />
       <div className="max-w-[1560px] mx-auto flex flex-col lg:flex-row lg:mt-[6vh] mt-4 gap-4 lg:gap-20 px-4 pb-16">
-        <div className="w-full lg:w-1/4 space-y-6">
+        <div className="w-full lg:w-1/4 space-y-6 lg:sticky lg:top-[6vh] lg:h-[calc(100vh-6vh)] lg:overflow-auto ">
           <SkillBoard />
           <UseCasesBoard />
         </div>
+
         <div className="w-full lg:w-3/4 pb-12 lg:pb-0">
           <Tabs />
           <main className="w-full mt-[6vh]">{children}</main>

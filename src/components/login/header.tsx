@@ -1,30 +1,26 @@
 import Image from "next/image";
-import codeLegendsLogo from "../../public/code-legends-logo.svg";
+import codeLegendsLogo from "../../../public/code-legends-logo.svg";
 import { ChevronRight, User, Menu } from "lucide-react";
-import circleIcon from "../../public/circle.svg";
-import { PrimaryButton } from "./ui/primary-button";
+import circleIcon from "../../../public/circle.svg";
+import { PrimaryButton } from "../ui/primary-button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { DialogTitle } from "@radix-ui/react-dialog";
 import Link from "next/link";
 
-export default function Header() {
+export default function HeaderLogin() {
   return (
     <div className="relative fixed top-0 left-0 w-full z-50 bg-[#121214] p-4">
-      <div className="flex justify-between items-center md:px-16">
-        <Image src={codeLegendsLogo} alt="Code Legends" />
+      <div className="relative max-w-[1200px] mx-auto flex justify-between items-center px-4 md:px-0 md:py-2">
+        <Link href="/">
+          <Image src={codeLegendsLogo} alt="Code Legends" />
+        </Link>
 
         {/* Menu Hamburger para telas menores */}
-        <div className="lg:hidden">
+        <div className="md:hidden">
           <Sheet>
             <SheetTrigger>
-              <div className="flex items-center p-2 space-x-4  border  rounded-lg border border-[#25252A]">
-                <p>Menu</p>
-                <Menu size={28} color="#c4c4cc" />
-              </div>
+              <Menu size={28} color="#c4c4cc" />
             </SheetTrigger>
             <SheetContent side="left" className="bg-[#121214] p-4">
-              <DialogTitle className="text-[#c4c4cc]"> </DialogTitle>{" "}
-              {/* Adicionando um título acessível */}
               <div className="flex flex-col space-y-4">
                 <a
                   href=""
@@ -45,13 +41,13 @@ export default function Header() {
                   Contato
                 </a>
                 <hr className="border-[#29292e]" />
-                <Link
-                  href="/login"
+                <a
+                  href=""
                   className="text-[#c4c4cc] p-2 hover:bg-[#202024] rounded-lg flex items-center space-x-2"
                 >
                   <User size={20} />
                   <span>LOGIN</span>
-                </Link>
+                </a>
                 <PrimaryButton>
                   INSCREVA-SE
                   <ChevronRight />
@@ -62,9 +58,9 @@ export default function Header() {
         </div>
 
         {/* Menu para telas maiores */}
-        <ul className="hidden flex space-x-12 items-center lg:flex xl:flex">
-          <ul className="flex space-x-8 items-center">
-            <li className="flex xl:block hidden">
+        <ul className="hidden md:flex xl:space-x-12 space-x-2 items-center">
+          <ul className="flex xl:space-x-8  space-x-2 items-center">
+            <li className="flex hidden xl:block">
               <a
                 href=""
                 className="relative p-3 flex space-x-2 rounded-xl px-8 hover:text-white group"
@@ -94,16 +90,25 @@ export default function Header() {
                 <span className="text-sm text-[#c4c4cc]">Contato</span>
               </a>
             </li>
+            <li className="block xl:hidden">
+              <a
+                href=""
+                className="relative p-3 flex space-x-2 rounded-xl px-8 hover:text-white group"
+              >
+                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500"></span>
+                <span className="text-sm text-[#c4c4cc]">Login</span>
+              </a>
+            </li>
           </ul>
           <ul className="flex items-center space-x-4 border-l-2 border-[#29292e]">
-            <li className="ml-4">
-              <Link
-                href="/login"
+            <li className="ml-4 hidden xl:block">
+              <a
+                href=""
                 className="p-3 flex space-x-2 text-[#c4c4cc] px-8 hover:bg-[#202024] rounded-xl hover:text-white"
               >
                 <User size={20} />
-                <span className="text-sm">LOGIN</span>
-              </Link>
+                <span className="text-sm font-semibold">LOGIN</span>
+              </a>
             </li>
             <li>
               <PrimaryButton>
