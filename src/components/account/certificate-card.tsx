@@ -6,18 +6,17 @@ interface CertificateCardProps {
 }
 
 export function CertificateCard({ courseName }: CertificateCardProps) {
-  // Definição da cor de fundo com base no nome do curso
   const bgGradient =
     {
       ReactJS: "bg-blue-gradient-500",
       Performance: "bg-red-gradient-500",
       HTML: "bg-orange-gradient-500",
       "UX/UI": "bg-gradient-to-r from-purple-500 to-purple-700",
-    }[courseName] || "bg-gray-700"; // Cor padrão caso não esteja na lista
+    }[courseName] || "bg-gray-700";
 
   return (
     <Card
-      className={`rounded-sm p-3 border-[#25252a] flex items-center justify-between lg:max-w-[362px] w-full  bg-[#121214]`}
+      className={`rounded-lg p-3 border-[#25252a] flex items-center justify-between lg:max-w-[362px] w-full  bg-[#121214]`}
     >
       <h3
         className={`font-semibold ${bgGradient} bg-clip-text text-transparent`}

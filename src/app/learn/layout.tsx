@@ -20,7 +20,7 @@ export default function LearnLayout({
 
         <div className="w-full lg:w-3/4 pb-12 lg:pb-0">
           <Tabs />
-          <main className="w-full mt-[6vh]">{children}</main>
+          <main className="w-full lg:mt-[6vh] mt-[1vh]">{children}</main>
         </div>
       </div>
       <FooterFixed />

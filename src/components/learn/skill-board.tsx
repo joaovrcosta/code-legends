@@ -60,12 +60,13 @@ const gradientClasses: { [key: string]: string } = {
 export function SkillBoard() {
   return (
     <div className="border border-[#25252A] rounded-2xl p-4 bg-transparent text-white">
-      <div className="flex items-center space-x-3 border h-[52px] rounded-full mt-2 border-[#25252A] justify-center cursor-pointer hover:bg-[#25252A] hover:bg-opacity-10">
-        <Link href="/account" className="flex items-center space-x-2">
-          <p className="text-md">Minha conta</p>
-          <Crown className="text-[#FF9D00]" />
-        </Link>
-      </div>
+      <Link
+        href="/account"
+        className="flex items-center justify-center w-full border h-[52px] rounded-full gap-2 border-[#25252a]"
+      >
+        <p className="text-md">Minha conta</p>
+        <Crown className="text-[#FF9D00]" />
+      </Link>
       <div className="mt-10 space-y-4">
         {skills.map((skill) => (
           <div key={skill.name} className="flex items-center justify-between">
