@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight, CirclePlay, Lock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -14,6 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { PrimaryButton } from "@/components/ui/primary-button";
 
 export default function LearnPage() {
   const [openTooltip, setOpenTooltip] = useState<string | null>(null);
@@ -44,7 +45,7 @@ export default function LearnPage() {
                 <ChevronRight size={48} />
               </div>
             </section>
-            <section className="mt-10 space-y-10">
+            <section className="mt-10 space-y-10 px-4">
               <div className="flex items-center justify-between mt-4">
                 <div className="h-[56px] w-[256px] rounded-tl-[55px] border-t border-l"></div>
                 <TooltipProvider>
@@ -57,8 +58,16 @@ export default function LearnPage() {
                         onClick={() => toggleTooltip("completeTaskRight")}
                       />
                     </TooltipTrigger>
-                    <TooltipContent className="w-[295px] h-[180px]">
-                      <p>Add to library</p>
+                    <TooltipContent className="w-[295px]  bg-[#1a1a1e] rounded-[20px] mb-4 border border-[#25252A] shadow-lg p-4">
+                      <div className="mb-3">
+                        <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xs">
+                          ReactJS
+                        </span>
+                        <h3 className="text-xl mt-2">Introdução</h3>
+                      </div>
+                      <PrimaryButton>
+                        Assistir de novo <CirclePlay />
+                      </PrimaryButton>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -74,8 +83,16 @@ export default function LearnPage() {
                         onClick={() => toggleTooltip("completeTaskLeft")}
                       />
                     </TooltipTrigger>
-                    <TooltipContent className="w-[295px] h-[180px]">
-                      <p>Task completed</p>
+                    <TooltipContent className="w-[295px]  bg-[#1a1a1e] rounded-[20px] mb-4 border border-[#25252A] shadow-lg p-4">
+                      <div className="mb-3">
+                        <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xs">
+                          ReactJS
+                        </span>
+                        <h3 className="text-xl mt-2">Fundamentos do ReactJS</h3>
+                      </div>
+                      <PrimaryButton>
+                        Assistir de novo <CirclePlay />
+                      </PrimaryButton>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -93,8 +110,16 @@ export default function LearnPage() {
                         onClick={() => toggleTooltip("incompleteTaskLeft")}
                       />
                     </TooltipTrigger>
-                    <TooltipContent className="w-[295px] h-[180px]">
-                      <p>Task incomplete</p>
+                    <TooltipContent className="w-[295px]  bg-[#1a1a1e] rounded-[20px] mb-4 border border-[#25252A] shadow-lg p-4">
+                      <div className="mb-3">
+                        <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xs">
+                          ReactJS
+                        </span>
+                        <h3 className="text-xl mt-2">Bundlers & Compilers</h3>
+                      </div>
+                      <PrimaryButton>
+                        Assistir <CirclePlay />
+                      </PrimaryButton>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -110,8 +135,18 @@ export default function LearnPage() {
                         onClick={() => toggleTooltip("incompleteTaskRight")}
                       />
                     </TooltipTrigger>
-                    <TooltipContent className="w-[295px] h-[180px]">
-                      <p>Complete this task</p>
+                    <TooltipContent className="w-[295px]  bg-[#1a1a1e] rounded-[20px] mb-4 border border-[#25252A] shadow-lg p-4">
+                      <div className="mb-3">
+                        <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xs">
+                          ReactJS
+                        </span>
+                        <h3 className="text-xl mt-2">
+                          Criando um projeto React
+                        </h3>
+                      </div>
+                      <PrimaryButton disabled>
+                        Confidencial <Lock />
+                      </PrimaryButton>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
