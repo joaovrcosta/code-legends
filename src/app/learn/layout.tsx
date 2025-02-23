@@ -1,8 +1,6 @@
 import { FooterFixed } from "@/components/learn/footer-fixed";
 import LearnHeader from "@/components/learn/header";
-import { SkillBoard } from "@/components/learn/skill-board";
-import { Tabs } from "@/components/learn/tabs";
-import { UseCasesBoard } from "@/components/learn/use-cases-board";
+import Sidebar from "@/components/learn/sidebar";
 
 export default function LearnLayout({
   children,
@@ -10,20 +8,21 @@ export default function LearnLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <LearnHeader />
-      <div className="max-w-[1560px] mx-auto flex flex-col lg:flex-row lg:mt-[6vh] mt-4 gap-4 lg:gap-20 px-4 pb-16">
-        <div className="w-full lg:w-1/4 space-y-6 lg:sticky lg:top-[6vh] lg:h-[calc(100vh-6vh)] lg:overflow-auto ">
-          <SkillBoard />
-          <UseCasesBoard />
+    <div className="h-screen w-full flex flex-col">
+      <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
+        <LearnHeader />
+      </div>
+
+      <div className="flex flex-1 pt-[80px]">
+        <div className="w-64 bg-gray-800 text-white sticky top-[80px] h-[calc(100vh-80px)] lg:block hidden">
+          <Sidebar />
         </div>
 
-        <div className="w-full lg:w-3/4 pb-12 lg:pb-0">
-          <Tabs />
-          <main className="w-full lg:mt-[6vh] mt-[1vh]">{children}</main>
+        <div className="flex-1 h-[calc(100vh-80px)] overflow-y-auto p-4">
+          <main className="w-full">{children}</main>
+          <FooterFixed />
         </div>
       </div>
-      <FooterFixed />
-    </>
+    </div>
   );
 }

@@ -1,28 +1,44 @@
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import reactIcon from "../../../public/react-icon.png"; // Imagem padrão
-import { CirclePlay, ScrollText, Star } from "lucide-react";
+import { ArrowUpRight, CirclePlay, ScrollText, Star } from "lucide-react";
 
 const courses = [
-  { name: "ReactJS", image: reactIcon, url: "/courses/react-js" },
-  { name: "Tailwind CSS Pro", image: "", url: "/courses/tailwind-css" },
-  { name: "Patterns", image: "", url: "/courses/patterns" },
-  { name: "HTML & CSS", image: "", url: "/courses/html-css" },
-  { name: "Perfomance", image: "", url: "/courses/performance" },
-  { name: "Inglês", image: "", url: "/courses/english" },
-  { name: "Design System", image: "", url: "/courses/design-system" },
-  { name: "Clean Code", image: "", url: "/courses/clean-code" },
+  {
+    name: "ReactJS",
+    image: reactIcon,
+    url: "/courses/react-js",
+    color: "blue",
+  },
+  {
+    name: "Tailwind CSS",
+    image: "",
+    url: "/courses/tailwind-css",
+    color: "blue",
+  },
+  { name: "Patterns", image: "", url: "/courses/patterns", color: "lime" },
+  { name: "HTML & CSS", image: "", url: "/courses/html-css", color: "blue" },
+  { name: "UI/UX", image: "", url: "/courses/performance", color: "purple" },
+  { name: "Inglês", image: "", url: "/courses/english", color: "red" },
+  {
+    name: "Design System",
+    image: "",
+    url: "/courses/design-system",
+    color: "purple",
+  },
+  { name: "Clean Code", image: "", url: "/courses/clean-code", color: "blue" },
 ];
 
 export function Catalog() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 lg:grid-cols-2 gap-6">
       {courses.map((course, index) => (
         <CatalogCard
           key={index}
           name={course.name}
           image={course.image}
           url={course.url}
+          color={course.color || "gray"}
         />
       ))}
     </div>
@@ -33,13 +49,29 @@ interface CatalogCardProps {
   name: string;
   image?: string | StaticImageData;
   url: string;
+  color: string;
 }
 
-export function CatalogCard({ name, image, url }: CatalogCardProps) {
+export function CatalogCard({ name, image, url, color }: CatalogCardProps) {
   const imageSrc = image || reactIcon;
 
+  // Classe de cor dinâmica
+  const colorClass =
+    {
+      blue: "bg-blue-gradient-500 bg-clip-text text-transparent",
+      "dark-blue": "text-blue-600",
+      green: "text-green-400",
+      orange: "bg-orange-gradient-500 bg-clip-text text-transparent",
+      red: "bg-red-gradient-500 bg-clip-text text-transparent",
+      yellow: "text-yellow-400",
+      pink: "text-pink-400",
+      gray: "text-gray-400",
+      lime: "bg-lime-gradient-500 bg-clip-text text-transparent",
+      purple: "bg-purple-gradient-500 bg-clip-text text-transparent",
+    }[color] || "text-gray-400";
+
   return (
-    <div className="w-full h-52 lg:w-[312px] bg-[#1A1A1E] border border-[#25252A] pb-6 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:backdrop-blur-lg hover:bg-[#1A1A1E]/40 cursor-pointer">
+    <div className="w-full h-52 xl:w-[312px] bg-gray-gradient border border-[#25252A] pb-6 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:backdrop-blur-lg hover:bg-[#1A1A1E]/40 cursor-pointer">
       <div className="flex items-center justify-end">
         <Star />
       </div>
@@ -47,7 +79,12 @@ export function CatalogCard({ name, image, url }: CatalogCardProps) {
         <Image src={imageSrc} alt={name} width={80} height={80} />
         <div className="px-4">
           <p className="font-light text-[12px] text-[#C2C2C2]">CURSO - 12h</p>
-          <h3 className="font-bold text-lg">{name}</h3>
+          <div className="flex items-center space-x-1">
+            <span className={`font-bold bg-clip-text text-lg ${colorClass}`}>
+              {name}
+            </span>
+            <ArrowUpRight />
+          </div>
         </div>
       </div>
       <div className="flex items-center justify-end">

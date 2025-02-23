@@ -68,6 +68,10 @@ export default {
         "orange-gradient-500":
           "linear-gradient(267deg, rgba(153,41,0,1) 0%, #FF4500 100%)",
         "red-gradient-500": "linear-gradient(267deg, #570D0D 0%, #BD1C1C 100%)",
+        "lime-gradient-500":
+          "linear-gradient(267deg, #6F8C0F 0%, #BFF21A 100%)",
+        "purple-gradient-500":
+          "linear-gradient(267deg, #39007F 0%, #6547EB 100%)",
         "yellow-gradient-first":
           "linear-gradient(0deg, rgba(15,15,16, 0.05) 0%, rgba(255,204,0,0.39) 100%)",
       },

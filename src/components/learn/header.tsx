@@ -12,8 +12,8 @@ import { Headset, LogOut, User } from "lucide-react";
 
 export default function LearnHeader() {
   return (
-    <div className="relative fixed top-0 left-0 w-full z-50 bg-[#121214]">
-      <ul className="flex justify-between items-center lg:pt-8 pt-4 pb-1 max-w-[1560px] mx-auto px-4">
+    <div className="relative fixed top-0 left-0 w-full z-50 bg-[#121214] border-b border-[#25252A]">
+      <ul className="flex justify-between items-center lg:pt-4 pt-4 pb-4 w-full mx-auto px-4">
         <li className="flex space-x-3 py-4">
           <Link href="/learn">
             <Image src={codeLegendsLogo} alt="Code Legends" />
