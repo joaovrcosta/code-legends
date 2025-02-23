@@ -13,7 +13,7 @@ export default function LearnLayout({
         <LearnHeader />
       </div>
 
-      <div className="flex flex-1 pt-[80px]">
+      <div className="flex flex-1 lg:pt-[80px] pt-[64px]">
         <div className="w-64 bg-gray-800 text-white sticky top-[80px] h-[calc(100vh-80px)] lg:block hidden">
           <Sidebar />
         </div>
