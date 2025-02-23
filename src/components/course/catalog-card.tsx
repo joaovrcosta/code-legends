@@ -11,7 +11,7 @@ const courses = [
     color: "blue",
   },
   {
-    name: "Tailwind CSS",
+    name: "NextJS",
     image: "",
     url: "/courses/tailwind-css",
     color: "blue",
@@ -50,12 +50,18 @@ interface CatalogCardProps {
   image?: string | StaticImageData;
   url: string;
   color: string;
+  className?: string;
 }
 
-export function CatalogCard({ name, image, url, color }: CatalogCardProps) {
+export function CatalogCard({
+  name,
+  image,
+  url,
+  color,
+  className,
+}: CatalogCardProps & { className?: string }) {
   const imageSrc = image || reactIcon;
 
-  // Classe de cor dinâmica
   const colorClass =
     {
       blue: "bg-blue-gradient-500 bg-clip-text text-transparent",
@@ -71,7 +77,9 @@ export function CatalogCard({ name, image, url, color }: CatalogCardProps) {
     }[color] || "text-gray-400";
 
   return (
-    <div className="w-full h-52 xl:w-[312px] bg-gray-gradient border border-[#25252A] pb-6 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:backdrop-blur-lg hover:bg-[#1A1A1E]/40 cursor-pointer">
+    <div
+      className={`w-full h-52 2xl:w-[312px] bg-gray-gradient border border-[#25252A] pb-6 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:backdrop-blur-lg hover:bg-[#1A1A1E]/40 cursor-pointer ${className}`}
+    >
       <div className="flex items-center justify-end">
         <Star />
       </div>

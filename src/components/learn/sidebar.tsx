@@ -19,7 +19,7 @@ const links = [
     path: "/learn/courses",
     icon: <BookOpenText />,
   },
-  { name: "Quartel General", path: "/account/purchases", icon: <Shield /> },
+  { name: "Quartel General", path: "/learn/hq", icon: <Shield /> },
   { name: "Estatisticas", path: "/learn/statistcs", icon: <ChartNetwork /> },
   { name: "Casos de uso", path: "/account/access", icon: <Blocks /> },
   { name: "Insights", path: "/", icon: <Sparkle /> },

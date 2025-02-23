@@ -18,7 +18,7 @@ const filterOptions = [
 
 export function Filters() {
   return (
-    <div className="xl:block hidden">
+    <div className="2xl:block hidden ml-10">
       <div className="flex items-center justify-between">
         <span className="text-lg font-semibold text-[#c4c4cc]">
           Filtre aqui
