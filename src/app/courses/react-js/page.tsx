@@ -1,55 +1,8 @@
-import Image from "next/image";
-import reactIcon from "../../../../public/react-icon.svg";
-import Link from "next/link";
-import { ArrowLeft, CircleCheckBig, Lock, Play } from "lucide-react";
+import { CircleCheckBig, Lock, Play } from "lucide-react";
 
 export default function ReactJsPage() {
   return (
     <div className="">
-      <div className="bg-gray-gradient border border-[#25252A] lg:p-14 xl:p-14 px-4 py-4 flex items-center rounded-lg">
-        <div className="lg:block hidden">
-          <Image src={reactIcon} alt="ReactJS" width={120} height={120} />
-        </div>
-        <div className="flex flex-col lg:ml-4">
-          <Link href="/learn/courses">
-            <div className="flex items-center gap-2 cursor-pointer mb-2 text-sm text-[#7e7e89]">
-              <ArrowLeft size={16} className="text-[#7e7e89]" />
-              Voltar
-            </div>
-          </Link>
-          <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent lg:text-2xl text-xl">
-            ReactJS
-          </span>
-          <p className="lg:text-base text-sm">
-            Desenvolva interfaces modernas e reativas na web utilizando uma
-            biblioteca modular e escalável.
-          </p>
-        </div>
-      </div>
-      <div className="">
-        <ul className="flex gap-3 mt-4 mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
-          <li className="border border-[#25252A] flex items-center justify-center p-3 rounded-lg h-[42px] min-w-[90px]">
-            <Link href="/courses/react-js">
-              <p>Curso</p>
-            </Link>
-          </li>
-          <li className="border border-[#25252A] flex items-center justify-center p-3 rounded-lg h-[42px] min-w-[90px]">
-            <Link href="/courses/react-js">
-              <p>Quizes</p>
-            </Link>
-          </li>
-          <li className="border border-[#25252A] flex items-center justify-center p-3 rounded-lg h-[42px] min-w-[90px]">
-            <Link href="/courses/react-js">
-              <p>Material</p>
-            </Link>
-          </li>
-          <li className="border border-[#25252A] flex items-center justify-center p-3 rounded-lg h-[42px] min-w-[90px]">
-            <Link href="/courses/react-js">
-              <p>Projetos</p>
-            </Link>
-          </li>
-        </ul>
-      </div>
       <section className="mb-4">
         <span>Terra - Nível 1</span>
         <div className="border border-[#25252A] rounded-3xl p-4 h-[136px] mt-4 flex gap-4">

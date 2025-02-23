@@ -15,13 +15,13 @@ export default function CoursesPage() {
           <div className="w-full flex flex-wrap justify-start gap-6">
             <CatalogCard
               name="ReactJS"
-              url="/course/react-js"
+              url="/courses/react-js"
               color="blue"
               // className="xl:h-[168px] p-0"
             />
             <CatalogCard
               name="Tailwind CSS Pro"
-              url="/course/react-js"
+              url="/courses/react-js"
               color="blue"
             />
           </div>
