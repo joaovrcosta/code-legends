@@ -18,7 +18,7 @@ export default function LearnLayout({
           <Sidebar />
         </div>
 
-        <div className="flex-1 h-[calc(100vh-80px)] overflow-y-auto p-4">
+        <div className="flex-1 h-[calc(100vh-80px)] overflow-y-auto pt-0 pl-4 pr-4 pb-4">
           <main className="w-full">{children}</main>
           <FooterFixed />
         </div>

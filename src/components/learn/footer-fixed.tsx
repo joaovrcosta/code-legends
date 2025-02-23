@@ -45,22 +45,24 @@ export function FooterFixed() {
   const pathname = usePathname(); // Obtém a rota atual
 
   return (
-    <footer className="w-full bg-[#121214] border-t-[1px] border-[#25252a] text-white text-center p-4 fixed bottom-0 left-0 lg:hidden">
-      <ul className="flex justify-around">
-        {links.map((link, index) => {
-          const isActive = pathname === link.path; // Verifica se o link está ativo
+    <>
+      <footer className="w-full bg-[#121214] border-t-[1px] border-[#25252a] text-white text-center p-4 fixed bottom-0 left-0 lg:hidden">
+        <ul className="flex justify-around">
+          {links.map((link, index) => {
+            const isActive = pathname === link.path; // Verifica se o link está ativo
 
-          return (
-            <li key={index}>
-              <Link href={link.path} className="flex flex-col items-center">
-                {React.cloneElement(link.icon, {
-                  color: isActive ? "#008ab0" : "white", // Altera a cor se for ativo
-                })}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </footer>
+            return (
+              <li key={index}>
+                <Link href={link.path} className="flex flex-col items-center">
+                  {React.cloneElement(link.icon, {
+                    color: isActive ? "#008ab0" : "white", // Altera a cor se for ativo
+                  })}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </footer>
+    </>
   );
 }
