@@ -6,7 +6,7 @@ export default function CoursesPage() {
     <div>
       <div className="flex items-center justify-center w-full lg:pt-6 pt-3">
         <div className="max-w-[1180px] w-full">
-          <div className=" w-full px-0 pb-6 flex space-x-2">
+          <div className=" w-full px-0 py-6 flex space-x-2">
             <Library className="text-[#00C8FF]" />
             <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-lg">
               Meu catálogo

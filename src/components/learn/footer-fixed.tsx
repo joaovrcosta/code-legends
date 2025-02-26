@@ -1,68 +1,113 @@
 "use client";
 
 import {
-  Blocks,
   BookOpenText,
-  ChartNetwork,
+  ChartDonut,
   House,
+  Lego,
   Shield,
   Sparkle,
-} from "lucide-react";
+} from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { ReactNode } from "react";
 
-const links = [
+type LinkItem = {
+  name: string;
+  path: string;
+  icon: (isActive: boolean) => ReactNode;
+};
+
+const links: LinkItem[] = [
   {
     name: "Home",
     path: "/learn",
-    icon: <House size={34} strokeWidth={1} />,
+    icon: (isActive) => (
+      <House
+        size={34}
+        strokeWidth={1}
+        weight={isActive ? "fill" : "regular"}
+        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
+      />
+    ),
   },
   {
     name: "Cursos",
     path: "/learn/catalog",
-    icon: <BookOpenText size={34} strokeWidth={1} />,
+    icon: (isActive) => (
+      <BookOpenText
+        size={34}
+        strokeWidth={1}
+        weight={isActive ? "fill" : "regular"}
+        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
+      />
+    ),
   },
-  { name: "HQ", path: "/learn/hq", icon: <Shield size={34} strokeWidth={1} /> },
   {
-    name: "Estatisticas",
+    name: "HQ",
+    path: "/learn/hq",
+    icon: (isActive) => (
+      <Shield
+        size={34}
+        strokeWidth={1}
+        weight={isActive ? "fill" : "regular"}
+        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
+      />
+    ),
+  },
+  {
+    name: "Estatísticas",
     path: "/learn/statiscs",
-    icon: <ChartNetwork size={34} strokeWidth={1} />,
+    icon: (isActive) => (
+      <ChartDonut
+        size={32}
+        weight={isActive ? "fill" : "regular"}
+        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
+      />
+    ),
   },
   {
     name: "Casos de uso",
     path: "/learn/usecases",
-    icon: <Blocks size={34} strokeWidth={1} />,
+    icon: (isActive) => (
+      <Lego
+        size={32}
+        weight={isActive ? "fill" : "regular"}
+        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
+      />
+    ),
   },
   {
     name: "Insights",
     path: "/learn/insights",
-    icon: <Sparkle size={34} strokeWidth={1} />,
+    icon: (isActive) => (
+      <Sparkle
+        size={34}
+        strokeWidth={1}
+        weight={isActive ? "fill" : "regular"}
+      />
+    ),
   },
 ];
 
 export function FooterFixed() {
-  const pathname = usePathname(); // Obtém a rota atual
+  const pathname = usePathname();
 
   return (
-    <>
-      <footer className="w-full bg-[#121214] border-t-[1px] border-[#25252a] text-white text-center p-4 fixed bottom-0 left-0 lg:hidden">
-        <ul className="flex justify-around">
-          {links.map((link, index) => {
-            const isActive = pathname === link.path; // Verifica se o link está ativo
+    <footer className="w-full bg-[#121214] border-t-[1px] border-[#25252a] text-white text-center p-4 fixed bottom-0 left-0 lg:hidden">
+      <ul className="flex justify-around">
+        {links.map((link, index) => {
+          const isActive = pathname === link.path;
 
-            return (
-              <li key={index}>
-                <Link href={link.path} className="flex flex-col items-center">
-                  {React.cloneElement(link.icon, {
-                    color: isActive ? "#008ab0" : "white", // Altera a cor se for ativo
-                  })}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </footer>
-    </>
+          return (
+            <li key={index}>
+              <Link href={link.path} className="flex flex-col items-center">
+                {link.icon(isActive)}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </footer>
   );
 }

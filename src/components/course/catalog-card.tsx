@@ -1,7 +1,8 @@
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import reactIcon from "../../../public/react-icon.png"; // Imagem padrão
-import { ArrowUpRight, CirclePlay, ScrollText, Star } from "lucide-react";
+import { ArrowUpRight, CirclePlay, ScrollText } from "lucide-react";
+import { Star } from "@phosphor-icons/react/dist/ssr";
 
 const courses = [
   {
@@ -81,7 +82,7 @@ export function CatalogCard({
       className={`w-full h-52 2xl:w-[312px] bg-gray-gradient border border-[#25252A] pb-6 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:backdrop-blur-lg hover:bg-[#1A1A1E]/40 cursor-pointer ${className}`}
     >
       <div className="flex items-center justify-end">
-        <Star />
+        <Star size={28} />
       </div>
       <div>
         <Image src={imageSrc} alt={name} width={80} height={80} />
