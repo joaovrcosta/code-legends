@@ -1,27 +1,22 @@
 "use client";
 
-import {
-  ArrowBigDown,
-  ArrowLeft,
-  ChevronRight,
-  CirclePlay,
-  Lock,
-} from "lucide-react";
+import { ArrowLeft, ChevronRight, CirclePlay, Lock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+} from "@/components/ui/popover"; // Supondo que você tenha esse componente Popover
 import { PrimaryButton } from "@/components/ui/primary-button";
 import completeTaskRight from "../../../public/complete-task-right.svg";
 import completeTaskLeft from "../../../public/complete-task-left.svg";
 import incompleteTaskLeft from "../../../public/incomplete-task-left.svg";
 import incompleteTaskRight from "../../../public/incomplete-task-right.svg";
 import DividerWithText from "@/components/divider-with-text";
+import { FastForward } from "@phosphor-icons/react/dist/ssr";
 
 type Task = {
   id: number;
@@ -80,74 +75,77 @@ const tasks: Task[] = [
 
 const firstIncompleteTask = tasks.find((task) => !task.completed)?.id ?? null;
 
-const TaskTooltip = ({
+const TaskPopover = ({
   task,
-  openTooltip,
-  toggleTooltip,
+  openPopover,
+  togglePopover,
   showContinue,
   setShowContinue,
 }: {
   task: Task;
-  openTooltip: number | null;
-  toggleTooltip: (id: number) => void;
+  openPopover: number | null;
+  togglePopover: (id: number) => void;
   showContinue: boolean;
   setShowContinue: (state: boolean) => void;
 }) => (
-  <TooltipProvider>
+  <div>
     {showContinue && firstIncompleteTask === task.id ? (
-      <Tooltip open={true}>
-        <TooltipTrigger asChild>
+      <Popover open={true}>
+        <PopoverTrigger asChild>
           <Image
             src={task.image}
             alt=""
             className="cursor-pointer"
             onClick={() => {
               setShowContinue(false);
-              toggleTooltip(task.id);
+              togglePopover(task.id);
             }}
           />
-        </TooltipTrigger>
-        <TooltipContent className="w-[120px] text-center bg-[#1a1a1e] rounded-[20px] mb-4 border border-[#25252A] shadow-lg p-2">
+        </PopoverTrigger>
+        <PopoverContent
+          className="w-[120px] text-center bg-[#00c1f6] rounded-[12px] border-[2px] border-[#25252A] shadow-lg p-2"
+          side="top"
+        >
           <div className="flex flex-col items-center justify-center gap-2">
-            <span className="text-white text-sm">Continuar</span>
-            <ArrowBigDown className="text-[#00c8ff]" />
+            <span className="text-white text-base">Continuar</span>
           </div>
-        </TooltipContent>
-      </Tooltip>
+          <PopoverArrow className="fill-[#00c1f6] mb-3 w-4 h-4 transform translate-y-[-2px]" />
+        </PopoverContent>
+      </Popover>
     ) : (
-      /* Tooltip normal de "Assistir" */
-      <Tooltip open={openTooltip === task.id}>
-        <TooltipTrigger asChild>
+      <Popover open={openPopover === task.id}>
+        <PopoverTrigger asChild>
           <Image
             src={task.image}
             alt=""
             className="cursor-pointer"
-            onClick={() => toggleTooltip(task.id)}
+            onClick={() => togglePopover(task.id)}
           />
-        </TooltipTrigger>
-        <TooltipContent className="w-[295px] bg-[#1a1a1e] rounded-[20px] mb-4 border border-[#25252A] shadow-lg p-4">
+        </PopoverTrigger>
+        <PopoverContent className="w-[295px] bg-[#1a1a1e] rounded-[20px] border border-[#25252A] shadow-lg p-4">
           <div className="mb-3">
             <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xs">
               {task.category}
             </span>
-            <h3 className="text-xl mt-2">{task.title}</h3>
+            <h3 className="text-xl mt-2 text-white">{task.title}</h3>
           </div>
           <PrimaryButton disabled={task.locked}>
             {task.locked ? "Confidencial" : "Assistir"}
             {task.locked ? <Lock /> : <CirclePlay />}
           </PrimaryButton>
-        </TooltipContent>
-      </Tooltip>
+          <PopoverArrow className="fill-[#1a1a1e] w-4 h-4 transform translate-y-[-2px]" />
+        </PopoverContent>
+      </Popover>
     )}
-  </TooltipProvider>
+  </div>
 );
 
 export default function LearnPage() {
-  const [openTooltip, setOpenTooltip] = useState<number | null>(null);
+  const [openPopover, setOpenPopover] = useState<number | null>(null);
   const [showContinue, setShowContinue] = useState<boolean>(true);
 
-  const toggleTooltip = (id: number) => {
-    setOpenTooltip((prev) => (prev === id ? null : id));
+  const togglePopover = (id: number) => {
+    setOpenPopover((prev) => (prev === id ? null : id));
   };
 
   return (
@@ -179,31 +177,42 @@ export default function LearnPage() {
           <DividerWithText text="Fundamentos do ReactJS" />
 
           {/* Lista de Tarefas */}
-          <section className="mt-8 space-y-10 px-4">
-            {tasks.map((task, index) => {
-              const isLeft = index % 2 === 0;
-              return (
-                <div
-                  key={task.id}
-                  className="flex items-center justify-between mt-4 space-x-2"
-                >
-                  {isLeft && (
-                    <div className="h-[56px] w-[256px] rounded-tl-[55px] border-t border-l"></div>
-                  )}
-                  <TaskTooltip
-                    task={task}
-                    openTooltip={openTooltip}
-                    toggleTooltip={toggleTooltip}
-                    showContinue={showContinue}
-                    setShowContinue={setShowContinue}
-                  />
-                  {!isLeft && (
-                    <div className="h-[56px] w-[256px] rounded-tr-[55px] border-t border-r"></div>
-                  )}
-                </div>
-              );
-            })}
-          </section>
+          <div className="pb-14">
+            <section className="mt-8 space-y-12 px-4 mb-12">
+              {tasks.map((task, index) => {
+                const isLeft = index % 2 === 0;
+                return (
+                  <div
+                    key={task.id}
+                    className="flex items-center justify-between mt-4 space-x-2 pb-4"
+                  >
+                    {isLeft && (
+                      <div className="h-[56px] w-[256px] rounded-tl-[55px] border-t border-l"></div>
+                    )}
+                    <TaskPopover
+                      task={task}
+                      openPopover={openPopover}
+                      togglePopover={togglePopover}
+                      showContinue={showContinue}
+                      setShowContinue={setShowContinue}
+                    />
+                    {!isLeft && (
+                      <div className="h-[56px] w-[256px] rounded-tr-[55px] border-t border-r"></div>
+                    )}
+                  </div>
+                );
+              })}
+            </section>
+            <section className="flex items-center justify-center p-8 border border-[#25252A] rounded-[20px] flex-col space-y-3">
+              <p className="text-sm">Seção 2</p>
+              <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent">
+                Aprofundando com hooks
+              </span>
+              <PrimaryButton>
+                Pular sessão <FastForward size={32} weight="fill" />
+              </PrimaryButton>
+            </section>
+          </div>
         </div>
       </div>
     </div>
