@@ -20,7 +20,7 @@ const links = [
   },
   {
     name: "Cursos",
-    path: "/learn/courses",
+    path: "/learn/catalog",
     icon: <BookOpenText size={34} strokeWidth={1} />,
   },
   { name: "HQ", path: "/learn/hq", icon: <Shield size={34} strokeWidth={1} /> },

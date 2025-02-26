@@ -7,7 +7,7 @@ import {
   ChevronRight,
   House,
   Shield,
-  Sparkle,
+  Sticker,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,13 +16,13 @@ const links = [
   { name: "Aprender", path: "/learn", icon: <House /> },
   {
     name: "Cursos",
-    path: "/learn/courses",
+    path: "/learn/catalog",
     icon: <BookOpenText />,
   },
   { name: "Quartel General", path: "/learn/hq", icon: <Shield /> },
   { name: "Estatisticas", path: "/learn/statistcs", icon: <ChartNetwork /> },
   { name: "Casos de uso", path: "/account/access", icon: <Blocks /> },
-  { name: "Insights", path: "/", icon: <Sparkle /> },
+  { name: "Emblemas", path: "/", icon: <Sticker /> },
 ];
 
 const Sidebar = () => {
@@ -40,7 +40,7 @@ const Sidebar = () => {
                   className={`flex items-center h-[52px] px-4 space-x-3 transition-colors ${
                     pathName === link.path
                       ? "bg-blue-gradient-500 text-white font-semibold"
-                      : "text-[#C4C4CC]"
+                      : "text-[#C4C4CC] hover:bg-[#2E2E32]"
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">

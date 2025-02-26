@@ -33,7 +33,7 @@ const tasks: Task[] = [
     category: "ReactJS",
     image: completeTaskRight,
     completed: true,
-    url: "/learn/courses",
+    url: "/learn/catalog",
   },
   {
     id: 2,
@@ -41,7 +41,7 @@ const tasks: Task[] = [
     category: "ReactJS",
     image: completeTaskLeft,
     completed: true,
-    url: "/learn/courses",
+    url: "/learn/catalog",
   },
   {
     id: 3,
@@ -49,7 +49,7 @@ const tasks: Task[] = [
     category: "ReactJS",
     image: incompleteTaskLeft,
     completed: false,
-    url: "/learn/courses",
+    url: "/learn/catalog",
   },
   {
     id: 4,
@@ -58,7 +58,7 @@ const tasks: Task[] = [
     image: incompleteTaskRight,
     completed: false,
     locked: true,
-    url: "/learn/courses",
+    url: "/learn/catalog",
   },
   {
     id: 5,
@@ -66,7 +66,7 @@ const tasks: Task[] = [
     category: "ReactJS",
     image: incompleteTaskLeft,
     completed: false,
-    url: "/learn/courses",
+    url: "/learn/catalog",
   },
   {
     id: 6,
@@ -74,7 +74,7 @@ const tasks: Task[] = [
     category: "ReactJS",
     image: incompleteTaskLeft,
     completed: false,
-    url: "/learn/courses",
+    url: "/learn/catalog",
   },
   {
     id: 7,
@@ -82,7 +82,7 @@ const tasks: Task[] = [
     category: "ReactJS",
     image: incompleteTaskLeft,
     completed: false,
-    url: "/learn/courses",
+    url: "/learn/catalog",
   },
   {
     id: 8,
@@ -90,7 +90,7 @@ const tasks: Task[] = [
     category: "ReactJS",
     image: incompleteTaskLeft,
     completed: false,
-    url: "/learn/courses",
+    url: "/learn/catalog",
   },
 ];
 
@@ -142,9 +142,9 @@ export default function LearnPage() {
           {/* Cabeçalho */}
           <div className="w-full max-w-[713px] sticky top-0 z-10">
             <div className="bg-[#121214] px-4 flex items-center  justify-between h-[24px]"></div>
-            <section className="bg-gray-gradient border border-[#25252A] px-4 py-4 flex items-center rounded-lg w-full max-w-[713px] justify-between sticky top-0 z-10 bg-[#1a1a1e]">
+            <section className="bg-gray-gradient border border-[#25252A] px-4 py-4 flex items-center shadow-lg rounded-lg w-full max-w-[713px] justify-between sticky top-0 z-10 bg-[#1a1a1e]">
               <div className="flex flex-col lg:ml-4">
-                <Link href="/learn/courses">
+                <Link href="/learn/catalog">
                   <div className="flex items-center gap-2 cursor-pointer mb-2 text-sm text-[#7e7e89]">
                     <ArrowLeft size={16} className="text-[#7e7e89]" />
                     SEÇÃO 1, AULA 14
@@ -155,7 +155,7 @@ export default function LearnPage() {
                 </span>
                 <p className="text-xl">Fundamentos do ReactJS</p>
               </div>
-              <Link href="/learn/courses">
+              <Link href="/learn/catalog">
                 <ChevronRight size={48} />
               </Link>
             </section>

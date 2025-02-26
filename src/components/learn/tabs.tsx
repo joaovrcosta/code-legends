@@ -8,7 +8,7 @@ import { Menu } from "lucide-react";
 
 const tabs = [
   { id: "learn", label: "Aprender", path: "/learn" },
-  { id: "courses", label: "Cursos", path: "/learn/courses" },
+  { id: "courses", label: "Cursos", path: "/learn/catalog" },
   { id: "hq", label: "Quartel General", path: "/learn/hq" },
   { id: "stats", label: "Estatísticas", path: "/stats" },
   { id: "use-cases", label: "Casos de uso", path: "/use-cases" },
