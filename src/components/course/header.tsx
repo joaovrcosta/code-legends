@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, Headset, LogOut, User } from "lucide-react";
+import { Headset, LogOut, User } from "lucide-react";
 
 export default function CourseHeader() {
   return (

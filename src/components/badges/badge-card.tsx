@@ -1,11 +1,9 @@
-import { Card } from "../ui/card";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { PrimaryButton } from "../ui/primary-button";
 import { TestTube } from "@phosphor-icons/react/dist/ssr";

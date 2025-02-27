@@ -6,7 +6,6 @@ import {
   House,
   Lego,
   Shield,
-  Sparkle,
   Sticker,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
