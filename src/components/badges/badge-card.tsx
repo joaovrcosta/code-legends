@@ -18,12 +18,10 @@ interface BadgeCardProps {
 }
 
 export function BadgeCard({
-  className = "",
   badgeTitle,
   badgeSubtitle,
   badgeImage,
   buttonText = "Fazer Teste",
-  description,
 }: BadgeCardProps) {
   return (
     <Accordion type="single" collapsible>
