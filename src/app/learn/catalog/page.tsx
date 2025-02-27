@@ -1,16 +1,23 @@
 import { Catalog, CatalogCard } from "@/components/course/catalog-card";
 import { Filters } from "@/components/learn/filters";
+import { Input } from "@/components/ui/input";
 import { Library, Store } from "lucide-react";
 export default function CoursesPage() {
   return (
     <div>
       <div className="flex items-center justify-center w-full lg:pt-6 pt-3">
         <div className="max-w-[1180px] w-full">
-          <div className=" w-full px-0 py-6 flex space-x-2">
+          <div className=" w-full px-0 py-6 pb-4 flex space-x-2">
             <Library className="text-[#00C8FF]" />
             <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-lg">
               Meu catálogo
             </span>
+          </div>
+          <div className="mb-6">
+            <Input
+              className="rounded-full h-[52px] lg:max-w-[312px] w-full border-[#25252A] px-4 shadow-lg"
+              placeholder="Pesquisar"
+            />
           </div>
           <div className="w-full flex flex-wrap justify-start gap-6">
             <CatalogCard

@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Headset, LogOut, User } from "lucide-react";
+import { ChevronDown, Headset, LogOut, User } from "lucide-react";
 
 export default function LearnHeader() {
   return (
@@ -30,6 +30,7 @@ export default function LearnHeader() {
                 <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent">
                   João
                 </span>
+                <ChevronDown className="text-[#00C8FF]" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent

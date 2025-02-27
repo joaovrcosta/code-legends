@@ -7,6 +7,7 @@ import {
   Lego,
   Shield,
   Sparkle,
+  Sticker,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -68,7 +69,7 @@ const links: LinkItem[] = [
   },
   {
     name: "Casos de uso",
-    path: "/learn/usecases",
+    path: "/learn/use-cases",
     icon: (isActive) => (
       <Lego
         size={32}
@@ -79,12 +80,13 @@ const links: LinkItem[] = [
   },
   {
     name: "Insights",
-    path: "/learn/insights",
+    path: "/learn/badges",
     icon: (isActive) => (
-      <Sparkle
+      <Sticker
         size={34}
         strokeWidth={1}
         weight={isActive ? "fill" : "regular"}
+        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
       />
     ),
   },
