@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, Headset, LogOut, Menu, User } from "lucide-react";
-import { Fire } from "@phosphor-icons/react/dist/ssr";
 import fireIcon from "../../../public/hot-flame-icon.svg";
 import useSidebarStore from "@/stores/sidebarStore";
 
