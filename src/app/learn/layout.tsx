@@ -1,3 +1,4 @@
+// src/layouts/LearnLayout.tsx
 import { FooterFixed } from "@/components/learn/footer-fixed";
 import LearnHeader from "@/components/learn/header";
 import Sidebar from "@/components/learn/sidebar";
@@ -13,8 +14,8 @@ export default function LearnLayout({
         <LearnHeader />
       </div>
 
-      <div className="flex flex-1 lg:pt-[80px] pt-[64px]">
-        <div className="w-64 bg-gray-800 text-white sticky top-[80px] h-[calc(100vh-80px)] lg:block hidden">
+      <div className="flex flex-1 lg:pt-[74px] pt-[64px]">
+        <div className="lg:block hidden max-w-64">
           <Sidebar />
         </div>
 

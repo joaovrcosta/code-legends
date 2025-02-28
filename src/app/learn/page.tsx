@@ -247,13 +247,13 @@ const TaskPopover = ({
           />
         </PopoverTrigger>
         <PopoverContent
-          className="w-[120px] text-center bg-[#00c1f6] rounded-[12px] border-[2px] border-[#25252A] shadow-lg p-2"
+          className="w-[120px] text-center bg-blueGradient500 rounded-full border-[2px] border-[#25252A] shadow-lg p-2"
           side="top"
         >
           <div className="flex flex-col items-center justify-center gap-2">
             <span className="text-white text-base">Continuar</span>
           </div>
-          <PopoverArrow className="fill-[#00c1f6] mb-3 w-4 h-4 transform translate-y-[-2px]" />
+          <PopoverArrow className="fill-[#25252A] mb-3 w-4 h-4 transform translate-y-[-2px]" />
         </PopoverContent>
       </Popover>
     ) : (
