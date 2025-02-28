@@ -13,36 +13,76 @@ import {
 import { ChevronDown, Headset, LogOut, Menu, User } from "lucide-react";
 import fireIcon from "../../../public/hot-flame-icon.svg";
 import useSidebarStore from "@/stores/sidebarStore";
+import clCoin from "../../../public/cl-coin.svg";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { Brain } from "@phosphor-icons/react/dist/ssr";
 
 export default function LearnHeader() {
   const { toggleSidebar } = useSidebarStore();
 
   return (
     <div className="relative fixed top-0 left-0 w-full z-50 bg-[#121214] shadow-lg border-b-[1px] border-[#25252a] lg:py-0 py-4">
-      <ul className="flex justify-between items-center lg:pt-4 pt-2 lg:pb-4 pb-2 w-full mx-auto px-4">
-        <li className="flex items-center space-x-3">
+      <ul className="flex justify-between items-center lg:pt-4 pt-0 lg:pb-4 lpb-0 w-full mx-auto px-4">
+        <li className="flex items-center lg:space-x-3">
           <button
             onClick={toggleSidebar}
             className="text-white p-1 border border-[#25252a] rounded-lg lg:block hidden hover:bg-[#25252a] transition-all duration-150 ease-in-out"
           >
-            <Menu size={28} />
+            <Menu size={24} />
           </button>
-          <Link href="/learn">
-            <Image src={codeLegendsLogo} alt="Code Legends" />
-          </Link>
+          <div className="lg:flex hidden">
+            <Link href="/learn">
+              <Image src={codeLegendsLogo} alt="Code Legends" />
+            </Link>
+          </div>
+
+          <div className="lg:hidden block">
+            <Link href="/learn">
+              <Image src={clCoin} alt="Code Legends" className="h-8 w-8" />
+            </Link>
+          </div>
         </li>
 
         <li className="flex space-x-2 items-center ">
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-3">
-              <Image
-                src={fireIcon}
-                alt=""
-                height={24}
-                width={24}
-                className="lg:h-6 lg:w-6 h-5 w-5"
-              />
-              <span>252</span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div className="flex items-center space-x-3">
+                    <Image
+                      src={fireIcon}
+                      alt=""
+                      height={24}
+                      width={24}
+                      className="h-5 w-5"
+                    />
+                    <span>21</span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-[200px]">
+                  <p>
+                    Seu{" "}
+                    <span className="font-bold bg-yellow-lightning-500 bg-clip-text text-transparent">
+                      STREAK
+                    </span>
+                    ele representa quantos dias seguidos você se dedicou dentro
+                    da plataforma estudando, e se tornando uma{" "}
+                    <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent">
+                      lenda
+                    </span>
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <div className="flex items-center space-x-2">
+              <Brain size={24} weight="fill" className="text-[#00C8FF]" />
+              <span>8</span>
             </div>
             <div className="hidden lg:block">
               <DropdownMenu>

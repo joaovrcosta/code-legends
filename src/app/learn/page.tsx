@@ -3,7 +3,7 @@
 import { ArrowLeft, ChevronRight, CirclePlay, Lock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Popover,
   PopoverTrigger,
@@ -17,7 +17,7 @@ import incompleteTaskLeft from "../../../public/incomplete-task-left.svg";
 import incompleteTaskRight from "../../../public/incomplete-task-right.svg";
 import DividerWithText from "@/components/divider-with-text";
 import { FastForward } from "@phosphor-icons/react/dist/ssr";
-import quizTest from "../../../public/question-task-left.svg";
+import quizTest from "../../../public/incomplete-test.svg";
 
 interface Module {
   moduleName: string;
@@ -289,10 +289,20 @@ const TaskPopover = ({
 export default function LearnPage() {
   const [openPopover, setOpenPopover] = useState<number | null>(null);
   const [showContinue, setShowContinue] = useState<boolean>(true);
+  const taskRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
   const togglePopover = (id: number) => {
     setOpenPopover((prev) => (prev === id ? null : id));
   };
+
+  useEffect(() => {
+    if (firstIncompleteTask && taskRefs.current[firstIncompleteTask]) {
+      taskRefs.current[firstIncompleteTask]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, []);
 
   return (
     <div className="flex items-center justify-center w-full">
@@ -331,7 +341,13 @@ export default function LearnPage() {
                   {submodule.tasks.map((task, index) => {
                     const isLeft = index % 2 === 0;
                     return (
-                      <div key={task.id} className="max-w-[384px]">
+                      <div
+                        key={task.id}
+                        className="max-w-[384px]"
+                        ref={(el) => {
+                          taskRefs.current[task.id] = el;
+                        }}
+                      >
                         <div className="flex items-center justify-center space-x-2 mb-6 pt-7 pb-4 max-w-[384px]">
                           {isLeft && (
                             <div className="h-[56px] w-[256px] rounded-tl-[55px] border-t border-l"></div>
