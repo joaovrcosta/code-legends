@@ -14,7 +14,7 @@ const courses = [
   {
     name: "NextJS",
     image: "",
-    url: "/courses/tailwind-css",
+    url: "/courses/next-js",
     color: "blue",
   },
   { name: "Patterns", image: "", url: "/courses/patterns", color: "lime" },

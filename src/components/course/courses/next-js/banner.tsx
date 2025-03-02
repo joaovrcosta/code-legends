@@ -7,7 +7,7 @@ import reactIcon from "../../../../../public/react-icon.svg";
 import { Progress } from "@/components/ui/progress";
 import { usePathname } from "next/navigation";
 
-export function ReactCourseBanner() {
+export function NextCourseBanner() {
   const pathName = usePathname();
 
   return (
@@ -24,7 +24,7 @@ export function ReactCourseBanner() {
             </div>
           </Link>
           <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent lg:text-2xl text-xl">
-            ReactJS
+            NextJS
           </span>
           <p className="lg:text-base text-sm">
             Desenvolva interfaces modernas e reativas na web utilizando uma
@@ -35,13 +35,15 @@ export function ReactCourseBanner() {
       <section className="flex items-center justify-between mt-4 mb-4">
         <ul className="flex gap-3 mt-4 mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
           {[
-            { href: "/courses/react-js", label: "Visão Geral" },
-            { href: "/courses/react-js/about", label: "Sobre" },
+            { href: "/courses/next-js", label: "Curso" },
+            { href: "/courses/next-js/quizes", label: "Quizes" },
+            { href: "/courses/next-js/materials", label: "Material" },
+            { href: "/courses/next-js/projects", label: "Projetos" },
           ].map(({ href, label }) => (
             <li
               key={href}
-              className={`flex items-center justify-center p-3 h-[42px] min-w-[110px] text-lg ${
-                pathName === href ? "border-b-[2px] border-[#00C8FF]" : ""
+              className={`flex items-center justify-center p-3 h-[42px] min-w-[90px] text-lg ${
+                pathName === href ? "border-b-[1px] border-[#00C8FF]" : ""
               }`}
             >
               <Link href={href}>
