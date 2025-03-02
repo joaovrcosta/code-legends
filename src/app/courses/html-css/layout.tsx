@@ -1,4 +1,4 @@
-import { ReactJSCourseBanner } from "@/components/course/courses/react-js/banner";
+import { HTMLCSSCourseBanner } from "@/components/course/courses/html-css/banner";
 
 export default function CourseLayout({
   children,
@@ -9,7 +9,7 @@ export default function CourseLayout({
     <>
       <div>
         <main className="w-full">
-          <ReactJSCourseBanner />
+          <HTMLCSSCourseBanner />
           {children}
         </main>
       </div>

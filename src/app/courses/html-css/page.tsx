@@ -19,33 +19,37 @@ const courseData = [
     title: "HTML Iniciante",
     infos: ["6 aulas", "2 quizzes", "5h 30m"],
     session: "Sessão 1",
-    completed: "Concluído",
-    progress: 100,
+    completed: "0% completo",
+    progress: 0,
     locked: false,
     classes: [
-      { title: "Introdução ao ReactJS", duration: "00:01:31", complete: true },
-      { title: "Fundamentos do JSX", duration: "00:02:15", complete: true },
+      { title: "Introdução ao ReactJS", duration: "00:01:31", complete: false },
+      { title: "Fundamentos do JSX", duration: "00:02:15", complete: false },
       {
         title: "Projeto: Animal Fun Facts",
         duration: "",
         isQuiz: false,
         isProject: true,
-        complete: true,
+        complete: false,
       },
-      { title: "Componentes e Props", duration: "00:03:00", complete: true },
-      { title: "Estado e Ciclo de Vida", duration: "00:04:00", complete: true },
+      { title: "Componentes e Props", duration: "00:03:00", complete: false },
+      {
+        title: "Estado e Ciclo de Vida",
+        duration: "00:04:00",
+        complete: false,
+      },
       {
         title: "Quiz - Fundamentos",
         duration: "",
         isQuiz: true,
-        complete: true,
+        complete: false,
       },
       {
         title: "Projeto: Authorization Form",
         duration: "",
         isQuiz: false,
         isProject: true,
-        complete: true,
+        complete: false,
       },
     ],
   },
@@ -56,8 +60,8 @@ const courseData = [
     session: "Sessão 2",
     lessons: "31 aulas",
     completed: "Concluído",
-    progress: 100,
-    locked: false,
+    progress: 0,
+    locked: true,
     classes: [
       { title: "Introdução ao Hooks", duration: "00:01:45", complete: true },
       { title: "UseState e UseEffect", duration: "00:02:30", complete: true },
@@ -80,8 +84,8 @@ const courseData = [
     session: "Sessão 3",
     lessons: "31 aulas",
     completed: "27% completo",
-    progress: 27,
-    locked: false,
+    progress: 0,
+    locked: true,
     classes: [
       { title: "Fundamentos de HTTP", duration: "00:01:30", complete: true },
       {
@@ -301,7 +305,7 @@ export default function ReactJsPage() {
             className={
               course.locked
                 ? "text-gray-500"
-                : "bg-blue-gradient-500 bg-clip-text text-transparent"
+                : "bg-orange-gradient-500 bg-clip-text text-transparent"
             }
           >
             {course.level}
@@ -315,7 +319,7 @@ export default function ReactJsPage() {
               {/* Barra de progresso inferior */}
               <div className="absolute bottom-0 left-0 w-full h-[4px] bg-[#25252A] rounded-b-3xl">
                 <div
-                  className="h-full bg-[#004E63] rounded-b-3xl transition-all ease-in-out duration-300"
+                  className="h-full bg-[#f34200] rounded-b-3xl transition-all ease-in-out duration-300"
                   style={{ width: `${course.progress}%` }}
                 />
               </div>
@@ -327,10 +331,10 @@ export default function ReactJsPage() {
                     className={`flex items-center justify-center rounded-full h-[70px] w-[70px] border-[3px] ${
                       course.locked
                         ? "border-gray-600 cursor-not-allowed"
-                        : "border-[#00C8FF] cursor-pointer"
+                        : "border-[#f34200] cursor-pointer"
                     }`}
                   >
-                    <div className="flex items-center justify-center h-[70px] w-[70px] hover:bg-[#00C8FF] rounded-full hover:text-[#17171a] transition-all duration-300 hover:shadow-[0_0_12px_#00C8FF]">
+                    <div className="flex items-center justify-center h-[70px] w-[70px] hover:bg-[#f34200] rounded-full hover:text-[#17171a] transition-all duration-300 hover:shadow-[0_0_12px_#00C8FF]">
                       <Play className={course.locked ? "text-gray-500" : ""} />
                     </div>
                   </Link>
@@ -339,8 +343,8 @@ export default function ReactJsPage() {
                       <span
                         className={`font-bold text-2xl ${
                           course.locked
-                            ? "text-gray-600 text-lg"
-                            : "bg-blue-gradient-500 bg-clip-text text-transparent text-lg"
+                            ? "text-gray-600"
+                            : "bg-orange-gradient-500 bg-clip-text text-transparent text-lg"
                         }`}
                       >
                         {course.title}
@@ -372,7 +376,7 @@ export default function ReactJsPage() {
                             weight="fill"
                             className="text-[#00A277]"
                           />
-                          <p>{course.completed}</p>
+                          <p>Concluido</p>
                         </>
                       ) : (
                         <p>{course.completed}</p>
