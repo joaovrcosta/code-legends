@@ -48,11 +48,11 @@ const TaskPopover = ({
           />
         </PopoverTrigger>
         <PopoverContent
-          className="w-[120px] text-center bg-blueGradient500 rounded-full border-[2px] border-[#25252A] shadow-lg p-2"
+          className="w-[120px] cursor-pointer text-center bg-[#121214] rounded-full border-[2px] border-[#25252A] shadow-lg p-2 hover:bg-[#25252A]"
           side="top"
         >
           <div className="flex flex-col items-center justify-center gap-2">
-            <span className="text-white text-base">Continuar</span>
+            <span className="text-white text-sm font-semibold">Continuar</span>
           </div>
           <PopoverArrow className="fill-[#25252A] mb-3 w-4 h-4 transform translate-y-[-2px]" />
         </PopoverContent>
@@ -150,9 +150,15 @@ export default function LearnPage() {
                             taskRefs.current[task.id] = el;
                           }}
                         >
-                          <div className="flex items-center justify-center space-x-2 mb-6 pt-7 pb-4 max-w-[384px]">
+                          <div className="flex items-center justify-center space-x-4 mb-6 pt-7 max-w-[384px]">
                             {isLeft && (
-                              <div className="h-[56px] w-[256px] rounded-tl-[55px] border-t border-l"></div>
+                              <div
+                                className={`h-[42px] w-[256px] rounded-tl-[55px] border-t border-l ${
+                                  task.completed
+                                    ? "border-[#00C8FF]"
+                                    : "border-[#25252A]"
+                                }`}
+                              ></div>
                             )}
                             <TaskPopover
                               task={task}
@@ -162,7 +168,13 @@ export default function LearnPage() {
                               setShowContinue={setShowContinue}
                             />
                             {!isLeft && (
-                              <div className="h-[56px] w-[256px] rounded-tr-[55px] border-t border-r"></div>
+                              <div
+                                className={`h-[42px] w-[256px] rounded-tr-[55px] border-t border-r ${
+                                  task.completed
+                                    ? "border-[#00C8FF]"
+                                    : "border-[#25252A]"
+                                }`}
+                              ></div>
                             )}
                           </div>
                         </div>

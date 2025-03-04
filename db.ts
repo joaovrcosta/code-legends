@@ -1,8 +1,9 @@
 import completeTaskRight from "./public/complete-task-right.svg";
 import completeTaskLeft from "./public/complete-task-left.svg";
-import incompleteTaskRight from "./public/incomplete-task-right.svg";
 import incompleteTaskLeft from "./public/incomplete-task-left.svg";
-import quizTest from "./public/question-task-left.svg";
+import recordedClassIcon from "./public/recorded-class-icon.svg";
+import incompleteRecordedClass from "./public/incomplete-recorded-class.svg";
+import quizTest from "./public/quiz-test-incomplete.svg";
 import { StaticImageData } from "next/image";
 
 interface Module {
@@ -58,7 +59,7 @@ export const reactCourseData: ReactCourse = {
               id: 1,
               title: "Introdução",
               category: "ReactJS",
-              image: completeTaskRight,
+              image: recordedClassIcon,
               type: "video",
               completed: true,
               url: "/classroom/reactjs/chapter/iniciando-com-react/introducao",
@@ -67,7 +68,7 @@ export const reactCourseData: ReactCourse = {
               id: 2,
               title: "Fundamentos do ReactJS",
               category: "ReactJS",
-              image: completeTaskLeft,
+              image: recordedClassIcon,
               type: "video",
               completed: true,
               url: "/classroom/reactjs/chapter/iniciando-com-react/fundamentos-do-react",
@@ -76,7 +77,7 @@ export const reactCourseData: ReactCourse = {
               id: 3,
               title: "Bundlers & Compilers",
               category: "ReactJS",
-              image: incompleteTaskLeft,
+              image: incompleteRecordedClass,
               type: "video",
               completed: false,
               url: "/classroom/reactjs/chapter/iniciando-com-react/bundles-compilers",
@@ -85,7 +86,7 @@ export const reactCourseData: ReactCourse = {
               id: 4,
               title: "Criando um projeto React",
               category: "ReactJS",
-              image: incompleteTaskRight,
+              image: incompleteRecordedClass,
               type: "video",
               completed: false,
               locked: true,
@@ -95,7 +96,7 @@ export const reactCourseData: ReactCourse = {
               id: 5,
               title: "Componentes",
               category: "ReactJS",
-              image: incompleteTaskLeft,
+              image: incompleteRecordedClass,
               type: "video",
               completed: false,
               locked: true,
@@ -105,7 +106,7 @@ export const reactCourseData: ReactCourse = {
               id: 6,
               title: "Propriedades",
               category: "ReactJS",
-              image: incompleteTaskRight,
+              image: incompleteRecordedClass,
               type: "video",
               completed: false,
               locked: true,
@@ -115,7 +116,7 @@ export const reactCourseData: ReactCourse = {
               id: 7,
               title: "Colors",
               category: "ReactJS",
-              image: incompleteTaskLeft,
+              image: incompleteRecordedClass,
               type: "video",
               completed: false,
               locked: true,
@@ -140,7 +141,7 @@ export const reactCourseData: ReactCourse = {
               id: 9,
               title: "CSS Modules",
               category: "ReactJS",
-              image: incompleteTaskRight,
+              image: incompleteRecordedClass,
               completed: false,
               type: "video",
               locked: true,
@@ -150,7 +151,7 @@ export const reactCourseData: ReactCourse = {
               id: 10,
               title: "CSS Global",
               category: "ReactJS",
-              image: incompleteTaskLeft,
+              image: incompleteRecordedClass,
               completed: false,
               type: "video",
               locked: true,
@@ -160,7 +161,7 @@ export const reactCourseData: ReactCourse = {
               id: 11,
               title: "Componentes: Header",
               category: "ReactJS",
-              image: incompleteTaskLeft,
+              image: incompleteRecordedClass,
               completed: false,
               type: "video",
               locked: true,
