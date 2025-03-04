@@ -13,14 +13,12 @@ import {
 import { ChevronDown, Headset, LogOut, Menu, User } from "lucide-react";
 import fireIcon from "../../../public/hot-flame-icon.svg";
 import useSidebarStore from "@/stores/sidebarStore";
-import clCoin from "../../../public/cl-coin.svg";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { Brain } from "@phosphor-icons/react/dist/ssr";
 
 export default function LearnHeader() {
   const { toggleSidebar } = useSidebarStore();
@@ -43,7 +41,11 @@ export default function LearnHeader() {
 
           <div className="lg:hidden block">
             <Link href="/learn">
-              <Image src={clCoin} alt="Code Legends" className="h-8 w-8" />
+              <Image
+                src={codeLegendsLogo}
+                alt="Code Legends"
+                // className="h-8 w-8"
+              />
             </Link>
           </div>
         </li>
@@ -57,9 +59,9 @@ export default function LearnHeader() {
                     <Image
                       src={fireIcon}
                       alt=""
-                      height={24}
-                      width={24}
-                      className="h-5 w-5"
+                      height={32}
+                      width={32}
+                      className="h-6 w-6"
                     />
                     <span>21</span>
                   </div>
@@ -80,10 +82,10 @@ export default function LearnHeader() {
               </Tooltip>
             </TooltipProvider>
 
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <Brain size={24} weight="fill" className="text-[#00C8FF]" />
               <span>8</span>
-            </div>
+            </div> */}
             <div className="hidden lg:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

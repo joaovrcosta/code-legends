@@ -69,9 +69,14 @@ const TaskPopover = ({
         </PopoverTrigger>
         <PopoverContent className="w-[295px] bg-[#1a1a1e] rounded-[20px] border border-[#25252A] shadow-lg p-4">
           <div className="mb-3">
-            <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xs">
-              {task.category}
-            </span>
+            <div className="flex items-center space-x-2">
+              <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xs">
+                {task.category}
+              </span>
+              <span className="text-xs text-[#7e7e89] capitalize">
+                {task.type}
+              </span>
+            </div>
             <h3 className="text-xl mt-2 text-white">{task.title}</h3>
           </div>
           <Link href={`${task.url}`}>
@@ -80,6 +85,15 @@ const TaskPopover = ({
               {task.locked ? <Lock /> : <CirclePlay />}
             </PrimaryButton>
           </Link>
+
+          {(task.type === "project" || task.type === "quiz") && (
+            <Link href={`/skip-task/${task.id}`}>
+              <PrimaryButton className="mt-2" disabled={task.locked}>
+                Pular
+                <FastForward size={24} weight="fill" />
+              </PrimaryButton>
+            </Link>
+          )}
           <PopoverArrow className="fill-[#1a1a1e] w-4 h-4 transform translate-y-[-2px]" />
         </PopoverContent>
       </Popover>

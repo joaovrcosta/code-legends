@@ -3,6 +3,7 @@ import completeTaskLeft from "./public/complete-task-left.svg";
 import incompleteTaskLeft from "./public/incomplete-task-left.svg";
 import recordedClassIcon from "./public/recorded-class-icon.svg";
 import incompleteRecordedClass from "./public/incomplete-recorded-class.svg";
+import imcompleteTestIcon from "./public/imcomplete-test-icon.svg";
 import quizTest from "./public/quiz-test-incomplete.svg";
 import { StaticImageData } from "next/image";
 
@@ -116,19 +117,19 @@ export const reactCourseData: ReactCourse = {
               id: 7,
               title: "Colors",
               category: "ReactJS",
-              image: incompleteRecordedClass,
-              type: "video",
+              image: quizTest,
+              type: "quiz",
               completed: false,
               locked: true,
               url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
             },
             {
               id: 8,
-              title: "Quiz - Fundamentos ReactJS",
+              title: "Fundamentos ReactJS",
               category: "ReactJS",
-              image: quizTest,
+              image: imcompleteTestIcon,
               completed: false,
-              type: "quiz",
+              type: "project",
               locked: true,
               url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
             },
@@ -161,18 +162,18 @@ export const reactCourseData: ReactCourse = {
               id: 11,
               title: "Componentes: Header",
               category: "ReactJS",
-              image: incompleteRecordedClass,
+              image: quizTest,
               completed: false,
-              type: "video",
+              type: "quiz",
               locked: true,
               url: "/learn/catalog",
             },
             {
               id: 12,
-              title: "Quiz",
-              category: "Componentes: Sidebar",
-              image: quizTest,
-              type: "quiz",
+              title: "Componentes: Sidebar",
+              category: "ReactJS",
+              image: imcompleteTestIcon,
+              type: "project",
               completed: false,
               locked: true,
               url: "/learn/catalog",
