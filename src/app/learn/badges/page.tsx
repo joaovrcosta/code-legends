@@ -16,7 +16,7 @@ export default function BadgePage() {
           <div className="flex items-center justify-start space-x-2">
             <Sticker className="text-[#00C8FF]" size={28} weight="fill" />
             <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-lg">
-              Flashcards
+              Emblemas
             </span>
             <div className="flex items-center justify-center">
               <TooltipProvider>
@@ -28,7 +28,7 @@ export default function BadgePage() {
                   <TooltipContent className="max-w-[412px]">
                     <p className="text-xs">
                       <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xs">
-                        Flashcards
+                        Emblemas
                       </span>{" "}
                       são pequenos cartões que servem para testar sua memória.
                       Explicando de forma simples: de um lado, eles têm

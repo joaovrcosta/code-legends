@@ -4,8 +4,8 @@ import {
   BookOpenText,
   ChartDonut,
   Lego,
+  Path,
   Shield,
-  Stack,
   Sticker,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
@@ -23,7 +23,7 @@ const links: LinkItem[] = [
     name: "Home",
     path: "/learn",
     icon: (isActive) => (
-      <Stack
+      <Path
         size={34}
         strokeWidth={1}
         weight={isActive ? "fill" : "regular"}

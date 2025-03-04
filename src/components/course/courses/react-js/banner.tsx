@@ -15,7 +15,7 @@ export function ReactJSCourseBanner() {
 
   return (
     <>
-      <section className="bg-gray-gradient border border-[#25252A] lg:p-14 xl:p-14 px-4 py-4 flex flex-col lg:flex-row items-center rounded-lg pb-10 lg:pb-0 lg:space-x-6 space-x-0">
+      <section className="bg-gray-gradient border border-[#25252A] lg:p-14 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center rounded-lg">
         <div className="w-full lg:hidden block">
           <Link href="/learn/catalog" className="lg:hidden block">
             <div className="flex items-center gap-2 cursor-pointer mb-2 text-sm text-[#7e7e89]">
@@ -24,18 +24,18 @@ export function ReactJSCourseBanner() {
             </div>
           </Link>
         </div>
-        <div className="lg:block">
+        <div className="lg:block lg:mr-6 mr-0">
           <Image src={icon} alt="ReactJS" width={120} height={120} />
         </div>
         <div className="flex flex-col items-center lg:items-start">
           <div className="flex flex-col">
             <Link href="/learn/catalog" className="lg:block hidden">
-              <div className="flex items-center gap-2 cursor-pointer mb-2 text-sm text-[#7e7e89]">
+              <div className="flex items-center gap-2 cursor-pointer mb-2 text-sm text-[#7e7e89] hover:text-[#505055]">
                 <ArrowLeft size={16} className="text-[#7e7e89]" />
                 Voltar
               </div>
             </Link>
-            <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent lg:text-2xl text-xl lg:text-left text-center">
+            <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent lg:text-3xl text-xl lg:text-left text-center">
               ReactJS
             </span>
             <p className="lg:text-base text-sm mt-2 text-center lg:text-left">
@@ -44,7 +44,7 @@ export function ReactJSCourseBanner() {
             </p>
           </div>
 
-          <Button className="w-full max-w-[220px] h-[46px] bg-blue-gradient-500 mt-4 transition-all duration-300 hover:shadow-[0_0_12px_#00C8FF]">
+          <Button className="w-full max-w-[220px] h-[46px] bg-blue-gradient-500 mt-4 transition-all duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold">
             Continuar curso <Play />
           </Button>
         </div>

@@ -9,17 +9,17 @@ import {
   CaretRight,
   Shield,
   Sticker,
-  Stack,
 } from "@phosphor-icons/react";
 import Link from "next/link";
+import { Path } from "@phosphor-icons/react/dist/ssr";
 
 const links = [
-  { name: "Aprender", path: "/learn", icon: Stack },
+  { name: "Aprender", path: "/learn", icon: Path },
   { name: "Cursos", path: "/learn/catalog", icon: BookOpenText },
   { name: "Quartel General", path: "/learn/hq", icon: Shield },
   { name: "Estatísticas", path: "/learn/statistcs", icon: ChartPieSlice },
   { name: "Casos de uso", path: "/learn/use-cases", icon: Lego },
-  { name: "Flashcards", path: "/learn/badges", icon: Sticker },
+  { name: "Emblemas", path: "/learn/badges", icon: Sticker },
 ];
 
 const Sidebar = () => {
