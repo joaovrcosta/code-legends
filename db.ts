@@ -29,7 +29,7 @@ export type Task = {
   image: StaticImageData;
   completed: boolean;
   locked?: boolean;
-  url?: string;
+  url: string;
   type: string;
 };
 
@@ -90,7 +90,7 @@ export const reactCourseData: ReactCourse = {
               image: incompleteRecordedClass,
               type: "video",
               completed: false,
-              locked: true,
+              locked: false,
               url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
             },
             {
@@ -100,7 +100,7 @@ export const reactCourseData: ReactCourse = {
               image: incompleteRecordedClass,
               type: "video",
               completed: false,
-              locked: true,
+              locked: false,
               url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
             },
             {
@@ -110,7 +110,7 @@ export const reactCourseData: ReactCourse = {
               image: incompleteRecordedClass,
               type: "video",
               completed: false,
-              locked: true,
+              locked: false,
               url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
             },
             {
@@ -120,7 +120,7 @@ export const reactCourseData: ReactCourse = {
               image: quizTest,
               type: "quiz",
               completed: false,
-              locked: true,
+              locked: false,
               url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
             },
             {
@@ -130,7 +130,7 @@ export const reactCourseData: ReactCourse = {
               image: imcompleteTestIcon,
               completed: false,
               type: "project",
-              locked: true,
+              locked: false,
               url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
             },
           ],
@@ -145,7 +145,7 @@ export const reactCourseData: ReactCourse = {
               image: incompleteRecordedClass,
               completed: false,
               type: "video",
-              locked: true,
+              locked: false,
               url: "/learn/catalog",
             },
             {
@@ -155,7 +155,7 @@ export const reactCourseData: ReactCourse = {
               image: incompleteRecordedClass,
               completed: false,
               type: "video",
-              locked: true,
+              locked: false,
               url: "/learn/catalog",
             },
             {
@@ -165,7 +165,7 @@ export const reactCourseData: ReactCourse = {
               image: quizTest,
               completed: false,
               type: "quiz",
-              locked: true,
+              locked: false,
               url: "/learn/catalog",
             },
             {
@@ -175,7 +175,7 @@ export const reactCourseData: ReactCourse = {
               image: imcompleteTestIcon,
               type: "project",
               completed: false,
-              locked: true,
+              locked: false,
               url: "/learn/catalog",
             },
           ],
@@ -198,7 +198,8 @@ export const reactCourseData: ReactCourse = {
               title: "CSS Modules",
               category: "ReactJS",
               image: completeTaskRight,
-              completed: true,
+              completed: false,
+              locked: true,
               type: "video",
               url: "/learn/catalog",
             },
@@ -207,7 +208,8 @@ export const reactCourseData: ReactCourse = {
               title: "CSS Global",
               category: "ReactJS",
               image: completeTaskLeft,
-              completed: true,
+              completed: false,
+              locked: true,
               type: "video",
               url: "/learn/catalog",
             },
@@ -217,6 +219,7 @@ export const reactCourseData: ReactCourse = {
               category: "ReactJS",
               image: incompleteTaskLeft,
               completed: false,
+              locked: true,
               type: "video",
               url: "/learn/catalog",
             },

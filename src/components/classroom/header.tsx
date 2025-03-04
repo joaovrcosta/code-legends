@@ -19,34 +19,35 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import useClassroomSidebarStore from "@/stores/classroom-sidebar";
+import { SkipBack, SkipForward } from "@phosphor-icons/react/dist/ssr";
 
-export default function LearnHeader() {
+export default function ClassroomHeader() {
   const { toggleSidebar } = useClassroomSidebarStore();
 
   return (
     <div className="relative fixed top-0 left-0 w-full z-50 bg-[#121214] shadow-lg border-b-[1px] border-[#25252a] lg:py-0 py-4">
       <ul className="flex justify-between items-center lg:pt-4 pt-0 lg:pb-4 lpb-0 w-full mx-auto px-4">
-        <li className="flex items-center lg:space-x-3">
+        <li className="flex items-center lg:space-x-6">
           <button
             onClick={toggleSidebar}
             className="text-white p-1 border border-[#25252a] rounded-lg lg:block hidden hover:bg-[#25252a] transition-all duration-150 ease-in-out"
           >
             <Menu size={24} />
           </button>
-          <div className="lg:flex hidden">
+          <div className="">
             <Link href="/learn">
               <Image src={codeLegendsLogo} alt="Code Legends" />
             </Link>
           </div>
-
-          <div className="lg:hidden block">
-            <Link href="/learn">
-              <Image
-                src={codeLegendsLogo}
-                alt="Code Legends"
-                // className="h-8 w-8"
-              />
-            </Link>
+          <div className="border rounded-[8px] border-[#25252a] p-2 lg:block hidden px-3">
+            <span className="text-[14px]">ReactJS</span>
+          </div>
+          <div className="p-2 lg:flex flex px-3 space-x-2 lg:block hidden">
+            <SkipBack size={24} />
+            <SkipForward size={24} weight="fill" />
+          </div>
+          <div className="p-2 lg:flex flex px-3 space-x-2 lg:block hidden">
+            <p>Bundles & Compilers</p>
           </div>
         </li>
 

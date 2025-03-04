@@ -71,6 +71,14 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .custom-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Oculta a barra de rolagem no Firefox */
+  .custom-scrollbar {
+    scrollbar-width: none;
+  }
 }
 
 @layer base {
