@@ -18,10 +18,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import useClassroomSidebarStore from "@/stores/classroom-sidebar";
+import useSidebarStore from "@/stores/sidebarStore";
 
 export default function LearnHeader() {
-  const { toggleSidebar } = useClassroomSidebarStore();
+  const { toggleSidebar } = useSidebarStore();
 
   return (
     <div className="relative fixed top-0 left-0 w-full z-50 bg-[#121214] shadow-lg border-b-[1px] border-[#25252a] lg:py-0 py-4">

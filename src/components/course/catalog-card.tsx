@@ -1,6 +1,10 @@
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import reactIcon from "../../../public/react-icon.png"; // Imagem padrão
+import reactIcon from "../../../public/react-course-icon.svg";
+import htmlcssIcon from "../../../public/html-course-icon.svg";
+import nextjsIcon from "../../../public/nextjs-course-icon.svg";
+import tailwindIcon from "../../../public/tailwind-course-icon.svg";
+import patternIcon from "../../../public/patterns-course-icon.svg";
 import { ArrowUpRight, CirclePlay, ScrollText } from "lucide-react";
 import { Star } from "@phosphor-icons/react/dist/ssr";
 
@@ -13,12 +17,28 @@ const courses = [
   },
   {
     name: "NextJS",
-    image: "",
+    image: nextjsIcon,
+    url: "/courses/next-js",
+    color: "white",
+  },
+  {
+    name: "Tailwind CSS",
+    image: tailwindIcon,
     url: "/courses/next-js",
     color: "blue",
   },
-  { name: "Patterns", image: "", url: "/courses/patterns", color: "lime" },
-  { name: "HTML & CSS", image: "", url: "/courses/html-css", color: "blue" },
+  {
+    name: "Patterns",
+    image: patternIcon,
+    url: "/courses/patterns",
+    color: "lime",
+  },
+  {
+    name: "HTML & CSS",
+    image: htmlcssIcon,
+    url: "/courses/html-css",
+    color: "orange",
+  },
   { name: "UI/UX", image: "", url: "/courses/performance", color: "purple" },
   { name: "Inglês", image: "", url: "/courses/english", color: "red" },
   {
@@ -65,6 +85,7 @@ export function CatalogCard({
 
   const colorClass =
     {
+      white: "text-[#c4c4cc]",
       blue: "bg-blue-gradient-500 bg-clip-text text-transparent",
       "dark-blue": "text-blue-600",
       green: "text-green-400",
@@ -79,7 +100,7 @@ export function CatalogCard({
 
   return (
     <div
-      className={`w-full h-52 2xl:w-[312px] bg-gray-gradient border border-[#25252A] pb-6 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:backdrop-blur-lg hover:bg-[#1A1A1E]/40 cursor-pointer ${className}`}
+      className={`relative w-full 2xl:w-[312px] bg-gray-gradient border border-[#25252A] pb-4 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:scale-105 hover:backdrop-blur-lg hover:bg-[#1A1A1E]/40 cursor-pointer ${className}`}
     >
       <div className="flex items-center justify-end">
         <Star size={28} />

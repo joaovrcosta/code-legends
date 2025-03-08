@@ -2,6 +2,7 @@ import { Catalog, CatalogCard } from "@/components/course/catalog-card";
 import { Filters } from "@/components/learn/filters";
 import { Input } from "@/components/ui/input";
 import { Library, Store } from "lucide-react";
+import tailwindIcon from "../../../../public/tailwind-course-icon.svg";
 export default function CoursesPage() {
   return (
     <div>
@@ -30,6 +31,7 @@ export default function CoursesPage() {
               name="Tailwind CSS Pro"
               url="/courses/react-js"
               color="blue"
+              image={tailwindIcon}
             />
           </div>
           <div className=" w-full px-0 pb-6 pt-6 flex space-x-2">

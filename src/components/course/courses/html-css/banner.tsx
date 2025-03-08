@@ -3,7 +3,7 @@
 // import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import htmlIcon from "../../../../../public/htmlcss-course-icon.svg";
+import htmlIcon from "../../../../../public/html-course-icon.svg";
 import { Progress } from "@/components/ui/progress";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";

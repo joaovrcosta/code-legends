@@ -47,7 +47,7 @@ export const reactCourseData: ReactCourse = {
   courseModules: [
     {
       moduleName: "Fundamentos do React",
-      level: "Terra - Nível 1",
+      level: "Módulo - Nível 1",
       locked: false,
       progress: 56,
       tags: ["ReactJS", "Front-end"],
@@ -184,9 +184,9 @@ export const reactCourseData: ReactCourse = {
     },
     {
       moduleName: "Aprofundando em Hooks",
-      level: "Terra - Nível 2",
+      level: "Módulo - Nível 2",
       locked: true,
-      progress: 35,
+      progress: 0,
       tags: ["ReactJS", "Front-end"],
       completed: false,
       submodules: [
