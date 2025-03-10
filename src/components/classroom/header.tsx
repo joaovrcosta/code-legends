@@ -82,11 +82,6 @@ export default function ClassroomHeader() {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
-            {/* <div className="flex items-center space-x-2">
-              <Brain size={24} weight="fill" className="text-[#00C8FF]" />
-              <span>8</span>
-            </div> */}
             <div className="hidden lg:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
