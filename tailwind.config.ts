@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import scrollbarHide from "tailwind-scrollbar-hide";
 
 export default {
   darkMode: ["class"],
@@ -65,6 +66,8 @@ export default {
           "linear-gradient(0deg, rgba(15,15,16, 0.05) 0%, rgba(0,200,255,0.39) 100%)",
         "blue-gradient-second":
           "linear-gradient(0deg, #0F0F10 0%, rgba(0,200,255,0.39) 100%)",
+        "blue-gradient-third":
+          "linear-gradient(0deg, #101012 0%, #00C8FF 100%)",
         "blue-gradient-500":
           "linear-gradient(267deg, rgba(0,78,99,1) 0%, #00c8ff 100%)",
         "blue-gradient-500-inverse":
@@ -110,5 +113,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar-hide")],
 } satisfies Config;

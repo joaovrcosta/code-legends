@@ -16,7 +16,7 @@ export default function ClassroomLayout({
 
       <div className="flex flex-1 lg:pt-[74px] pt-[57px]">
         {/* Sidebar agora respeita o topo com a altura do header */}
-        <div className="lg:block hidden max-w-64 h-[calc(100vh-80px)] overflow-y-auto">
+        <div className="lg:block hidden max-w-64 h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide">
           <ClassroomSidebar />
         </div>
 

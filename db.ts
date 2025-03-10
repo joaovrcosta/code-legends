@@ -63,7 +63,7 @@ export const reactCourseData: ReactCourse = {
               image: recordedClassIcon,
               type: "video",
               completed: true,
-              url: "/classroom/reactjs/chapter/iniciando-com-react/introducao",
+              url: "/classroom/react-js/lessons/introducao",
             },
             {
               id: 2,
@@ -72,7 +72,7 @@ export const reactCourseData: ReactCourse = {
               image: recordedClassIcon,
               type: "video",
               completed: true,
-              url: "/classroom/reactjs/chapter/iniciando-com-react/fundamentos-do-react",
+              url: "/classroom/react-js/lessons/fundamentos-do-reactjs",
             },
             {
               id: 3,

@@ -75,7 +75,6 @@ body {
     display: none;
   }
 
-  /* Oculta a barra de rolagem no Firefox */
   .custom-scrollbar {
     scrollbar-width: none;
   }

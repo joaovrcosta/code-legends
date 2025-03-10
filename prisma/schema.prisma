@@ -1,0 +1,49 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Course {
+  id          Int       @id @default(autoincrement())
+  title       String
+  slug        String    @unique
+  description String
+  modules     Module[]
+}
+
+model Module {
+  id          Int       @id @default(autoincrement())
+  name        String
+  courseId    Int
+  course      Course    @relation(fields: [courseId], references: [id])
+  submodules  Submodule[]
+}
+
+model Submodule {
+  id          Int       @id @default(autoincrement())
+  name        String
+  moduleId    Int
+  module      Module    @relation(fields: [moduleId], references: [id])
+  tasks       Task[]
+}
+
+model Task {
+  id            Int       @id @default(autoincrement())
+  title         String
+  description   String?
+  type          String
+  slug          String     @unique
+  url           String?
+  video_url     String?
+  video_duration String?     
+  locked        Boolean   @default(false)
+  completed     Boolean   @default(false)
+  submoduleId   Int
+  submodule     Submodule @relation(fields: [submoduleId], references: [id])
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+}

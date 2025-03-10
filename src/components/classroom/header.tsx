@@ -47,7 +47,7 @@ export default function ClassroomHeader() {
             <SkipForward size={24} weight="fill" />
           </div>
           <div className="p-2 lg:flex flex px-3 space-x-2 lg:block hidden">
-            <p>Bundles & Compilers</p>
+            <p>Introdução</p>
           </div>
         </li>
 
@@ -96,7 +96,7 @@ export default function ClassroomHeader() {
                   >
                     <User className="text-[#00C8FF]" />
                     <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent">
-                      João Victor
+                      João
                     </span>
                     <ChevronDown className="text-[#00C8FF]" />
                   </Button>

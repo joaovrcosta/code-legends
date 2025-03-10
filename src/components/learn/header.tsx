@@ -95,7 +95,7 @@ export default function LearnHeader() {
                   >
                     <User className="text-[#00C8FF]" />
                     <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent">
-                      João Victor
+                      João
                     </span>
                     <ChevronDown className="text-[#00C8FF]" />
                   </Button>
