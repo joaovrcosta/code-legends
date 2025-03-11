@@ -11,7 +11,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, Headset, LogOut, Menu, User } from "lucide-react";
-import fireIcon from "../../../public/hot-flame-icon.svg";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import {
   Tooltip,
   TooltipContent,
@@ -19,7 +26,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import useClassroomSidebarStore from "@/stores/classroom-sidebar";
-import { SkipBack, SkipForward } from "@phosphor-icons/react/dist/ssr";
+import { Fire, SkipBack, SkipForward } from "@phosphor-icons/react/dist/ssr";
 
 export default function ClassroomHeader() {
   const { toggleSidebar } = useClassroomSidebarStore();
@@ -34,7 +41,26 @@ export default function ClassroomHeader() {
           >
             <Menu size={24} />
           </button>
-          <div className="">
+
+          <Sheet>
+            <SheetTrigger className="text-white p-1 border border-[#25252a] rounded-lg lg:hidden hover:bg-[#25252a] transition-all duration-150 ease-in-out mr-3">
+              <Menu size={24} />
+            </SheetTrigger>
+            <SheetContent className="bg-[#121214] border border-[#25252a]">
+              <SheetHeader>
+                <SheetTitle>
+                  <span className="font-semibold bg-blue-gradient-500 bg-clip-text text-transparent italic tracking-[3px] mt-3">
+                    TRILHA
+                  </span>
+                </SheetTitle>
+                <SheetDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account and remove your data from our servers.
+                </SheetDescription>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
+          <div className="mr-3">
             <Link href="/learn">
               <Image src={codeLegendsLogo} alt="Code Legends" />
             </Link>
@@ -53,19 +79,13 @@ export default function ClassroomHeader() {
           </div>
         </li>
 
-        <li className="flex space-x-2 items-center ">
-          <div className="flex items-center space-x-4">
+        <li className="flex lg:space-x-2 space-x-1 items-center ">
+          <div className="flex items-center lg:space-x-4 space-x-0">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <div className="flex items-center space-x-3 border border-[#25252a] py-2 px-4 rounded-[8px] hover:bg-[#25252a] transition-all duration-150 ease-in-out">
-                    <Image
-                      src={fireIcon}
-                      alt=""
-                      height={28}
-                      width={28}
-                      className="h-5 w-5"
-                    />
+                  <div className="flex items-center justify-center lg:space-x-3 space-x-1 border border-[#25252a] lg:py-2 py-1 lg:px-4 px-2 rounded-[8px] hover:bg-[#25252a] transition-all duration-150 ease-in-out">
+                    <Fire size={24} weight="fill" />
                     <span>21</span>
                   </div>
                 </TooltipTrigger>
