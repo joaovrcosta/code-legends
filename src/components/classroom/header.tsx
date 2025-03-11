@@ -25,7 +25,7 @@ export default function ClassroomHeader() {
   const { toggleSidebar } = useClassroomSidebarStore();
 
   return (
-    <div className="relative fixed top-0 left-0 w-full z-50 bg-[#121214] shadow-lg border-b-[1px] border-[#25252a] lg:py-0 py-4">
+    <header className="relative fixed top-0 left-0 w-full z-50 bg-[#121214] shadow-lg border-b-[1px] border-[#25252a] lg:py-0 py-4">
       <ul className="flex justify-between items-center lg:pt-4 pt-0 lg:pb-4 lpb-0 w-full mx-auto px-4">
         <li className="flex items-center lg:space-x-6">
           <button
@@ -39,9 +39,11 @@ export default function ClassroomHeader() {
               <Image src={codeLegendsLogo} alt="Code Legends" />
             </Link>
           </div>
-          <div className="border rounded-[8px] border-[#25252a] p-2 lg:block hidden px-3">
-            <span className="text-[14px]">ReactJS</span>
-          </div>
+          <Link href="/courses/react-js">
+            <div className="border rounded-[8px] border-[#25252a] py-2 lg:block hidden px-3 hover:bg-[#25252a] cursor-pointer transition-all duration-150 ease-in-out">
+              <span className="text-[14px]">ReactJS</span>
+            </div>
+          </Link>
           <div className="p-2 lg:flex flex px-3 space-x-2 lg:block hidden">
             <SkipBack size={24} />
             <SkipForward size={24} weight="fill" />
@@ -56,13 +58,13 @@ export default function ClassroomHeader() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3 border border-[#25252a] py-2 px-4 rounded-[8px] hover:bg-[#25252a] transition-all duration-150 ease-in-out">
                     <Image
                       src={fireIcon}
                       alt=""
-                      height={32}
-                      width={32}
-                      className="h-6 w-6"
+                      height={28}
+                      width={28}
+                      className="h-5 w-5"
                     />
                     <span>21</span>
                   </div>
@@ -144,6 +146,6 @@ export default function ClassroomHeader() {
           </div>
         </li>
       </ul>
-    </div>
+    </header>
   );
 }

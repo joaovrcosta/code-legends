@@ -75,7 +75,7 @@ export default function SidebarContent({ course }: SidebarContentProps) {
               </span>
             </div>
             <div className="flex items-center space-x-1">
-              <Link
+              {/* <Link
                 href="/courses/react-js"
                 className="hover:bg-[#252931] px-2 pt-4 pb-2 rounded-br-3xl rounded-bl-3xl hover:text-[#00C8FF] text-[#666c6f]"
               >
@@ -83,7 +83,7 @@ export default function SidebarContent({ course }: SidebarContentProps) {
                   size={28}
                   className="transition-transform transform hover:-rotate-45"
                 />
-              </Link>
+              </Link> */}
               <Link
                 href="/learn"
                 className="hover:bg-[#252931] px-2 pt-4 pb-2 rounded-br-3xl rounded-bl-3xl hover:text-[#00C8FF] text-[#666c6f]"

@@ -73,7 +73,7 @@ export async function createTask(
           .toLowerCase()
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
-          .replace(/\s+/g, "-"),
+          .replace(/[:\s]+/g, "-"),
       },
     });
     return task;

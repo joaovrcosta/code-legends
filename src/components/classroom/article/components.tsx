@@ -1,19 +1,7 @@
 export function ComponentsArticle() {
   return (
     <div>
-      {/* <Image
-        src="https://github.com/user-attachments/assets/c51d9003-05b0-4572-85bf-b6082e9c0a0a"
-        alt="Modulo 1"
-        width={1600}
-        height={400}
-        className="w-full h-96 object-cover"
-        quality={100}
-      /> */}
-
       <div className="bg-gradient-to-r from-[#101012] to-[rgba(0,200,255,0.25)] p-6 lg:h-64 h-56 flex flex-col justify-center items-center">
-        {/* <div className="flex items-center w-full justify-center">
-          <Image src={codeLegendsLogo} alt="Code Legends" />
-        </div> */}
         <div className="text-center">
           <span className="text-lg">Modulo 1</span>
           <h1 className="text-3xl">Fundamentos do ReactJS</h1>
