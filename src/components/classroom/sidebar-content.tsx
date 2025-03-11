@@ -67,7 +67,7 @@ export default function SidebarContent({ course }: SidebarContentProps) {
     >
       {isOpen && (
         <>
-          <div className="px-4 pb-2 bg-[#121214] z-10 shadow-lg flex items-center space-x-1">
+          <div className="px-4 pb-2 bg-[#121214] z-10 shadow-lg flex items-center space-x-1 border-b border-[#25252A]">
             <div className="flex items-center space-x-1 w-full justify-start">
               {/* <Path size={28} weight="fill" className="text-[#00C8FF]" /> */}
               <span className="font-semibold bg-blue-gradient-500 bg-clip-text text-transparent italic tracking-[3px] mt-3">
@@ -93,10 +93,10 @@ export default function SidebarContent({ course }: SidebarContentProps) {
             </div>
           </div>
           <nav className="flex-1">
-            <ul className="space-y-4">
+            <ul className="">
               {course.modules.map((module) => (
                 <li key={module.name}>
-                  <div className="p-4 border-b border-t border-[#25252A] cursor-pointer">
+                  <div className="p-4 border-b border-[#25252A] cursor-pointer">
                     <span className="text-xs text-[#666c6f]">Module 1</span>
                     <span className="block text-base font-semibold text-[#C4C4CC] whitespace-nowrap">
                       {module.name}

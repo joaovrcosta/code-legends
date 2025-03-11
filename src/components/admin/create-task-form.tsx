@@ -5,20 +5,34 @@ import { createTask } from "@/actions/actions"; // Importa a ação de criar tar
 import { Card } from "../ui/card";
 
 export default function CreateTaskForm() {
-  const [submoduleId, setSubmoduleId] = useState<string>(""); // Agora é uma string vazia
-  const [taskTitle, setTaskTitle] = useState(""); // Título da tarefa
-  const [taskDescription, setTaskDescription] = useState(""); // Descrição da tarefa
-  const [taskType, setTaskType] = useState("video"); // Tipo da tarefa (video, article, quiz)
-  const [videoUrl, setVideoUrl] = useState(""); // URL do vídeo
+  const [submoduleId, setSubmoduleId] = useState<string>("");
+  const [taskTitle, setTaskTitle] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
+  const [taskType, setTaskType] = useState("video");
+  const [videoUrl, setVideoUrl] = useState("");
+  const [videoDuration, setVideoDuration] = useState("");
+  const [order, setOrder] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Converte submoduleId para número apenas se não estiver vazio
       const id = submoduleId ? Number(submoduleId) : 0;
-      await createTask(id, taskTitle, taskDescription, taskType, videoUrl);
-      // Limpa os campos após o sucesso
-      setSubmoduleId(""); // Limpa o campo do submódulo
+      const orderNumber = order ? Number(order) : 0; // Converte order para número
+
+      await createTask(
+        id,
+        taskTitle,
+        taskDescription,
+        taskType,
+        videoUrl,
+        videoDuration,
+        orderNumber // Agora é um número
+      );
+
+      // Reseta os estados corretamente
+      setSubmoduleId("");
+      setOrder(""); // Reseta como string vazia
+      setVideoDuration("");
       setTaskTitle("");
       setTaskDescription("");
       setTaskType("video");
@@ -56,6 +70,19 @@ export default function CreateTaskForm() {
           name="videoUrl"
           value={videoUrl}
           onChange={(e) => setVideoUrl(e.target.value)}
+        />
+        <Input
+          placeholder="Duração do Vídeo"
+          name="videoDuration"
+          value={videoDuration}
+          onChange={(e) => setVideoDuration(e.target.value)}
+        />
+        <Input
+          placeholder="Ordem do conteúdo"
+          name="order"
+          value={order}
+          type="number"
+          onChange={(e) => setOrder(e.target.value)} // Permite string vazia
         />
         <select
           value={taskType}

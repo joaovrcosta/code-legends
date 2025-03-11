@@ -20,7 +20,11 @@ export async function createCourse(
   });
 }
 
-export async function createModule(courseSlug: string, name: string) {
+export async function createModule(
+  courseSlug: string,
+  name: string,
+  nivel: string
+) {
   if (!courseSlug || !name) {
     throw new Error("O slug do curso e o nome do módulo são obrigatórios.");
   }
@@ -37,6 +41,7 @@ export async function createModule(courseSlug: string, name: string) {
     data: {
       name,
       courseId: course.id,
+      nivel: nivel,
     },
   });
 }
@@ -59,7 +64,9 @@ export async function createTask(
   title: string,
   description: string,
   type: string,
-  video_url: string
+  video_url: string,
+  video_duration: string,
+  order: number
 ) {
   try {
     const task = await prisma.task.create({
@@ -69,6 +76,8 @@ export async function createTask(
         type,
         submoduleId,
         video_url,
+        video_duration,
+        order,
         slug: title
           .toLowerCase()
           .normalize("NFD")

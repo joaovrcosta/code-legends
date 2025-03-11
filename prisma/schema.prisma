@@ -19,6 +19,7 @@ model Course {
 model Module {
   id          Int       @id @default(autoincrement())
   name        String
+  nivel       String   @default("Módulo 1")
   courseId    Int
   course      Course    @relation(fields: [courseId], references: [id])
   submodules  Submodule[]
