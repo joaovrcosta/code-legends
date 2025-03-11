@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { CheckCircle, Brain, Article } from "@phosphor-icons/react";
 import { Lock } from "lucide-react";
-import { ArrowUp, Circle, House } from "@phosphor-icons/react/dist/ssr";
+import { Circle, House } from "@phosphor-icons/react/dist/ssr";
 import useClassroomSidebarStore from "@/stores/classroom-sidebar";
 import { usePathname } from "next/navigation";
 import {
