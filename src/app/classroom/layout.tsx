@@ -1,4 +1,3 @@
-// src/layouts/LearnLayout.tsx
 import { Content } from "@/components/classroom/content";
 import ClassroomHeader from "@/components/classroom/header";
 import ClassroomSidebar from "@/components/classroom/sidebar";
@@ -35,14 +34,9 @@ export default async function ClassroomLayout({
 
   return (
     <div className="h-screen w-full flex flex-col">
-      <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
-        <ClassroomHeader />
-      </div>
-
+      <ClassroomHeader />
       <div className="flex flex-1 lg:pt-[74px] pt-[57px]">
-        <div className="lg:block hidden max-w-64 h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide">
-          <ClassroomSidebar course={course} />
-        </div>
+        <ClassroomSidebar course={course} />
 
         <div className="flex-1 h-[calc(100vh-80px)] overflow-y-auto">
           <main className="w-full">{children}</main>
