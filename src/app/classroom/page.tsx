@@ -1,4 +1,4 @@
-export default function ClassroomPage() {
+export default async function ClassroomPage() {
   return (
     <div className="">
       <h1>Titulo da minha pagina</h1>

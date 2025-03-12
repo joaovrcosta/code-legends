@@ -27,7 +27,7 @@ export default function VideoComponent({
           </div>
         )}
       </div>
-      <div className="p-4 lg:p-7">
+      <div className="p-4 lg:p-7 lg:block hidden">
         <span className="bg-blue-gradient-500 bg-clip-text text-transparent text-[20px] font-bold">
           {title}
         </span>

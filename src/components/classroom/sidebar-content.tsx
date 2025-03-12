@@ -12,52 +12,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
-
-interface Task {
-  id: number;
-  title: string;
-  slug: string;
-  description: string | null;
-  type: string;
-  url: string | null;
-  video_url: string | null;
-  locked: boolean;
-  completed: boolean;
-  submoduleId: number;
-  video_duration: string | null;
-}
-
-interface Submodule {
-  id: number;
-  name: string;
-  moduleId: number;
-  tasks: Task[];
-}
-
-interface Module {
-  id: number;
-  name: string;
-  courseId: number;
-  submodules: Submodule[];
-}
-
-interface Course {
-  id: number;
-  title: string;
-  slug: string;
-  description: string;
-  modules: Module[];
-}
-
-interface SidebarContentProps {
-  course: Course;
-}
+import { SidebarContentProps } from "@/types/course-types";
 
 export default function SidebarContent({ course }: SidebarContentProps) {
   const pathName = usePathname();
   const { isOpen } = useClassroomSidebarStore();
-
-  console.log(course);
 
   return (
     <aside
@@ -96,8 +55,10 @@ export default function SidebarContent({ course }: SidebarContentProps) {
             <ul className="">
               {course.modules.map((module) => (
                 <li key={module.name}>
-                  <div className="p-4 border-b border-[#25252A] cursor-pointer">
-                    <span className="text-xs text-[#666c6f]">Module 1</span>
+                  <div className="p-4 border-b border-[#25252A] shadow-xl">
+                    <span className="text-xs text-[#666c6f]">
+                      {module.nivel}
+                    </span>
                     <span className="block text-base font-semibold text-[#C4C4CC] whitespace-nowrap">
                       {module.name}
                     </span>
