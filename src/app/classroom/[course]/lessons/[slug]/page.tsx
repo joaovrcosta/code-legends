@@ -1,16 +1,12 @@
+import { getTaskBySlug } from "@/actions/getTaskBySlug";
 import VideoComponent from "@/components/classroom/video";
-import { prisma } from "@/lib/prisma";
 
 type tParams = Promise<{ slug: string }>;
 
 export default async function LessonPage(props: { params: tParams }) {
   const { slug } = await props.params;
 
-  const data = await prisma.task.findUnique({
-    where: {
-      slug: slug,
-    },
-  });
+  const data = await getTaskBySlug(slug);
 
   return (
     <div>
