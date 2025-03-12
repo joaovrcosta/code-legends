@@ -36,7 +36,7 @@ model Submodule {
 model Task {
   id            Int       @id @default(autoincrement())
   title         String
-  description   String?
+  description   String
   type          String
   slug          String     @unique
   url           String?

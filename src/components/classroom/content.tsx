@@ -1,10 +1,33 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SidebarContentProps } from "@/types/course-types";
 import { Info, PlayCircle } from "@phosphor-icons/react/dist/ssr";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Task } from "@prisma/client";
 
-export async function Content({ course }: SidebarContentProps) {
+interface ContentProps {
+  course: {
+    id: number;
+    title: string;
+    slug: string;
+    description: string;
+    modules: {
+      id: number;
+      name: string;
+      nivel: string;
+      courseId: number;
+      submodules: {
+        id: number;
+        name: string;
+        moduleId: number;
+        tasks: Task[];
+      }[];
+    }[];
+  };
+  taskData: Task | null;
+}
+
+export async function Content({ course, taskData }: ContentProps) {
   return (
-    <div className="mb-[43px] lg:hidden block w-full">
+    <div className="lg:hidden block">
       <Tabs defaultValue="account">
         <TabsList className="bg-transparent w-full h-[64px] border-b-[1px] border-[#25252A]">
           <TabsTrigger
@@ -21,13 +44,27 @@ export async function Content({ course }: SidebarContentProps) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="account">
-          {/* <div className="p-4 lg:p-7 lg:block hidden">
-            <span className="bg-blue-gradient-500 bg-clip-text text-transparent text-[20px] font-bold">
-              {title}
-            </span>
-            <p className="text-[14px] mt-4 max-w-[800px]">{description}</p>
-          </div> */}
-          <p>oi</p>
+          <div className="p-4">
+            <div className="flex flex-col">
+              <span className="text-xs">{course.title}</span>
+              <span className="bg-blue-gradient-500 bg-clip-text text-transparent text-[20px] font-bold">
+                {taskData?.title}
+              </span>
+            </div>
+            <p className="text-[14px] mt-4 max-w-[800px]">
+              {taskData?.description}
+            </p>
+            <div className="flex items-center mt-4 space-x-3">
+              <Avatar className="h-[52px] w-[52px]">
+                <AvatarImage src="https://avatars.githubusercontent.com/u/70654718?s=400&u=415dc8fde593b5dcbdef181e6186a8d80daf72fc&v=4" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div>
+                <h3 className="text-[14px]">João Victor</h3>
+                <p className="text-[12px] text-[#c4c4c4]">Educator</p>
+              </div>
+            </div>
+          </div>
         </TabsContent>
         <TabsContent value="password">Change your password here.</TabsContent>
       </Tabs>

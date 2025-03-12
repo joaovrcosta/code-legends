@@ -12,7 +12,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
-import { SidebarContentProps } from "@/types/course-types";
+import { Course } from "@/types/course-types";
+
+export interface SidebarContentProps {
+  course: Course | null;
+}
 
 export default function SidebarContent({ course }: SidebarContentProps) {
   const pathName = usePathname();
@@ -34,15 +38,6 @@ export default function SidebarContent({ course }: SidebarContentProps) {
               </span>
             </div>
             <div className="flex items-center space-x-1">
-              {/* <Link
-                href="/courses/react-js"
-                className="hover:bg-[#252931] px-2 pt-4 pb-2 rounded-br-3xl rounded-bl-3xl hover:text-[#00C8FF] text-[#666c6f]"
-              >
-                <ArrowUp
-                  size={28}
-                  className="transition-transform transform hover:-rotate-45"
-                />
-              </Link> */}
               <Link
                 href="/learn"
                 className="hover:bg-[#252931] px-2 pt-4 pb-2 rounded-br-3xl rounded-bl-3xl hover:text-[#00C8FF] text-[#666c6f]"
@@ -53,7 +48,7 @@ export default function SidebarContent({ course }: SidebarContentProps) {
           </div>
           <nav className="flex-1">
             <ul className="">
-              {course.modules.map((module) => (
+              {course?.modules.map((module) => (
                 <li key={module.name}>
                   <div className="p-4 border-b border-[#25252A] shadow-xl">
                     <span className="text-xs text-[#666c6f]">

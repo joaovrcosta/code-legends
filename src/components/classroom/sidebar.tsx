@@ -1,5 +1,9 @@
+import { Course } from "@/types/course-types";
 import SidebarContent from "./sidebar-content";
-import { SidebarContentProps } from "@/types/course-types";
+
+export interface SidebarContentProps {
+  course: Course | null;
+}
 
 export default async function ClassroomSidebar({
   course,

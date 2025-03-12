@@ -1,15 +1,17 @@
 interface Task {
   id: number;
   title: string;
-  slug: string;
-  description: string | null;
+  description: string;
   type: string;
+  slug: string;
   url: string | null;
   video_url: string | null;
+  video_duration: string | null;
   locked: boolean;
   completed: boolean;
   submoduleId: number;
-  video_duration: string | null;
+  order: number;
+  createdAt: Date;
 }
 
 interface Submodule {
