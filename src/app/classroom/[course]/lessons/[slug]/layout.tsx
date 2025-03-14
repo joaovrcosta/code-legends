@@ -1,6 +1,6 @@
 import { getCourse } from "@/actions/getCourse";
 import { getTaskBySlug } from "@/actions/getTaskBySlug";
-import { Content } from "@/components/classroom/content";
+import { Content } from "@/components/classroom/mobile-content";
 import ClassroomSidebar from "@/components/classroom/sidebar";
 import { prisma } from "@/lib/prisma";
 

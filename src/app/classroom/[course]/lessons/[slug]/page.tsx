@@ -1,13 +1,12 @@
 import { getCourse } from "@/actions/getCourse";
 import { getTaskBySlug } from "@/actions/getTaskBySlug";
+import { ComponentsArticle } from "@/components/classroom/article/components";
 import VideoComponent from "@/components/classroom/video";
 
 type tParams = Promise<{ course: string; slug: string }>;
 
 export default async function LessonPage(props: { params: tParams }) {
   const { slug, course } = await props.params;
-
-  console.log(course);
 
   const taskData = await getTaskBySlug(slug);
   const courseData = await getCourse(course);
@@ -23,7 +22,7 @@ export default async function LessonPage(props: { params: tParams }) {
           src={taskData.video_url}
         />
       )}
-      {taskData?.type === "article" && <p>Artigo bb</p>}
+      {taskData?.type === "article" && <ComponentsArticle />}
       {taskData?.type === "quiz" && <p>Quiz bb</p>}
     </div>
   );

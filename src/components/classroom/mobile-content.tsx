@@ -1,7 +1,11 @@
+"use client";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Info, PlayCircle } from "@phosphor-icons/react/dist/ssr";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Task } from "@prisma/client";
+import { usePathname } from "next/navigation";
+import { CourseContentList } from "./course-content-list";
 
 interface ContentProps {
   course: {
@@ -25,7 +29,9 @@ interface ContentProps {
   taskData: Task | null;
 }
 
-export async function Content({ course, taskData }: ContentProps) {
+export function Content({ course, taskData }: ContentProps) {
+  const pathName = usePathname();
+
   return (
     <div className="lg:hidden block">
       <Tabs defaultValue="account">
@@ -66,7 +72,9 @@ export async function Content({ course, taskData }: ContentProps) {
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="password">Change your password here.</TabsContent>
+        <TabsContent value="password">
+          <CourseContentList course={course} pathName={pathName} />
+        </TabsContent>
       </Tabs>
     </div>
   );
