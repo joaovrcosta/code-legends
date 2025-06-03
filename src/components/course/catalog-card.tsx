@@ -5,49 +5,73 @@ import htmlcssIcon from "../../../public/html-course-icon.svg";
 import nextjsIcon from "../../../public/nextjs-course-icon.svg";
 import tailwindIcon from "../../../public/tailwind-course-icon.svg";
 import patternIcon from "../../../public/patterns-course-icon.svg";
-import { ArrowUpRight, CirclePlay, ScrollText } from "lucide-react";
+import { ArrowUpRight, CirclePlay, Medal, ScrollText } from "lucide-react";
 import { Star } from "@phosphor-icons/react/dist/ssr";
 
-const courses = [
+const courses: CatalogCardProps[] = [
   {
     name: "ReactJS",
     image: reactIcon,
     url: "/courses/react-js",
     color: "blue",
+    status: "not-started",
   },
   {
     name: "NextJS",
     image: nextjsIcon,
     url: "/courses/next-js",
     color: "white",
+    status: "not-started",
   },
   {
     name: "Tailwind CSS",
     image: tailwindIcon,
     url: "/courses/next-js",
     color: "blue",
+    status: "completed",
   },
   {
     name: "Patterns",
     image: patternIcon,
     url: "/courses/patterns",
     color: "lime",
+    status: "not-started",
   },
   {
     name: "HTML & CSS",
     image: htmlcssIcon,
     url: "/courses/html-css",
     color: "orange",
+    status: "not-started",
   },
-  { name: "UI/UX", image: "", url: "/courses/performance", color: "purple" },
-  { name: "Inglês", image: "", url: "/courses/english", color: "red" },
+  {
+    name: "UI/UX",
+    image: "",
+    url: "/courses/performance",
+    color: "purple",
+    status: "not-started",
+  },
+  {
+    name: "Inglês",
+    image: "",
+    url: "/courses/english",
+    color: "red",
+    status: "not-started",
+  },
   {
     name: "Design System",
     image: "",
     url: "/courses/design-system",
     color: "purple",
+    status: "not-started",
   },
-  { name: "Clean Code", image: "", url: "/courses/clean-code", color: "blue" },
+  {
+    name: "Clean Code",
+    image: "",
+    url: "/courses/clean-code",
+    color: "blue",
+    status: "not-started",
+  },
 ];
 
 export function Catalog() {
@@ -60,10 +84,67 @@ export function Catalog() {
           image={course.image}
           url={course.url}
           color={course.color || "gray"}
+          status={course.status}
+          isCurrent={course.isCurrent}
         />
       ))}
     </div>
   );
+}
+
+function getStatusInfo(status?: CatalogCardProps["status"]) {
+  switch (status) {
+    case "in-progress":
+      return {
+        label: "Em progresso...",
+        className: "text-[#007e97]",
+        icon: (isFavorite?: boolean) => (
+          <Star
+            size={20}
+            weight="fill"
+            className={isFavorite ? "text-[#35BED5]" : "text-gray-600"}
+          />
+        ),
+      };
+    case "completed":
+      return {
+        label: "Concluído",
+        className: "text-green-600",
+        icon: (isFavorite?: boolean) => (
+          <Star
+            size={20}
+            weight="fill"
+            className={isFavorite ? "text-[#35BED5]" : "text-gray-600"}
+          />
+        ),
+      };
+    case "career":
+    case "continue":
+      return {
+        label: "Curso atual",
+        className: "text-white",
+        icon: (isFavorite?: boolean) => (
+          <Star
+            size={20}
+            weight="fill"
+            className={isFavorite ? "text-[#35BED5]" : "text-gray-600"}
+          />
+        ),
+      };
+    case "not-started":
+    default:
+      return {
+        label: "Curso",
+        className: "text-gray-500",
+        icon: (isFavorite?: boolean) => (
+          <Star
+            size={20}
+            weight="fill"
+            className={isFavorite ? "text-[#35BED5]" : "text-gray-600"}
+          />
+        ),
+      };
+  }
 }
 
 interface CatalogCardProps {
@@ -72,6 +153,9 @@ interface CatalogCardProps {
   url: string;
   color: string;
   className?: string;
+  isCurrent?: boolean;
+  isFavorite?: boolean;
+  status?: "in-progress" | "completed" | "not-started" | "career" | "continue";
 }
 
 export function CatalogCard({
@@ -79,8 +163,11 @@ export function CatalogCard({
   image,
   url,
   color,
+  status,
   className,
-}: CatalogCardProps & { className?: string }) {
+  isCurrent,
+  isFavorite,
+}: CatalogCardProps) {
   const imageSrc = image || reactIcon;
 
   const colorClass =
@@ -98,14 +185,32 @@ export function CatalogCard({
       purple: "bg-purple-gradient-500 bg-clip-text text-transparent",
     }[color] || "text-gray-400";
 
+  const { label, className: statusClass, icon } = getStatusInfo(status);
+  const iconElement = icon(isFavorite);
   return (
     <div
-      className={`relative w-full 2xl:w-[312px] bg-gray-gradient border border-[#25252A] pb-4 pt-4 px-4 rounded-[20px] transition-all duration-300 hover:scale-105 hover:backdrop-blur-lg hover:bg-[#1A1A1E]/40 cursor-pointer ${className}`}
+      className={`relative w-full 2xl:w-[312px] rounded-[20px] transition-all duration-300 hover:scale-105 hover:backdrop-blur-lg cursor-pointer
+    ${
+      isCurrent
+        ? "bg-blue-gradient-second border-[#35BED5]"
+        : "bg-gray-gradient border-[#25252A]"
+    }
+    border ${className}`}
     >
-      <div className="flex items-center justify-end">
-        <Star size={28} />
-      </div>
-      <div>
+      {label && (
+        <div className="flex items-center justify-between rounded-t-[20px] pr-4 pl-4 pt-4 pb-0">
+          <div
+            className={`text-white ${statusClass} rounded-full px-2 border ${
+              isCurrent ? "border-white" : "border-[#25252A]"
+            }`}
+          >
+            <p className="text-sm">{label}</p>
+          </div>
+          {iconElement}
+        </div>
+      )}
+
+      <div className="p-4">
         <Image src={imageSrc} alt={name} width={80} height={80} />
         <div className="px-4">
           <p className="font-light text-[12px] text-[#C2C2C2]">CURSO - 12h</p>
@@ -117,20 +222,29 @@ export function CatalogCard({
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-end">
-        <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
-          <ScrollText size={20} className="text-[#858585]" />
+
+      <div className="flex items-center justify-between pr-4 pl-4 pb-4">
+        <div className="flex items-center gap-2 px-4">
+          <Medal size={16} className="text-gray-600" />
+          <p className="text-xs text-gray-600">Com certificado</p>
         </div>
-        {url && (
-          <Link href={url}>
-            <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
-              <CirclePlay
-                size={28}
-                className="text-white hover:text-[#35BED5]"
-              />
-            </div>
-          </Link>
-        )}
+        <div className="flex">
+          <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
+            <Link href={url}>
+              <ScrollText size={20} className="text-gray-600" />
+            </Link>
+          </div>
+          {url && (
+            <Link href="/learn">
+              <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
+                <CirclePlay
+                  size={28}
+                  className="text-white hover:text-[#35BED5]"
+                />
+              </div>
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );

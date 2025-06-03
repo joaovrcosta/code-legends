@@ -66,6 +66,8 @@ export default {
           "linear-gradient(0deg, rgba(15,15,16, 0.05) 0%, rgba(0,200,255,0.39) 100%)",
         "blue-gradient-second":
           "linear-gradient(0deg, #0F0F10 0%, rgba(0,200,255,0.39) 100%)",
+        "blue-gradient-inverted":
+          "linear-gradient(0deg, rgba(0,200,255,0.39) 0%, #0F0F10 100%)",
         "blue-gradient-third":
           "linear-gradient(0deg, #101012 0%, #00C8FF 100%)",
         "blue-gradient-500":

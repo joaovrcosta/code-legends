@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Album,
   ChevronRight,
   Crown,
   KeyRound,
@@ -13,6 +14,11 @@ import { usePathname } from "next/navigation";
 
 const links = [
   { name: "Visão Geral", path: "/account", icon: <LayoutDashboard /> },
+  {
+    name: "Meus Cursos",
+    path: "/account/mycourses",
+    icon: <Album />,
+  },
   {
     name: "Certificados",
     path: "/account/certificates",
@@ -27,7 +33,7 @@ export function AccountAsideMenu() {
   const pathName = usePathname();
 
   return (
-    <nav className="lg:w-[338px] w-full max-h-[326px] bg-transparent py-4 px-0 rounded-lg shadow-md border border-[#25252A]">
+    <nav className="lg:sticky lg:top-[6vh] lg:w-[338px] w-full h-auto bg-transparent py-4 px-0 rounded-lg shadow-md border border-[#25252A]">
       <ul className="space-y-2">
         {links.map((link) => (
           <li key={link.path}>

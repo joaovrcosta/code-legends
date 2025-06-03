@@ -10,7 +10,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, Headset, LogOut, Menu, User } from "lucide-react";
+import {
+  ChevronDown,
+  Headset,
+  ListEnd,
+  LogOut,
+  Menu,
+  User,
+} from "lucide-react";
 import fireIcon from "../../../public/hot-flame-icon.svg";
 import {
   Tooltip,
@@ -19,20 +26,35 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import useSidebarStore from "@/stores/sidebarStore";
+import { usePathname } from "next/navigation";
+import { CourseMenu } from "./course-menu";
+import reactImg from "../../../public/react-icon-course.svg";
 
 export default function LearnHeader() {
-  const { toggleSidebar } = useSidebarStore();
+  const { toggleSidebar, isOpen } = useSidebarStore();
+  const pathName = usePathname();
 
   return (
     <div className="relative fixed top-0 left-0 w-full z-50 bg-[#121214] shadow-lg border-b-[1px] border-[#25252a] lg:py-0 py-4">
       <ul className="flex justify-between items-center lg:pt-4 pt-0 lg:pb-4 lpb-0 w-full mx-auto px-4">
         <li className="flex items-center lg:space-x-3">
-          <button
-            onClick={toggleSidebar}
-            className="text-white p-1 border border-[#25252a] rounded-lg lg:block hidden hover:bg-[#25252a] transition-all duration-150 ease-in-out"
-          >
-            <Menu size={24} />
-          </button>
+          {!pathName.startsWith("/account") && (
+            <button
+              onClick={toggleSidebar}
+              className="text-white p-1 border border-[#25252a] rounded-lg lg:block hidden hover:bg-[#25252a] transition-all duration-150 ease-in-out"
+            >
+              {isOpen ? (
+                <>
+                  <ListEnd size={24} />
+                </>
+              ) : (
+                <>
+                  <Menu size={24} />
+                </>
+              )}
+            </button>
+          )}
+
           <div className="lg:flex hidden">
             <Link href="/learn">
               <Image src={codeLegendsLogo} alt="Code Legends" />
@@ -53,20 +75,34 @@ export default function LearnHeader() {
         <li className="flex space-x-2 items-center ">
           <div className="flex items-center space-x-4">
             <TooltipProvider>
-              <Tooltip>
+              <Tooltip delayDuration={0}>
                 <TooltipTrigger>
-                  <div className="flex items-center space-x-3">
+                  <div className="bg-gray-gradient-first items-center gap-3 border py-3 px-4 rounded-[12px] border-[#25252A] hover:bg-[#25252A] cursor-pointer hidden lg:flex max-h-[42px]">
+                    <Image src={reactImg} alt="" height={20} width={20} />
+                    <p>ReactJS</p>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent className="bg-[#1A1A1E] border border-[#25252A] rounded-[20px] shadow-lg">
+                  <CourseMenu />
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger>
+                  <div className="flex items-center space-x-3 border py-2 px-3 border-[#25252A] hover:bg-[#25252A] rounded-[20px]">
                     <Image
                       src={fireIcon}
                       alt=""
-                      height={32}
-                      width={32}
-                      className="h-6 w-6"
+                      height={20}
+                      width={20}
+                      className="h-4 w-4"
                     />
-                    <span>21</span>
+                    <span className="text-base">21</span>
                   </div>
                 </TooltipTrigger>
-                <TooltipContent className="max-w-[200px]">
+                <TooltipContent className="max-w-[200px] bg-[#1A1A1E] border border-[#25252A] rounded-[20px] shadow-lg p-4 text-sm">
                   <p>
                     Seu{" "}
                     <span className="font-bold bg-yellow-lightning-500 bg-clip-text text-transparent">
@@ -86,6 +122,7 @@ export default function LearnHeader() {
               <Brain size={24} weight="fill" className="text-[#00C8FF]" />
               <span>8</span>
             </div> */}
+
             <div className="hidden lg:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

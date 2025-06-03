@@ -134,10 +134,17 @@ export default function LearnPage() {
                     SEÇÃO 1, AULA 3
                   </div>
                 </Link>
-                <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
-                  ReactJS
-                </span>
-                <p className="text-xl">Bundlers & Compilers</p>
+                <div className="flex items-center gap-3">
+                  {/* <div className="border p-3 rounded-[20px] border-[#25252A] hover:bg-[#25252A] cursor-pointer hidden lg:block">
+                    <Image src={reactImg} alt="" height={36} width={36} />
+                  </div> */}
+                  <div>
+                    <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
+                      ReactJS
+                    </span>
+                    <p className="text-xl">Bundlers & Compilers</p>
+                  </div>
+                </div>
               </div>
               <Link href="/learn/catalog">
                 <ChevronRight size={48} />
