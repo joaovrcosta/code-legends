@@ -4,7 +4,6 @@ import Image from "next/image";
 import codeLegendsLogo from "../../../public/code-legends-logo.svg";
 import codeLegendsLogoMobile from "../../../public/code-legends-logo-mobile.svg";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,14 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  ChevronDown,
-  Headset,
-  ListEnd,
-  LogOut,
-  Menu,
-  User,
-} from "lucide-react";
+import { Headset, ListEnd, LogOut, Menu, User } from "lucide-react";
 import fireIcon from "../../../public/hot-flame-icon.svg";
 import {
   Tooltip,
@@ -31,6 +23,7 @@ import {
 import useSidebarStore from "@/stores/sidebarStore";
 import { usePathname } from "next/navigation";
 import { CourseDropdownMenu } from "./course-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function LearnHeader() {
   const { toggleSidebar, isOpen } = useSidebarStore();
@@ -136,16 +129,10 @@ export default function LearnHeader() {
             <div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="bg-transparent border border-[#25252A] h-[42px] rounded-full"
-                  >
-                    <User className="text-[#00C8FF]" />
-                    <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent">
-                      João
-                    </span>
-                    <ChevronDown className="text-[#00C8FF]" />
-                  </Button>
+                  <Avatar className="h-[42px] w-[42px]">
+                    <AvatarImage src="https://avatars.githubusercontent.com/u/70654718?v=4" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"

@@ -26,7 +26,7 @@ const links = [
   },
   { name: "Pedidos", path: "/account/purchases", icon: <Crown /> },
   { name: "Dados", path: "/account/access", icon: <KeyRound /> },
-  { name: "Sair", path: "/", icon: <LogOut /> },
+  { name: "Sair da conta", path: "/", icon: <LogOut /> },
 ];
 
 export function AccountAsideMenu() {

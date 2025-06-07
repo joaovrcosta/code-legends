@@ -1,7 +1,7 @@
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import reactIcon from "../../../public/react-course-icon.svg";
-import { CirclePlay } from "lucide-react";
+import { Play } from "lucide-react";
 
 interface CatalogCardProps {
   name: string;
@@ -62,11 +62,8 @@ export function PersonalCatalog({
         <div className="flex items-center justify-end w-full">
           {url && (
             <Link href="/learn">
-              <div className="flex items-center justify-center  hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
-                <CirclePlay
-                  size={40}
-                  className="text-white hover:text-[#35BED5]"
-                />
+              <div className="border border-[#35BED5] p-3 flex items-center justify-center  hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
+                <Play size={24} className="text-white hover:text-[#35BED5]" />
               </div>
             </Link>
           )}

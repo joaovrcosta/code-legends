@@ -37,7 +37,7 @@ export default function CoursesPage() {
           </div>
           <div className=" w-full px-0 pb-4 pt-8 flex space-x-2">
             {/* <Store className="text-[#00C8FF]" /> */}
-            <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-lg">
+            <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-">
               Catálogo
             </span>
           </div>

@@ -125,7 +125,7 @@ export default function LearnPage() {
         <div className="w-full lg:py-10 py-0 rounded-2xl flex items-center justify-center flex-col">
           {/* Cabeçalho */}
 
-          <div className="w-full max-w-[713px] lg:sticky md:sticky fixed mt-[50px] lg:mt-0 md:mt-0 top-0 z-10 mb-8 px-4 pt-4">
+          <div className="w-full max-w-[713px] lg:sticky md:sticky fixed mt-[50px] lg:mt-0 md:mt-0 top-0 z-10 mb-8 px-4 md:pt-2 pt-4 lg:pt-0">
             <div className="bg-[#121214] px-4 flex items-center  justify-between h-[24px]"></div>
             <section className="bg-gray-gradient border border-[#25252A] px-4 py-4 flex items-center shadow-lg rounded-lg w-full max-w-[713px] justify-between sticky top-0 z-10 bg-[#1a1a1e]">
               <div className="flex flex-col lg:ml-4">
