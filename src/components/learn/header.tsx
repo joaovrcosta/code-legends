@@ -2,12 +2,15 @@
 
 import Image from "next/image";
 import codeLegendsLogo from "../../../public/code-legends-logo.svg";
+import codeLegendsLogoMobile from "../../../public/code-legends-logo-mobile.svg";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -27,8 +30,7 @@ import {
 } from "../ui/tooltip";
 import useSidebarStore from "@/stores/sidebarStore";
 import { usePathname } from "next/navigation";
-import { CourseMenu } from "./course-menu";
-import reactImg from "../../../public/react-icon-course.svg";
+import { CourseDropdownMenu } from "./course-menu";
 
 export default function LearnHeader() {
   const { toggleSidebar, isOpen } = useSidebarStore();
@@ -55,26 +57,34 @@ export default function LearnHeader() {
             </button>
           )}
 
-          <div className="lg:flex hidden">
-            <Link href="/learn">
-              <Image src={codeLegendsLogo} alt="Code Legends" />
-            </Link>
-          </div>
+          <div className="flex items-center space-x-4">
+            {/* <LoggedSheet /> */}
 
-          <div className="lg:hidden block">
-            <Link href="/learn">
-              <Image
-                src={codeLegendsLogo}
-                alt="Code Legends"
-                // className="h-8 w-8"
-              />
-            </Link>
+            <div>
+              <Link href="/learn">
+                <Image
+                  src={codeLegendsLogo}
+                  alt="Code Legends"
+                  className="lg:block hidden"
+                />
+              </Link>
+              <Link href="/learn">
+                <Image
+                  src={codeLegendsLogoMobile}
+                  alt="Code Legends"
+                  className="lg:hidden block"
+                  height={24}
+                  width={24}
+                />
+              </Link>
+            </div>
           </div>
         </li>
 
         <li className="flex space-x-2 items-center ">
           <div className="flex items-center space-x-4">
-            <TooltipProvider>
+            <CourseDropdownMenu />
+            {/* <TooltipProvider>
               <Tooltip delayDuration={0}>
                 <TooltipTrigger>
                   <div className="bg-gray-gradient-first items-center gap-3 border py-3 px-4 rounded-[12px] border-[#25252A] hover:bg-[#25252A] cursor-pointer hidden lg:flex max-h-[42px]">
@@ -86,7 +96,7 @@ export default function LearnHeader() {
                   <CourseMenu />
                 </TooltipContent>
               </Tooltip>
-            </TooltipProvider>
+            </TooltipProvider> */}
 
             <TooltipProvider>
               <Tooltip delayDuration={0}>
@@ -123,7 +133,7 @@ export default function LearnHeader() {
               <span>8</span>
             </div> */}
 
-            <div className="hidden lg:block">
+            <div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -139,11 +149,37 @@ export default function LearnHeader() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="bg-[#1A1A1E] border border-[#25252A] rounded-[20px] shadow-lg"
+                  side="bottom"
+                  className="
+                   w-screen 
+                   max-w-none 
+                   left-0 
+                   right-0 
+                   rounded-none 
+                   border-none 
+                   bg-[#1A1A1E] 
+                   shadow-2xl 
+                   z-50
+                   mt-3
+               
+                   sm:w-auto 
+                   sm:max-w-sm 
+                   sm:rounded-[20px] 
+                   sm:border 
+                   sm:border-[#25252A] 
+                   sm:left-auto 
+                   sm:right-auto
+                 "
                 >
+                  <DropdownMenuLabel className="p-4">
+                    <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
+                      Minha Conta
+                    </span>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="border border-[#25252A]" />
                   <DropdownMenuItem
                     asChild
-                    className="px-6 py-4 w-[352px] text-white border-none rounded-[20px]"
+                    className="px-6 py-4 lg:w-[352px] w-full text-white border-none rounded-[20px]"
                   >
                     <Link
                       href="/account"
@@ -156,7 +192,7 @@ export default function LearnHeader() {
 
                   <DropdownMenuItem
                     asChild
-                    className="px-6 py-4 w-[352px] text-white border-none rounded-[20px]"
+                    className="px-6 py-4  lg:w-[352px] w-full text-white border-none rounded-[20px]"
                   >
                     <Link
                       href="/account"
@@ -169,7 +205,7 @@ export default function LearnHeader() {
 
                   <DropdownMenuItem
                     asChild
-                    className="px-6 py-4 w-[352px] text-white border-none rounded-[20px]"
+                    className="px-6 py-4  lg:w-[352px] w-full text-white border-none rounded-[20px]"
                   >
                     <Link
                       href="/logout"

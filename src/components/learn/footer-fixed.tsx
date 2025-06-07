@@ -3,9 +3,8 @@
 import {
   BookOpenText,
   ChartDonut,
-  Lego,
   Path,
-  Shield,
+  PuzzlePiece,
   Sticker,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
@@ -43,18 +42,18 @@ const links: LinkItem[] = [
       />
     ),
   },
-  {
-    name: "HQ",
-    path: "/learn/hq",
-    icon: (isActive) => (
-      <Shield
-        size={34}
-        strokeWidth={1}
-        weight={isActive ? "fill" : "regular"}
-        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
-      />
-    ),
-  },
+  // {
+  //   name: "HQ",
+  //   path: "/learn/hq",
+  //   icon: (isActive) => (
+  //     <Shield
+  //       size={34}
+  //       strokeWidth={1}
+  //       weight={isActive ? "fill" : "regular"}
+  //       className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
+  //     />
+  //   ),
+  // },
   {
     name: "Estatísticas",
     path: "/learn/statiscs",
@@ -70,7 +69,7 @@ const links: LinkItem[] = [
     name: "Casos de uso",
     path: "/learn/use-cases",
     icon: (isActive) => (
-      <Lego
+      <PuzzlePiece
         size={32}
         weight={isActive ? "fill" : "regular"}
         className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}

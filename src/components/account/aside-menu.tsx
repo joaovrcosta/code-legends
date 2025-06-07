@@ -33,7 +33,7 @@ export function AccountAsideMenu() {
   const pathName = usePathname();
 
   return (
-    <nav className="lg:sticky lg:top-[6vh] lg:w-[338px] w-full h-auto bg-transparent py-4 px-0 rounded-lg shadow-md border border-[#25252A]">
+    <nav className="w-full h-auto bg-transparent py-4 px-0 rounded-lg shadow-md border border-[#25252A] lg:sticky lg:top-[12vh] lg:w-[338px]">
       <ul className="space-y-2">
         {links.map((link) => (
           <li key={link.path}>

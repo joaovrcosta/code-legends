@@ -9,8 +9,11 @@ export default function AccountLayout({
 }) {
   return (
     <>
-      <LearnHeader />
-      <div className="max-w-[1560px] mx-auto flex lg:mt-[6vh] mt-4 gap-10 lg:flex flex-col lg:flex-row items-start px-4 pb-20">
+      <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
+        <LearnHeader />
+      </div>
+
+      <div className="max-w-[1560px] mx-auto flex mt-[12vh] gap-10 lg:flex flex-col lg:flex-row items-start px-4 pb-20">
         <AccountAsideMenu />
         <main className="w-full">{children}</main>
       </div>
