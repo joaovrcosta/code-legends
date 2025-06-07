@@ -14,7 +14,7 @@ import { Path } from "@phosphor-icons/react/dist/ssr";
 
 const links = [
   { name: "Aprender", path: "/learn", icon: Path },
-  { name: "Cursos", path: "/learn/catalog", icon: BookOpenText },
+  { name: "Catálogo", path: "/learn/catalog", icon: BookOpenText },
   // { name: "Quartel General", path: "/learn/hq", icon: Shield },
   { name: "Estatísticas", path: "/learn/statistcs", icon: ChartPieSlice },
   { name: "Projetos", path: "/learn/use-cases", icon: PuzzlePiece },

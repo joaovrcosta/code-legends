@@ -189,7 +189,7 @@ export function CatalogCard({
   const iconElement = icon(isFavorite);
   return (
     <div
-      className={`relative w-full 2xl:w-[312px] rounded-[20px] transition-all duration-300 hover:scale-105 hover:backdrop-blur-lg cursor-pointer
+      className={`relative w-full 2xl:w-[312px] rounded-[16px] transition-all duration-300 hover:scale-105 hover:backdrop-blur-lg cursor-pointer
     ${
       isCurrent
         ? "bg-blue-gradient-second border-[#35BED5]"

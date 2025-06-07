@@ -28,7 +28,7 @@
                 },
                 {
                   "id": 3,
-                  "title": "Bundlers & Compilers",
+                  "title": "CSS Modules",
                   "category": "ReactJS",
                   "image": "incompleteTaskLeft",
                   "completed": false,

@@ -12,6 +12,7 @@ interface CatalogCardProps {
   isCurrent?: boolean;
   isFavorite?: boolean;
   status?: "in-progress" | "completed" | "not-started" | "career" | "continue";
+  progress?: number;
 }
 
 export function PersonalCatalog({
@@ -21,6 +22,7 @@ export function PersonalCatalog({
   color,
   className,
   isCurrent,
+  progress,
 }: CatalogCardProps) {
   const imageSrc = image || reactIcon;
 
@@ -41,34 +43,46 @@ export function PersonalCatalog({
 
   return (
     <div
-      className={`relative w-full 2xl:w-[312px] rounded-[20px] transition-all duration-300 hover:scale-105 hover:backdrop-blur-lg cursor-pointer
+      className={`relative w-full 2xl:w-[312px] rounded-[16px] transition-all duration-300 hover:scale-105 hover:backdrop-blur-lg cursor-pointer
     ${
       isCurrent
         ? "bg-blue-gradient-second border-[#35BED5]"
         : "bg-gray-gradient border-[#25252A]"
     }
-    border ${className}`}
+    border overflow-hidden ${className}`} // <-- aqui o overflow-hidden
     >
+      {/* Conteúdo principal */}
       <div className="p-4 flex items-center">
         <Image src={imageSrc} alt={name} width={80} height={80} />
         <div className="px-4">
-          <p className="font-light text-[12px] text-[#C2C2C2]">CURSO - 12h</p>
+          <p className="font-light text-[12px] text-[#C2C2C2]">CURSO – 12h</p>
           <div className="flex items-center space-x-1">
             <span className={`font-bold bg-clip-text text-lg ${colorClass}`}>
               {name}
             </span>
           </div>
+          {/* <span className="text-xs">{progress}%</span> */}
         </div>
         <div className="flex items-center justify-end w-full">
           {url && (
             <Link href="/learn">
-              <div className="border border-[#35BED5] p-3 flex items-center justify-center  hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
-                <Play size={24} className="text-white hover:text-[#35BED5]" />
+              <div className="border-2 border-[#35BED5] p-3 flex items-center justify-center hover:bg-[#35BED5] rounded-full cursor-pointer hover:text-[#35BED5]">
+                <Play size={24} className="text-white" />
               </div>
             </Link>
           )}
         </div>
       </div>
+
+      {typeof progress === "number" && (
+        <div className="w-full h-[4px] bg-[#1f1f1f] rounded-b-[16px] overflow-hidden">
+          <div
+            className="h-full bg-[#35BED5] transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
+      {/* Barra de progresso - Fora do conteúdo com padding */}
     </div>
   );
 }

@@ -76,12 +76,12 @@ export const reactCourseData: ReactCourse = {
             },
             {
               id: 3,
-              title: "Bundlers & Compilers",
+              title: "CSS Modules",
               category: "ReactJS",
               image: incompleteRecordedClass,
               type: "video",
               completed: false,
-              url: "/classroom/reactjs/chapter/iniciando-com-react/bundles-compilers",
+              url: "/classroom/react-js/lessons/css-modules",
             },
             {
               id: 4,

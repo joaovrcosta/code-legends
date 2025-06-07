@@ -143,7 +143,7 @@ export default function LearnPage() {
                     <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
                       ReactJS
                     </span>
-                    <p className="text-xl">Bundlers & Compilers</p>
+                    <p className="text-xl">CSS Modules</p>
                   </div>
                 </div>
               </div>
