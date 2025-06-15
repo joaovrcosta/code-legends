@@ -94,14 +94,14 @@ export function FooterFixed() {
   const pathname = usePathname();
 
   return (
-    <footer className="w-full bg-[#121214] border-t-[1px] border-[#25252a] text-white text-center p-4 fixed bottom-0 left-0 lg:hidden">
+    <footer className="w-full bg-[#121214] border-t-[1px] border-[#25252a] text-white text-center fixed bottom-0 left-0 lg:hidden">
       <ul className="flex justify-around">
         {links.map((link, index) => {
           const isActive = pathname === link.path;
 
           return (
             <li key={index}>
-              <Link href={link.path} className="flex flex-col items-center">
+              <Link href={link.path} className="flex flex-col items-center p-2">
                 {link.icon(isActive)}
               </Link>
             </li>
