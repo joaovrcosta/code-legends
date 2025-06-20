@@ -32,7 +32,7 @@ export function CourseDropdownMenu() {
       <DropdownMenuContent
         align="center"
         side="bottom"
-        className="w-screen max-w-none left-0 right-0 border-none bg-[#1A1A1E] shadow-2xl z-50 mt-3 p-0
+        className="w-screen max-w-none left-0 right-0 border-none bg-[#1A1A1E] shadow-2xl z-50 mt-1 p-0
                   sm:w-auto sm:max-w-sm sm:rounded-[20px] sm:border sm:border-[#25252A] sm:left-auto sm:right-auto"
       >
         <DropdownMenuLabel className="p-4">

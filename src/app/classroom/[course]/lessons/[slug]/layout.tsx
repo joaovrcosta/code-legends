@@ -38,7 +38,7 @@ export default async function TaskLayout({ children, params }: DashboardProps) {
 
   return (
     <div className="h-screen w-full flex flex-col">
-      <div className="flex flex-1 lg:pt-[74px] pt-[57px]">
+      <div className="flex flex-1 lg:pt-[62px] pt-[57px]">
         <ClassroomSidebar course={courseData} />
         <div className="flex-1 h-[calc(100vh-80px)] overflow-y-auto">
           <main className="w-full">{children}</main>

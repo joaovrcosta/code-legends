@@ -35,7 +35,7 @@ export function UserDropdown() {
                    bg-[#1A1A1E] 
                    shadow-2xl 
                    z-50
-                   mt-3
+                   mt-1
                
                    sm:w-auto 
                    sm:max-w-sm 

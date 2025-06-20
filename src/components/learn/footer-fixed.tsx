@@ -19,18 +19,6 @@ type LinkItem = {
 
 const links: LinkItem[] = [
   {
-    name: "Home",
-    path: "/learn",
-    icon: (isActive) => (
-      <Path
-        size={34}
-        strokeWidth={1}
-        weight={isActive ? "fill" : "regular"}
-        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
-      />
-    ),
-  },
-  {
     name: "Cursos",
     path: "/learn/catalog",
     icon: (isActive) => (
@@ -38,7 +26,9 @@ const links: LinkItem[] = [
         size={34}
         strokeWidth={1}
         weight={isActive ? "fill" : "regular"}
-        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
+        className={`${
+          isActive ? "bg-blue-gradient-500 p-1 rounded-xl" : "text-white"
+        }`}
       />
     ),
   },
@@ -56,12 +46,28 @@ const links: LinkItem[] = [
   // },
   {
     name: "Estatísticas",
-    path: "/learn/statiscs",
+    path: "/learn/progress",
     icon: (isActive) => (
       <ChartDonut
         size={32}
         weight={isActive ? "fill" : "regular"}
-        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
+        className={`${
+          isActive ? "bg-blue-gradient-500 p-1 rounded-xl" : "text-white"
+        }`}
+      />
+    ),
+  },
+  {
+    name: "Home",
+    path: "/learn",
+    icon: (isActive) => (
+      <Path
+        size={34}
+        strokeWidth={1}
+        weight={isActive ? "fill" : "regular"}
+        className={`${
+          isActive ? "bg-blue-gradient-500 p-1 rounded-xl" : "text-white"
+        }`}
       />
     ),
   },
@@ -72,7 +78,9 @@ const links: LinkItem[] = [
       <PuzzlePiece
         size={32}
         weight={isActive ? "fill" : "regular"}
-        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
+        className={`${
+          isActive ? "bg-blue-gradient-500 p-1 rounded-xl" : "text-white"
+        }`}
       />
     ),
   },
@@ -84,7 +92,9 @@ const links: LinkItem[] = [
         size={34}
         strokeWidth={1}
         weight={isActive ? "fill" : "regular"}
-        className={`${isActive ? "text-[#00c8ff]" : "text-white"}`}
+        className={`${
+          isActive ? "bg-blue-gradient-500 p-1 rounded-xl" : "text-white"
+        }`}
       />
     ),
   },
