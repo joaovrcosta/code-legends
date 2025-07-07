@@ -49,7 +49,7 @@ export default function HeaderLogin() {
                   <span>LOGIN</span>
                 </a>
                 <PrimaryButton>
-                  INSCREVA-SE
+                  PRÉ-VENDA
                   <ChevronRight />
                 </PrimaryButton>
               </div>

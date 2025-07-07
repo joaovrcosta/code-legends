@@ -4,297 +4,20 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { htmlCourseData } from "@/mocks/htmlCourse";
 import {
   Brain,
   CheckCircle,
-  PuzzlePiece,
+  // PuzzlePiece,
   VideoCamera,
 } from "@phosphor-icons/react/dist/ssr";
 import { Lock, Play } from "lucide-react";
 import Link from "next/link";
 
-const courseData = [
-  {
-    level: "Terra - Nível 1",
-    title: "HTML Iniciante",
-    infos: ["6 aulas", "2 quizzes", "5h 30m"],
-    session: "Sessão 1",
-    completed: "0% completo",
-    progress: 0,
-    locked: false,
-    classes: [
-      { title: "Introdução ao ReactJS", duration: "00:01:31", complete: false },
-      { title: "Fundamentos do JSX", duration: "00:02:15", complete: false },
-      {
-        title: "Projeto: Animal Fun Facts",
-        duration: "",
-        isQuiz: false,
-        isProject: true,
-        complete: false,
-      },
-      { title: "Componentes e Props", duration: "00:03:00", complete: false },
-      {
-        title: "Estado e Ciclo de Vida",
-        duration: "00:04:00",
-        complete: false,
-      },
-      {
-        title: "Quiz - Fundamentos",
-        duration: "",
-        isQuiz: true,
-        complete: false,
-      },
-      {
-        title: "Projeto: Authorization Form",
-        duration: "",
-        isQuiz: false,
-        isProject: true,
-        complete: false,
-      },
-    ],
-  },
-  {
-    level: "Troposfera - Nível 2",
-    title: "CSS Iniciante",
-    infos: ["6 aulas", "4 quizzes", "5h 30m"],
-    session: "Sessão 2",
-    lessons: "31 aulas",
-    completed: "Concluído",
-    progress: 0,
-    locked: true,
-    classes: [
-      { title: "Introdução ao Hooks", duration: "00:01:45", complete: true },
-      { title: "UseState e UseEffect", duration: "00:02:30", complete: true },
-      { title: "Hooks Personalizados", duration: "00:03:15", complete: true },
-      { title: "Desempenho e Hooks", duration: "00:03:50", complete: true },
-      { title: "Quiz - Hooks", duration: "", isQuiz: true, complete: true },
-      {
-        title: "Projeto",
-        duration: "",
-        isQuiz: false,
-        isProject: true,
-        complete: true,
-      },
-    ],
-  },
-  {
-    level: "Estratosfera - Nível 3",
-    title: "Como Criar Sites no Seu Próprio Computador",
-    infos: ["6 aulas", "4 quizzes", "5h 30m"],
-    session: "Sessão 3",
-    lessons: "31 aulas",
-    completed: "27% completo",
-    progress: 0,
-    locked: true,
-    classes: [
-      { title: "Fundamentos de HTTP", duration: "00:01:30", complete: true },
-      {
-        title: "Requisições HTTP com Fetch",
-        duration: "00:02:00",
-        complete: true,
-      },
-      {
-        title: "Melhorando a Performance no React",
-        duration: "00:02:45",
-        complete: false,
-      },
-      {
-        title: "Lazy Loading e Suspense",
-        duration: "00:03:00",
-        complete: false,
-      },
-      { title: "Quiz - HTTP", duration: "N/A", isQuiz: true, complete: false },
-      {
-        title: "Projeto",
-        duration: "N/A",
-        isQuiz: false,
-        isProject: true,
-        complete: false,
-      },
-    ],
-  },
-  {
-    level: "Mesosfera - Nível 4",
-    title: "CSS Intermediário: Cores e Tipografia",
-    infos: ["6 aulas", "4 quizzes", "5h 30m"],
-    session: "Sessão 3",
-    lessons: "31 aulas",
-    progress: 0,
-    locked: true,
-    classes: [
-      {
-        title: "Autenticação no Frontend",
-        duration: "00:01:40",
-        complete: false,
-      },
-      {
-        title: "Integração com APIs externas",
-        duration: "00:02:20",
-        complete: false,
-      },
-      {
-        title: "Gerenciamento de Sessões",
-        duration: "00:02:50",
-        complete: false,
-      },
-      {
-        title: "Deploy de Aplicações React",
-        duration: "00:03:30",
-        complete: false,
-      },
-      {
-        title: "Quiz - Integração Frontend",
-        duration: "N/A",
-        isQuiz: true,
-        complete: false,
-      },
-      {
-        title: "Projeto",
-        duration: "N/A",
-        isQuiz: false,
-        isProject: true,
-        complete: false,
-      },
-    ],
-  },
-  {
-    level: "Termosfera - Nível 5",
-    title: "CSS Intermediário: Layout e Posicionamento",
-    infos: ["6 aulas", "4 quizzes", "5h 30m"],
-    session: "Sessão 3",
-    lessons: "31 aulas",
-    progress: 0,
-    locked: true,
-    classes: [
-      {
-        title: "Introdução ao Framework",
-        duration: "00:02:00",
-        complete: false,
-      },
-      {
-        title: "Configuração do Ambiente",
-        duration: "00:02:40",
-        complete: false,
-      },
-      {
-        title: "Estrutura do Framework",
-        duration: "00:03:10",
-        complete: false,
-      },
-      {
-        title: "Componentes no Framework",
-        duration: "00:03:50",
-        complete: false,
-      },
-      {
-        title: "Quiz - Framework",
-        duration: "N/A",
-        isQuiz: true,
-        complete: false,
-      },
-      {
-        title: "Projeto",
-        duration: "N/A",
-        isQuiz: false,
-        isProject: false,
-        complete: true,
-      },
-    ],
-  },
-  {
-    level: "Termosfera - Nível 5",
-    title: "Design Responsivo e Acessibilidade",
-    infos: ["6 aulas", "4 quizzes", "5h 30m"],
-    session: "Sessão 3",
-    lessons: "31 aulas",
-    progress: 0,
-    locked: true,
-    classes: [
-      {
-        title: "Introdução ao Framework",
-        duration: "00:02:00",
-        complete: false,
-      },
-      {
-        title: "Configuração do Ambiente",
-        duration: "00:02:40",
-        complete: false,
-      },
-      {
-        title: "Estrutura do Framework",
-        duration: "00:03:10",
-        complete: false,
-      },
-      {
-        title: "Componentes no Framework",
-        duration: "00:03:50",
-        complete: false,
-      },
-      {
-        title: "Quiz - Framework",
-        duration: "N/A",
-        isQuiz: true,
-        complete: false,
-      },
-      {
-        title: "Projeto",
-        duration: "N/A",
-        isQuiz: false,
-        isProject: false,
-        complete: true,
-      },
-    ],
-  },
-  {
-    level: "Termosfera - Nível 5",
-    title: "CSS Avançado: Flexbox e CSS Transitions",
-    infos: ["6 aulas", "4 quizzes", "5h 30m"],
-    session: "Sessão 3",
-    lessons: "31 aulas",
-    progress: 0,
-    locked: true,
-    classes: [
-      {
-        title: "Introdução ao Framework",
-        duration: "00:02:00",
-        complete: false,
-      },
-      {
-        title: "Configuração do Ambiente",
-        duration: "00:02:40",
-        complete: false,
-      },
-      {
-        title: "Estrutura do Framework",
-        duration: "00:03:10",
-        complete: false,
-      },
-      {
-        title: "Componentes no Framework",
-        duration: "00:03:50",
-        complete: false,
-      },
-      {
-        title: "Quiz - Framework",
-        duration: "N/A",
-        isQuiz: true,
-        complete: false,
-      },
-      {
-        title: "Projeto",
-        duration: "N/A",
-        isQuiz: false,
-        isProject: false,
-        complete: true,
-      },
-    ],
-  },
-];
-
 export default function ReactJsPage() {
   return (
     <div>
-      {courseData.map((course, index) => (
+      {htmlCourseData.map((course, index) => (
         <section
           key={index}
           className={`mb-4 ${
@@ -376,7 +99,7 @@ export default function ReactJsPage() {
                             weight="fill"
                             className="text-[#00A277]"
                           />
-                          <p>Concluido</p>
+                          <p>{course.progress}% Concluido</p>
                         </>
                       ) : (
                         <p>{course.completed}</p>
@@ -390,19 +113,19 @@ export default function ReactJsPage() {
                   {course.classes.map((lesson, lessonIndex) => (
                     <div
                       key={lessonIndex}
-                      className="flex items-center gap-4 p-2 hover:bg-[#25252A] rounded-lg hover:text-[#00C8FF] cursor-pointer"
+                      className="flex items-center gap-4 p-2 hover:bg-[#25252A] rounded-lg hover:text-[#f34200] cursor-pointer"
                     >
                       {lesson.complete ? (
                         <CheckCircle
                           size={20}
                           weight="fill"
-                          className="text-[#00C8FF]"
+                          className="text-[#f34200]"
                         />
                       ) : lesson.isQuiz ? (
                         <Brain size={20} />
-                      ) : lesson.isProject ? (
-                        <PuzzlePiece size={20} />
                       ) : (
+                        // ) : lesson?. ? (
+                        //   <PuzzlePiece size={20} />
                         <VideoCamera size={20} />
                       )}
                       <p>{lesson.title}</p>

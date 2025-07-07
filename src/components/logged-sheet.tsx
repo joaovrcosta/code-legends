@@ -34,7 +34,7 @@ export default function LoggedSheet() {
             >
               Contato
             </a>
-            <hr className="border-[#29292e]" />
+            <hr className="border-[#c4c4cc]" />
             <Link
               href="/login"
               className="text-[#c4c4cc] p-2 hover:bg-[#202024] rounded-lg flex items-center space-x-2"
@@ -43,7 +43,7 @@ export default function LoggedSheet() {
               <span>LOGIN</span>
             </Link>
             <PrimaryButton>
-              INSCREVA-SE
+              PRÉ-VENDA
               <ChevronRight />
             </PrimaryButton>
           </div>

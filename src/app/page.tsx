@@ -3,13 +3,12 @@ import Hero from "@/components/landing-page/hero";
 
 export default function Home() {
   return (
-    <div className="">
+    <>
       <Header />
-      <div className="flex items-center justify-center ">
-        <div className="max-w-[1216px] mx-auto">
-          <Hero />
-        </div>
-      </div>
-    </div>
+      <Hero />
+      <section className="bg-[#121214] w-full py-20 text-white text-center">
+        <p className="text-xl">The best course</p>
+      </section>
+    </>
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import codeLegendsLogo from "../../public/code-legends-logo.svg";
 import { ChevronRight, User, Menu } from "lucide-react";
@@ -6,10 +8,26 @@ import { PrimaryButton } from "./ui/primary-button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Header() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 30);
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <div className="relative fixed top-0 left-0 w-full z-50 bg-[#121214] p-4">
+    <div
+      className={`fixed top-0 left-0 w-full z-50 py-4 transition-colors duration-300 lg:px-0 px-4 ${
+        scrolled ? "bg-[#121214]/85 backdrop-blur-md" : "bg-transparent"
+      }`}
+    >
       <div className="flex justify-between items-center md:px-16">
         <Image src={codeLegendsLogo} alt="Code Legends" />
 
@@ -17,8 +35,7 @@ export default function Header() {
         <div className="lg:hidden">
           <Sheet>
             <SheetTrigger>
-              <div className="flex items-center p-2 space-x-4  border  rounded-lg border border-[#25252A]">
-                <p>Menu</p>
+              <div className="flex items-center p-1 space-x-4  border  rounded-lg  border-[#c4c4cc]">
                 <Menu size={28} color="#c4c4cc" />
               </div>
             </SheetTrigger>
@@ -44,7 +61,7 @@ export default function Header() {
                 >
                   Contato
                 </a>
-                <hr className="border-[#29292e]" />
+                <hr className="border-[#c4c4cc]" />
                 <Link
                   href="/login"
                   className="text-[#c4c4cc] p-2 hover:bg-[#202024] rounded-lg flex items-center space-x-2"
@@ -53,7 +70,7 @@ export default function Header() {
                   <span>LOGIN</span>
                 </Link>
                 <PrimaryButton>
-                  INSCREVA-SE
+                  PRÉ-VENDA
                   <ChevronRight />
                 </PrimaryButton>
               </div>
