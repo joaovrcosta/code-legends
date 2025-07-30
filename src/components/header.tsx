@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import codeLegendsLogo from "../../public/code-legends-logo.svg";
+import codeLegendsLogoMobile from "../../public/logo-mobile.png";
 import { ChevronRight, User, Menu } from "lucide-react";
 import circleIcon from "../../public/circle.svg";
 import { PrimaryButton } from "./ui/primary-button";
@@ -24,12 +25,19 @@ export default function Header() {
 
   return (
     <div
-      className={`fixed top-0 left-0 w-full z-50 py-4 transition-colors duration-300 lg:px-0 px-4 ${
-        scrolled ? "bg-[#121214]/85 backdrop-blur-md" : "bg-transparent"
+      className={`fixed top-0 left-0 w-full z-50 lg:py-4 py-3 transition-colors duration-300 lg:px-0 px-4 ${
+        scrolled
+          ? "bg-[#121214]/50 backdrop-blur-md border-b border-white/10 shadow-md"
+          : "lg:bg-transparent bg-[#121214]"
       }`}
     >
       <div className="flex justify-between items-center md:px-16">
-        <Image src={codeLegendsLogo} alt="Code Legends" />
+        <div className="hidden lg:block md:block">
+          <Image src={codeLegendsLogo} alt="Code Legends" />
+        </div>
+        <div className="lg:hidden md:hidden sm:block">
+          <Image src={codeLegendsLogoMobile} alt="Code Legends" height={32} />
+        </div>
 
         {/* Menu Hamburger para telas menores */}
         <div className="lg:hidden">
@@ -114,12 +122,10 @@ export default function Header() {
           </ul>
           <ul className="flex items-center space-x-4 border-l-2 border-[#29292e]">
             <li className="ml-4">
-              <Link
-                href="/login"
-                className="p-3 flex space-x-2 text-[#c4c4cc] px-8 hover:bg-[#202024] rounded-xl hover:text-white"
-              >
+              <Link href="/login" className="flex gap-2 px-4">
                 <User size={20} />
-                <span className="text-sm">LOGIN</span>
+                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500"></span>
+                <span className="text-sm text-[#c4c4cc]">LOGIN</span>
               </Link>
             </li>
             <li>

@@ -6,9 +6,6 @@ import Image from "next/image";
 import codeLegendsLogo from "../../../public/code-legends-logo.svg";
 import { Input } from "@/components/ui/input";
 import { PrimaryButton } from "@/components/ui/primary-button";
-import { Crown } from "lucide-react";
-import DividerWithText from "@/components/divider-with-text";
-import Link from "next/link";
 
 export default function LoginPage() {
   return (
@@ -29,7 +26,7 @@ export default function LoginPage() {
           <Card className="max-w-[600px] mx-auto lg:mt-8 mt-0  border border-[#25252A] rounded-[20px]">
             <CardHeader className="flex flex-col items-center space-y-4 mb-6 mt-4">
               <h1 className="text-2xl text-white font-medium text-center">
-                Entrar na conta
+                Cadastre-se gratuitamente
               </h1>
               <Image
                 src={codeLegendsLogo}
@@ -44,29 +41,34 @@ export default function LoginPage() {
                 <div className="space-y-5 pb-6">
                   <Input
                     className="h-[52px] rounded-full bg-[#121214] text-white border border-[#25252A] px-4"
-                    placeholder="E-mail"
+                    placeholder="Seu nome completo"
                   />
                   <Input
                     className="h-[52px] rounded-full bg-[#121214] text-white border border-[#25252A] px-4"
-                    placeholder="Senha"
+                    placeholder="Seu e-mail"
                   />
+                  <Input
+                    className="h-[52px] rounded-full bg-[#121214] text-white border border-[#25252A] px-4"
+                    placeholder="Deve ter no minimo 7 caracteres"
+                  />
+                  <Input
+                    className="h-[52px] rounded-full bg-[#121214] text-white border border-[#25252A] px-4"
+                    placeholder="Deve ter no minimo 7 caracteres"
+                  />
+                  <p className="text-[14px] text-muted-foreground text-center">
+                    Ao se cadastrar, você aceita nossos{" "}
+                    <span className="text-[#00C8FF]">termos de uso</span> e a
+                    nossa{" "}
+                    <span className="text-[#00C8FF]">
+                      política de privacidade
+                    </span>
+                    .
+                  </p>
                   <PrimaryButton className="font-semibold h-[52px]">
-                    Acessar conta
+                    Criar conta
                   </PrimaryButton>
                 </div>
               </form>
-
-              <DividerWithText text="OU INSCREVA-SE COM" />
-
-              <div className="flex flex-col items-center space-y-4 mt-4 mb-3">
-                {/* <h3 className="text-white text-sm">REGISTRE-SE</h3> */}
-                <Link href="/signup" className="w-full">
-                  <PrimaryButton className="h-[52px]" variant="yellow">
-                    Cadastre-se gratuitamente
-                    <Crown className="text-[#FF9D00] ml-2" size={24} />
-                  </PrimaryButton>
-                </Link>
-              </div>
             </CardContent>
           </Card>
         </div>

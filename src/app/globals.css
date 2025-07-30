@@ -88,3 +88,27 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.bg-login-gradient::before,
+.bg-login-gradient::after {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 9999px;
+  filter: blur(180px);
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.bg-login-gradient::before {
+  background: radial-gradient(circle at top left, #00b2ff, transparent 70%);
+  top: -100px;
+  left: -100px;
+}
+
+.bg-login-gradient::after {
+  background: radial-gradient(circle at bottom right, #ffffff, transparent 70%);
+  bottom: -100px;
+  right: -100px;
+}

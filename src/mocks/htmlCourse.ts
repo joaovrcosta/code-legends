@@ -1,7 +1,7 @@
 export const htmlCourseData = [
   {
     level: "Chapter - Nível 1",
-    title: "HTML e CSS para Iniciantes",
+    title: "Iniciando com HTML&CSS",
     infos: ["6 aulas", "2 quizzes", "5h 30m"],
     session: "Sessão 1",
     completed: "0% completo",
@@ -10,7 +10,12 @@ export const htmlCourseData = [
     classes: [
       { title: "Introdução", duration: "00:01:31", complete: false },
       {
-        title: "HTML, CSS e Javascript",
+        title: "HTML&CSS e Javascript",
+        duration: "00:02:15",
+        complete: false,
+      },
+      {
+        title: "História da Web",
         duration: "00:02:15",
         complete: false,
       },
@@ -21,7 +26,7 @@ export const htmlCourseData = [
       //     isProject: true,
       //     complete: false,
       //   },
-      { title: "Softwares Necessarios", duration: "00:03:00", complete: false },
+      { title: "Softwares", duration: "00:03:00", complete: false },
       {
         title: "Browser",
         duration: "",
@@ -29,7 +34,12 @@ export const htmlCourseData = [
         complete: false,
       },
       {
-        title: "Instalandando editor de código",
+        title: "Editor de Código",
+        duration: "00:04:00",
+        complete: false,
+      },
+      {
+        title: "Plugins ",
         duration: "00:04:00",
         complete: false,
       },
@@ -37,7 +47,7 @@ export const htmlCourseData = [
   },
   {
     level: "Chapter - Nível 2",
-    title: "HTML e CSS Básico",
+    title: "Fundamentos HTML",
     infos: ["6 aulas", "4 quizzes", "5h 30m"],
     session: "Sessão 2",
     lessons: "31 aulas",

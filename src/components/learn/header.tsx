@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import codeLegendsLogo from "../../../public/code-legends-logo.svg";
-import codeLegendsLogoMobile from "../../../public/code-legends-logo-mobile.svg";
+import codeLegendsLogoMobile from "../../../public/logo-mobile.png";
 import Link from "next/link";
 import { ListEnd, Menu } from "lucide-react";
 import useSidebarStore from "@/stores/sidebarStore";
