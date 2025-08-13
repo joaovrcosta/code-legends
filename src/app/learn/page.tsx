@@ -1,105 +1,13 @@
 "use client";
 
-import { ArrowLeft, ChevronRight, CirclePlay, Lock } from "lucide-react";
-import Image from "next/image";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-} from "@/components/ui/popover";
+import { useRef, useState } from "react";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import DividerWithText from "@/components/divider-with-text";
 import { FastForward } from "@phosphor-icons/react/dist/ssr";
-import { reactCourseData, Task } from "../../../db";
-
-const firstIncompleteTask =
-  reactCourseData.courseModules[0].submodules[0].tasks.find(
-    (task) => !task.completed
-  )?.id ?? null;
-
-const TaskPopover = ({
-  task,
-  openPopover,
-  togglePopover,
-  showContinue,
-  setShowContinue,
-}: {
-  task: Task;
-  openPopover: number | null;
-  togglePopover: (id: number) => void;
-  showContinue: boolean;
-  setShowContinue: (state: boolean) => void;
-}) => (
-  <div>
-    {showContinue && firstIncompleteTask === task.id ? (
-      <Popover open={true}>
-        <PopoverTrigger asChild>
-          <Image
-            src={task.image}
-            alt=""
-            className="cursor-pointer"
-            onClick={() => {
-              setShowContinue(false);
-              togglePopover(task.id);
-            }}
-          />
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-[120px] cursor-pointer text-center bg-[#121214] rounded-full border-[2px] border-[#25252A] shadow-lg p-2 hover:bg-[#25252A]"
-          side="top"
-        >
-          <div className="flex flex-col items-center justify-center gap-2">
-            <span className="text-white text-sm font-semibold">Continuar</span>
-          </div>
-          <PopoverArrow className="fill-[#25252A] mb-3 w-4 h-4 transform translate-y-[-2px]" />
-        </PopoverContent>
-      </Popover>
-    ) : (
-      <Popover open={openPopover === task.id}>
-        <PopoverTrigger asChild>
-          <Image
-            src={task.image}
-            alt=""
-            className="cursor-pointer"
-            onClick={() => togglePopover(task.id)}
-          />
-        </PopoverTrigger>
-        <PopoverContent className="w-[295px] bg-[#1a1a1e] rounded-[20px] border border-[#25252A] shadow-lg p-4">
-          <div className="mb-3">
-            <div className="flex items-center space-x-2">
-              <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xs">
-                {task.category}
-              </span>
-              <span className="text-xs text-[#7e7e89] capitalize">
-                {task.type}
-              </span>
-            </div>
-            <h3 className="text-xl mt-2 text-white">{task.title}</h3>
-          </div>
-          <Link href={`${task.url}`}>
-            <PrimaryButton disabled={task.locked}>
-              {task.locked ? "Confidencial" : "Assistir"}
-              {task.locked ? <Lock /> : <CirclePlay />}
-            </PrimaryButton>
-          </Link>
-
-          {(task.type === "project" || task.type === "quiz") && (
-            <Link href={`/skip-task/${task.id}`}>
-              <PrimaryButton className="mt-2" disabled={task.locked}>
-                Pular
-                <FastForward size={24} weight="fill" />
-              </PrimaryButton>
-            </Link>
-          )}
-          <PopoverArrow className="fill-[#1a1a1e] w-4 h-4 transform translate-y-[-2px]" />
-        </PopoverContent>
-      </Popover>
-    )}
-  </div>
-);
+import { reactCourseData } from "../../../db";
+import { TaskPopover } from "@/components/learn/task-popover";
 
 export default function LearnPage() {
   const [openPopover, setOpenPopover] = useState<number | null>(null);
@@ -109,15 +17,6 @@ export default function LearnPage() {
   const togglePopover = (id: number) => {
     setOpenPopover((prev) => (prev === id ? null : id));
   };
-
-  useEffect(() => {
-    if (firstIncompleteTask && taskRefs.current[firstIncompleteTask]) {
-      taskRefs.current[firstIncompleteTask]?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-  }, []);
 
   return (
     <div className="flex items-center justify-center w-full">
@@ -153,7 +52,6 @@ export default function LearnPage() {
             </section>
           </div>
 
-          {/* Lista de Tarefas */}
           <div className="lg:pb-14 pb-20 w-full lg:mt-0 md:mt-0 mt-40">
             <section className="mt-0 space-y-12 px-4 mb-12">
               {reactCourseData.courseModules[0].submodules.map(

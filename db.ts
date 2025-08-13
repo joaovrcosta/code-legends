@@ -29,7 +29,7 @@ export type Task = {
   image: StaticImageData;
   completed: boolean;
   locked?: boolean;
-  url: string;
+  videoUrl: string;
   type: string;
 };
 
@@ -63,7 +63,7 @@ export const reactCourseData: ReactCourse = {
               image: recordedClassIcon,
               type: "video",
               completed: true,
-              url: "/classroom/react-js/lessons/introducao",
+              videoUrl: "https://streamable.com/e/y01s30?",
             },
             {
               id: 2,
@@ -72,7 +72,7 @@ export const reactCourseData: ReactCourse = {
               image: recordedClassIcon,
               type: "video",
               completed: true,
-              url: "/classroom/react-js/lessons/fundamentos-do-reactjs",
+              videoUrl: "https://streamable.com/e/y01s30?",
             },
             {
               id: 3,
@@ -81,7 +81,7 @@ export const reactCourseData: ReactCourse = {
               image: incompleteRecordedClass,
               type: "video",
               completed: false,
-              url: "/classroom/react-js/lessons/css-modules",
+              videoUrl: "https://streamable.com/e/y01s30?",
             },
             {
               id: 4,
@@ -91,7 +91,7 @@ export const reactCourseData: ReactCourse = {
               type: "video",
               completed: false,
               locked: false,
-              url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
+              videoUrl: "https://streamable.com/e/y01s30?",
             },
             {
               id: 5,
@@ -101,7 +101,7 @@ export const reactCourseData: ReactCourse = {
               type: "video",
               completed: false,
               locked: false,
-              url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
+              videoUrl: "https://streamable.com/e/y01s30?",
             },
             {
               id: 6,
@@ -111,7 +111,7 @@ export const reactCourseData: ReactCourse = {
               type: "video",
               completed: false,
               locked: false,
-              url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
+              videoUrl: "https://streamable.com/e/y01s30?",
             },
             {
               id: 7,
@@ -121,7 +121,7 @@ export const reactCourseData: ReactCourse = {
               type: "quiz",
               completed: false,
               locked: false,
-              url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
+              videoUrl: "https://streamable.com/e/y01s30?",
             },
             {
               id: 8,
@@ -131,7 +131,7 @@ export const reactCourseData: ReactCourse = {
               completed: false,
               type: "project",
               locked: false,
-              url: "/classroom/reactjs/chapter/iniciando-com-react/criando-projeto-react",
+              videoUrl: "https://streamable.com/e/y01s30?",
             },
           ],
         },
@@ -146,7 +146,7 @@ export const reactCourseData: ReactCourse = {
               completed: false,
               type: "video",
               locked: false,
-              url: "/learn/catalog",
+              videoUrl: "/learn/catalog",
             },
             {
               id: 10,
@@ -156,7 +156,7 @@ export const reactCourseData: ReactCourse = {
               completed: false,
               type: "video",
               locked: false,
-              url: "/learn/catalog",
+              videoUrl: "/learn/catalog",
             },
             {
               id: 11,
@@ -166,7 +166,7 @@ export const reactCourseData: ReactCourse = {
               completed: false,
               type: "quiz",
               locked: false,
-              url: "/learn/catalog",
+              videoUrl: "/learn/catalog",
             },
             {
               id: 12,
@@ -176,7 +176,7 @@ export const reactCourseData: ReactCourse = {
               type: "project",
               completed: false,
               locked: false,
-              url: "/learn/catalog",
+              videoUrl: "/learn/catalog",
             },
           ],
         },
@@ -201,7 +201,7 @@ export const reactCourseData: ReactCourse = {
               completed: false,
               locked: true,
               type: "video",
-              url: "/learn/catalog",
+              videoUrl: "/learn/catalog",
             },
             {
               id: 2,
@@ -211,7 +211,7 @@ export const reactCourseData: ReactCourse = {
               completed: false,
               locked: true,
               type: "video",
-              url: "/learn/catalog",
+              videoUrl: "/learn/catalog",
             },
             {
               id: 3,
@@ -221,7 +221,7 @@ export const reactCourseData: ReactCourse = {
               completed: false,
               locked: true,
               type: "video",
-              url: "/learn/catalog",
+              videoUrl: "/learn/catalog",
             },
             {
               id: 4,
@@ -231,7 +231,7 @@ export const reactCourseData: ReactCourse = {
               type: "quiz",
               completed: false,
               locked: true,
-              url: "/learn/catalog",
+              videoUrl: "/learn/catalog",
             },
           ],
         },

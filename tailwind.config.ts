@@ -89,7 +89,6 @@ export default {
         "yellow-gradient-first":
           "linear-gradient(0deg, rgba(15,15,16, 0.05) 0%, rgba(255,204,0,0.39) 100%)",
       },
-
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
