@@ -8,7 +8,7 @@ import patternIcon from "../../../public/patterns-course-icon.svg";
 import { ArrowUpRight, CirclePlay, Medal, ScrollText } from "lucide-react";
 import { Star } from "@phosphor-icons/react/dist/ssr";
 
-const courses: CatalogCardProps[] = [
+export const courses: CatalogCardProps[] = [
   {
     name: "ReactJS",
     image: reactIcon,
@@ -189,13 +189,13 @@ export function CatalogCard({
   const iconElement = icon(isFavorite);
   return (
     <div
-      className={`relative w-full rounded-[16px] transition-all duration-300 hover:scale-105 hover:backdrop-blur-lg cursor-pointer
+      className={`relative shadow-xl w-full rounded-[16px] transition-all duration-300 hover:backdrop-blur-lg cursor-pointer hover:border-[#3f3f48]
     ${
       isCurrent
         ? "bg-blue-gradient-second border-[#35BED5]"
         : "bg-gray-gradient border-[#25252A]"
     }
-    border ${className}`}
+    border hover:shadow-[inset_0_-20px_20px_rgba(255,255,255,0.025)] ${className}`}
     >
       {label && (
         <div className="flex items-center justify-between rounded-t-[20px] pr-4 pl-4 pt-4 pb-0">

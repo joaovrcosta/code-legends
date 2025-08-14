@@ -2,8 +2,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { NewContentCard } from "./new-content-card";
 
@@ -21,7 +19,7 @@ export function NewContentCaroussel() {
           {[1, 2, 3, 4, 5].map((_, index) => (
             <CarouselItem
               key={index}
-              className={`lg:basis-[90%] basis-[75%] pr-4 ${
+              className={`lg:basis-[90%] basis-[85%] lg:pr-4 pr-2 ${
                 index === 0 ? "lg:pl-[95px] pl-4" : "pl-4"
               }`}
             >

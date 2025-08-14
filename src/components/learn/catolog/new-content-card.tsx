@@ -10,7 +10,7 @@ export function NewContentCard() {
     <>
       <div className="bg-gray-gradient border border-[#25252A] rounded-[16px] mb-4 flex 2xl:max-h-[340px] lg:h-full overflow-hidden shadow-xl">
         {/* Lado esquerdo */}
-        <div className="relative px-8 pb-8 pt-4 flex flex-col justify-between">
+        <div className="relative lg:px-8 px-4 lg:pb-8 pb-4 lg:pt-4 pt-2 flex flex-col justify-between">
           {/* Fade direito */}
           <div className="pointer-events-none absolute top-0 right-0 h-full w-12 bg-gradient-to-l from-[#121214] to-transparent z-10" />
 
@@ -43,7 +43,7 @@ export function NewContentCard() {
                 <Play size={32} weight="fill" />
                 Assistir
               </Button>
-              <Button className="h-[44px] w-[50px] bg-[#1a1a1e]">
+              <Button className="h-[44px] lg:w-[50px] w-full bg-[#1a1a1e]">
                 <Info size={32} weight="fill" />
               </Button>
             </div>
