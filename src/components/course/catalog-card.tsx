@@ -5,8 +5,9 @@ import htmlcssIcon from "../../../public/html-course-icon.svg";
 import nextjsIcon from "../../../public/nextjs-course-icon.svg";
 import tailwindIcon from "../../../public/tailwind-course-icon.svg";
 import patternIcon from "../../../public/patterns-course-icon.svg";
-import { ArrowUpRight, CirclePlay, Medal, ScrollText } from "lucide-react";
-import { Star } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRight, Medal, ScrollText } from "lucide-react";
+import { Plus, Star } from "@phosphor-icons/react/dist/ssr";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export const courses: CatalogCardProps[] = [
   {
@@ -189,7 +190,7 @@ export function CatalogCard({
   const iconElement = icon(isFavorite);
   return (
     <div
-      className={`relative shadow-xl w-full rounded-[16px] transition-all duration-300 hover:backdrop-blur-lg cursor-pointer hover:border-[#3f3f48]
+      className={`relative shadow-2xl w-full rounded-[16px] transition-all duration-300 hover:backdrop-blur-lg cursor-pointer hover:border-[#3f3f48]
     ${
       isCurrent
         ? "bg-blue-gradient-second border-[#35BED5]"
@@ -213,7 +214,6 @@ export function CatalogCard({
       <div className="p-4">
         <Image src={imageSrc} alt={name} width={80} height={80} />
         <div className="px-4">
-          <p className="font-light text-[12px] text-[#C2C2C2]">CURSO - 12h</p>
           <div className="flex items-center space-x-1">
             <span className={`font-bold bg-clip-text text-lg ${colorClass}`}>
               {name}
@@ -225,22 +225,27 @@ export function CatalogCard({
 
       <div className="flex items-center justify-between pr-4 pl-4 pb-4">
         <div className="flex items-center gap-2 px-4">
-          <Medal size={16} className="text-gray-600" />
+          <Medal size={16} className="text-gray-600 lg:block hidden" />
           <p className="text-xs text-gray-600">Com certificado</p>
         </div>
-        <div className="flex">
+
+        <div className="flex gap-2">
+          <div className="flex items-center gap-2 text-muted-foreground text-xs">
+            <Avatar className="h-[24px] w-[24px]">
+              <AvatarImage src="https://avatars.githubusercontent.com/u/70654718?s=400&u=415dc8fde593b5dcbdef181e6186a8d80daf72fc&v=4" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <p>João</p>
+          </div>
           <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
             <Link href={url}>
               <ScrollText size={20} className="text-gray-600" />
             </Link>
           </div>
           {url && (
-            <Link href="/learn">
+            <Link href="/learn" className="bg-[#25252A] rounded-full">
               <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
-                <CirclePlay
-                  size={28}
-                  className="text-white hover:text-[#35BED5]"
-                />
+                <Plus size={28} className="text-white hover:text-[#35BED5]" />
               </div>
             </Link>
           )}

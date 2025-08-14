@@ -3,6 +3,7 @@ import tailwindIcon from "../../../../public/tailwind-course-icon.svg";
 import { PersonalCatalog } from "@/components/course/personal-catalog-card";
 import { NewContentCaroussel } from "@/components/learn/catolog/new-content-caroussel";
 import { RecommendationsCarousel } from "@/components/learn/catolog/recommendations-carousel";
+import { CategoriesCarousel } from "@/components/learn/catolog/categories-carousel";
 
 export default function CoursesPage() {
   return (
@@ -22,6 +23,14 @@ export default function CoursesPage() {
 
         {/* Seus cursos e Catálogo */}
         <div className="lg:pl-20 pl-4 w-full">
+          <div className="flex items-center space-x-2 py-4">
+            <span className="text-muted-foreground text-[14px] font-semibold">
+              Categorias
+            </span>
+          </div>
+          <div className="pp-3 pb-6">
+            <CategoriesCarousel />
+          </div>
           {/* Seus cursos */}
           <div className="flex items-center space-x-2 py-4">
             <span className="text-muted-foreground text-[14px] font-semibold">
