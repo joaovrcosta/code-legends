@@ -7,7 +7,7 @@ import tailwindIcon from "../../../public/tailwind-course-icon.svg";
 import patternIcon from "../../../public/patterns-course-icon.svg";
 import { ArrowUpRight, Medal, ScrollText } from "lucide-react";
 import { Plus, Star } from "@phosphor-icons/react/dist/ssr";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+// import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export const courses: CatalogCardProps[] = [
   {
