@@ -230,13 +230,13 @@ export function CatalogCard({
         </div>
 
         <div className="flex gap-2">
-          <div className="flex items-center gap-2 text-muted-foreground text-xs">
+          {/* <div className="flex items-center gap-2 text-muted-foreground text-xs">
             <Avatar className="h-[24px] w-[24px]">
               <AvatarImage src="https://avatars.githubusercontent.com/u/70654718?s=400&u=415dc8fde593b5dcbdef181e6186a8d80daf72fc&v=4" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <p>João</p>
-          </div>
+          </div> */}
           <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
             <Link href={url}>
               <ScrollText size={20} className="text-gray-600" />
