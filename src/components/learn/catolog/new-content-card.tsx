@@ -1,14 +1,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Info, Play } from "@phosphor-icons/react/dist/ssr";
+import { Info } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import genesisIcon from "../../../../public/code-genesis.svg";
 import genesisBackground from "../../../../public/code-genesis-image.png";
+import { Plus } from "lucide-react";
 
 export function NewContentCard() {
   return (
     <>
-      <div className="bg-gray-gradient border border-[#25252A] rounded-[16px] mb-4 flex 2xl:max-h-[340px] lg:h-full overflow-hidden shadow-xl">
+      <div className="bg-gray-gradient border border-[#25252A] rounded-[16px] mb-4 flex max-h-[400px] lg:h-full overflow-hidden shadow-xl">
         {/* Lado esquerdo */}
         <div className="relative lg:px-8 px-4 lg:pb-8 pb-4 lg:pt-4 pt-2 flex flex-col justify-between">
           {/* Fade direito */}
@@ -40,10 +41,10 @@ export function NewContentCard() {
 
             <div className="flex items-center gap-3 mt-6">
               <Button className="bg-gray-gradient-first text-white h-[42px] rounded-[12px] hover:bg-slate-200 border border-[#25252A] hover:text-black">
-                <Play size={32} weight="fill" />
-                Assistir
+                <Plus size={32} />
+                Adicionar
               </Button>
-              <Button className="h-[44px] lg:w-[50px] w-full bg-[#1a1a1e]">
+              <Button className="h-[44px] lg:w-[50px] w-full bg-[#1a1a1e] rounded-[12px]">
                 <Info size={32} weight="fill" />
               </Button>
             </div>
