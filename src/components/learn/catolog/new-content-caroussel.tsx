@@ -20,7 +20,7 @@ export function NewContentCaroussel() {
             <CarouselItem
               key={index}
               className={`lg:basis-[90%] basis-[85%] lg:pr-4 pr-2 ${
-                index === 0 ? "lg:pl-[95px] pl-4" : "pl-4"
+                index === 0 ? "lg:pl-[100px] pl-4" : "pl-4"
               }`}
             >
               <NewContentCard />
