@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Headset, LogOut, User, Zap } from "lucide-react";
+import { logout } from "@/actions/auth";
 
 export function UserDropdown() {
   return (
@@ -81,13 +82,13 @@ export function UserDropdown() {
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            asChild
-            className="px-6 py-4  lg:w-[352px] w-full text-white border-none rounded-[20px]"
+            className="px-6 py-4  lg:w-[352px] w-full text-white border-none rounded-[20px] cursor-pointer"
+            onClick={() => logout()}
           >
-            <Link href="/logout" className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2">
               <LogOut className="text-[#fe6e78]" />
               <span className="text-[#fe6e78]">Sair da conta</span>
-            </Link>
+            </div>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

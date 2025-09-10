@@ -9,8 +9,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Headset, LogOut, User } from "lucide-react";
+import { logout } from "@/actions/auth";
+import { getCurrentUser } from "@/actions/user/get-current-user";
 
-export default function CourseHeader() {
+export default async function CourseHeader() {
+  const user = await getCurrentUser();
   return (
     <div className="relative fixed top-0 left-0 w-full z-50 bg-[#121214] border-b border-[#25252A]">
       <ul className="flex justify-between items-center lg:pt-4 pt-2 lg:pb-4 pb-2 max-w-[1560px] mx-auto px-4">
@@ -28,7 +31,7 @@ export default function CourseHeader() {
               >
                 <User className="text-[#00C8FF]" />
                 <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent">
-                  João
+                  {user?.name || "Usuário"}
                 </span>
               </Button>
             </DropdownMenuTrigger>
@@ -57,13 +60,13 @@ export default function CourseHeader() {
               </DropdownMenuItem>
 
               <DropdownMenuItem
-                asChild
-                className="px-6 py-4 w-[352px] text-white border-none rounded-[20px]"
+                className="px-6 py-4 w-[352px] text-white border-none rounded-[20px] cursor-pointer"
+                onClick={() => logout()}
               >
-                <Link href="/logout" className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2">
                   <LogOut className="text-[#fe6e78]" />
                   <span className="text-[#fe6e78]">Sair da conta</span>
-                </Link>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
