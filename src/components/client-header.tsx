@@ -15,7 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function ClientHeader() {
   const [scrolled, setScrolled] = useState(false);
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   useEffect(() => {
     const onScroll = () => {
@@ -79,7 +79,7 @@ export default function ClientHeader() {
                       className="text-[#c4c4cc] p-2 hover:bg-[#202024] rounded-lg flex items-center space-x-2"
                     >
                       <Avatar className="h-6 w-6">
-                        <AvatarImage src={session.user?.avatar || ""} />
+                        <AvatarImage src={session.user?.image || ""} />
                         <AvatarFallback>
                           {session.user?.name?.charAt(0).toUpperCase() || "U"}
                         </AvatarFallback>
@@ -159,7 +159,7 @@ export default function ClientHeader() {
                     className="flex gap-2 px-4 items-center"
                   >
                     <Avatar className="h-6 w-6">
-                      <AvatarImage src={session.user?.avatar || ""} />
+                      <AvatarImage src={session.user?.image || ""} />
                       <AvatarFallback>
                         {session.user?.name?.charAt(0).toUpperCase() || "U"}
                       </AvatarFallback>

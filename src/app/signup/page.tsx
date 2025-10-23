@@ -6,7 +6,7 @@ import Image from "next/image";
 import codeLegendsLogo from "../../../public/code-legends-logo.svg";
 import { Input } from "@/components/ui/input";
 import { PrimaryButton } from "@/components/ui/primary-button";
-import { Crown } from "lucide-react";
+// import { Crown } from "lucide-react";
 import DividerWithText from "@/components/divider-with-text";
 import { useState } from "react";
 import { useRouter } from "next/navigation";

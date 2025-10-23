@@ -15,7 +15,6 @@ export async function loginUser(formData: FormData) {
   }
 
   try {
-    console.log(API_BASE_URL);
     const response = await fetch(`${API_BASE_URL}/users/auth`, {
       method: "POST",
       headers: {

@@ -78,7 +78,7 @@ export async function markTaskAsCompleted(taskId: string) {
 }
 
 async function updateModuleProgress(userId: string, moduleId: number) {
-  const module = await prisma.module.findUnique({
+  const moduleData = await prisma.module.findUnique({
     where: { id: moduleId },
     include: {
       submodules: {
@@ -89,19 +89,19 @@ async function updateModuleProgress(userId: string, moduleId: number) {
     },
   });
 
-  if (!module) return;
+  if (!moduleData) return;
 
   // Buscar o userCourse relacionado
   const userCourse = await prisma.userCourse.findFirst({
     where: {
       userId,
-      courseId: module.courseId,
+      courseId: moduleData.courseId,
     },
   });
 
   if (!userCourse) return;
 
-  const totalTasks = module.submodules.reduce(
+  const totalTasks = moduleData.submodules.reduce(
     (acc, submodule) => acc + submodule.tasks.length,
     0
   );

@@ -27,36 +27,21 @@ export async function getCurrentSession() {
   }
 
   try {
-    // Buscar dados do usuário usando o token
-    // Quando a rota /me estiver disponível, descomente e ajuste:
-    /*
+    // Buscar dados do usuário usando o token da rota /me
     const response = await fetch(`${API_BASE_URL}/users/me`, {
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
+      cache: "no-store", // Sempre buscar dados atualizados
     });
 
     if (!response.ok) {
+      console.error("Erro ao buscar usuário da API:", response.status);
       return null;
     }
 
     const user = await response.json();
     return user;
-    */
-
-    // Temporariamente, decodificar o JWT para extrair informações do usuário
-    const payload = JSON.parse(
-      Buffer.from(token.split(".")[1], "base64").toString()
-    );
-
-    return {
-      id: payload.id,
-      name: payload.name,
-      email: payload.email,
-      role: payload.role,
-      avatar: payload.avatar || null,
-      createdAt: payload.createdAt || new Date(),
-    };
   } catch (error) {
     console.error("Erro ao obter sessão:", error);
     return null;

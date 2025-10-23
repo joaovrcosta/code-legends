@@ -1,5 +1,8 @@
 import { CircleCheckBig, Lock, Play } from "lucide-react";
 
+// Marcar como dinâmica pois usa cookies() no header
+export const dynamic = "force-dynamic";
+
 const courseData = [
   {
     level: "Terra - Nível 1",

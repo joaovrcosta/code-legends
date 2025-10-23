@@ -8,9 +8,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Headset, LogOut, User } from "lucide-react";
-import { logout } from "@/actions/auth";
+import { Headset, User } from "lucide-react";
 import { getCurrentUser } from "@/actions/user/get-current-user";
+import { LogoutMenuItem } from "./logout-menu-item";
 
 export default async function CourseHeader() {
   const user = await getCurrentUser();
@@ -59,15 +59,7 @@ export default async function CourseHeader() {
                 </Link>
               </DropdownMenuItem>
 
-              <DropdownMenuItem
-                className="px-6 py-4 w-[352px] text-white border-none rounded-[20px] cursor-pointer"
-                onClick={() => logout()}
-              >
-                <div className="flex items-center space-x-2">
-                  <LogOut className="text-[#fe6e78]" />
-                  <span className="text-[#fe6e78]">Sair da conta</span>
-                </div>
-              </DropdownMenuItem>
+              <LogoutMenuItem />
             </DropdownMenuContent>
           </DropdownMenu>
         </li>

@@ -9,7 +9,7 @@ export default function LoggedSheet() {
     <div className="lg:hidden">
       <Sheet>
         <SheetTrigger>
-          <div className="flex items-center p-2 space-x-4  border  rounded-lg border border-[#25252A]">
+          <div className="flex items-center p-2 space-x-4 rounded-lg border border-[#25252A]">
             <Menu size={28} color="#c4c4cc" />
           </div>
         </SheetTrigger>

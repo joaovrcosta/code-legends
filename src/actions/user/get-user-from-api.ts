@@ -15,11 +15,15 @@ export async function getUserFromAPI() {
   const token = await getAuthToken();
 
   if (!token) {
+    console.log("❌ Nenhum token encontrado");
     return null;
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/users/me`, {
+    const url = `${API_BASE_URL}/users/me`;
+    console.log("🔍 Buscando dados do usuário em:", url);
+
+    const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,16 +32,18 @@ export async function getUserFromAPI() {
 
     if (!response.ok) {
       if (response.status === 401) {
-        // Token inválido ou expirado
-        console.error("Token inválido ou expirado");
+        console.error("❌ Token inválido ou expirado");
+      } else {
+        console.error("❌ Erro ao buscar usuário:", response.status);
       }
       return null;
     }
 
     const user = await response.json();
+    console.log("✅ Usuário obtido com sucesso:", user.email);
     return user;
   } catch (error) {
-    console.error("Erro ao buscar dados do usuário da API:", error);
+    console.error("❌ Erro ao buscar dados do usuário da API:", error);
     return null;
   }
 }
