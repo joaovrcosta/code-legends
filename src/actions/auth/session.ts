@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import type { User, UserMeResponse } from "@/types/user";
 
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
 
@@ -18,7 +19,7 @@ export async function createSession(token: string) {
   return token;
 }
 
-export async function getCurrentSession() {
+export async function getCurrentSession(): Promise<User | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get("auth_token")?.value;
 
@@ -28,7 +29,7 @@ export async function getCurrentSession() {
 
   try {
     // Buscar dados do usuário usando o token da rota /me
-    const response = await fetch(`${API_BASE_URL}/users/me`, {
+    const response = await fetch(`${API_BASE_URL}/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -40,8 +41,8 @@ export async function getCurrentSession() {
       return null;
     }
 
-    const user = await response.json();
-    return user;
+    const data: UserMeResponse = await response.json();
+    return data.user;
   } catch (error) {
     console.error("Erro ao obter sessão:", error);
     return null;
