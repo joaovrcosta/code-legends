@@ -1,57 +1,74 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
 
-export async function createSession(userId: string) {
+const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
+
+export async function createSession(token: string) {
   const cookieStore = await cookies();
 
-  // Criar um token simples (em produção, use JWT)
-  const sessionToken = `session_${userId}_${Date.now()}`;
-
-  // Salvar no cookie
-  cookieStore.set("session_token", sessionToken, {
+  // Salvar o token JWT no cookie
+  cookieStore.set("auth_token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 60 * 60 * 24 * 7, // 7 dias
   });
 
-  return sessionToken;
+  return token;
 }
 
 export async function getCurrentSession() {
   const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value;
+  const token = cookieStore.get("auth_token")?.value;
 
-  if (!sessionToken) {
+  if (!token) {
     return null;
   }
 
-  // Extrair userId do token
-  const userId = sessionToken.split("_")[1];
+  try {
+    // Buscar dados do usuário usando o token
+    // Quando a rota /me estiver disponível, descomente e ajuste:
+    /*
+    const response = await fetch(`${API_BASE_URL}/users/me`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
 
-  if (!userId) {
+    if (!response.ok) {
+      return null;
+    }
+
+    const user = await response.json();
+    return user;
+    */
+
+    // Temporariamente, decodificar o JWT para extrair informações do usuário
+    const payload = JSON.parse(
+      Buffer.from(token.split(".")[1], "base64").toString()
+    );
+
+    return {
+      id: payload.id,
+      name: payload.name,
+      email: payload.email,
+      role: payload.role,
+      avatar: payload.avatar || null,
+      createdAt: payload.createdAt || new Date(),
+    };
+  } catch (error) {
+    console.error("Erro ao obter sessão:", error);
     return null;
   }
+}
 
-  // Buscar usuário no banco
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      avatar: true,
-      createdAt: true,
-    },
-  });
-
-  return user;
+export async function getAuthToken() {
+  const cookieStore = await cookies();
+  return cookieStore.get("auth_token")?.value || null;
 }
 
 export async function destroySession() {
   const cookieStore = await cookies();
-  cookieStore.delete("session_token");
+  cookieStore.delete("auth_token");
 }

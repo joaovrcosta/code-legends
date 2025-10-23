@@ -55,7 +55,7 @@ export function UserDropdown() {
               <div className="flex border border-[#25252A] py-2 px-4 rounded-[20px] items-center gap-3 text-[#8234E9] hover:bg-[#25252A] cursor-pointer">
                 <Zap />
                 <span className="bg-purple-gradient-500 bg-clip-text text-transparent font-bold text-sm">
-                  Premium
+                  Pro
                 </span>
               </div>
             </div>

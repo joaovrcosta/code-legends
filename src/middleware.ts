@@ -12,17 +12,17 @@ export function middleware(request: NextRequest) {
     pathname.startsWith(route)
   );
 
-  // Verificar se existe o cookie de sessão
-  const sessionToken = request.cookies.get("session_token");
+  // Verificar se existe o token de autenticação
+  const authToken = request.cookies.get("auth_token");
 
   // Se for uma rota pública e o usuário estiver logado, redirecionar para /learn
-  if (isPublicRoute && sessionToken) {
+  if (isPublicRoute && authToken) {
     return NextResponse.redirect(new URL("/learn", request.url));
   }
 
   // Se não for uma rota pública, verificar autenticação
   if (!isPublicRoute) {
-    if (!sessionToken) {
+    if (!authToken) {
       // Redirecionar para login se não estiver autenticado
       return NextResponse.redirect(new URL("/login", request.url));
     }

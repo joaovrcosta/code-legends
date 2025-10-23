@@ -16,7 +16,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
@@ -24,7 +24,6 @@ export default function LoginPage() {
     try {
       const formData = new FormData(e.currentTarget);
       await loginUser(formData);
-      // Se chegou aqui, o login foi bem-sucedido e o redirect já foi feito
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erro ao fazer login");
     } finally {
@@ -34,13 +33,10 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-[#0D0D12]">
-      {/* Luz azul - topo esquerdo */}
       <div className="absolute w-[400px] h-[400px] top-0 left-0 rounded-full bg-[#00b3ffa9] opacity-40 blur-[200px] pointer-events-none" />
 
-      {/* Luz rosa - centro esquerda */}
       <div className="absolute w-[300px] h-[300px] top-[20%] left-[30%] rounded-full bg-[#00b3ff5b] opacity-30 blur-[200px] pointer-events-none" />
 
-      {/* Luz roxa - inferior direito */}
       <div className="absolute w-[500px] h-[500px] bottom-0 right-0 rounded-full bg-[#00b3ffb6] opacity-40 blur-[220px] pointer-events-none" />
 
       {/* Conteúdo principal */}

@@ -98,7 +98,7 @@ export default function SignupPage() {
                   />
                   <Input
                     className="h-[52px] rounded-full bg-[#121214] text-white border border-[#25252A] px-4"
-                    placeholder="Deve ter no minimo 7 caracteres"
+                    placeholder="Deve ter no mínimo 8 caracteres"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -137,7 +137,7 @@ export default function SignupPage() {
 
               <div className="flex flex-col items-center space-y-4 mt-4 mb-3">
                 <Link href="/login" className="w-full">
-                  <PrimaryButton className="h-[52px]" variant="outline">
+                  <PrimaryButton className="h-[52px]" variant="secondary">
                     Fazer login
                   </PrimaryButton>
                 </Link>
