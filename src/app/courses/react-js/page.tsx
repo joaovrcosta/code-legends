@@ -14,6 +14,9 @@ import { Lock, Play } from "lucide-react";
 import Link from "next/link";
 import { reactCourseData } from "../../../../db";
 
+// Marcar como dinâmica pois usa cookies() no header
+export const dynamic = "force-dynamic";
+
 export default function ReactJsPage() {
   return (
     <div>

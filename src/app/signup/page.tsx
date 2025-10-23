@@ -6,8 +6,45 @@ import Image from "next/image";
 import codeLegendsLogo from "../../../public/code-legends-logo.svg";
 import { Input } from "@/components/ui/input";
 import { PrimaryButton } from "@/components/ui/primary-button";
+// import { Crown } from "lucide-react";
+import DividerWithText from "@/components/divider-with-text";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { registerUser } from "@/actions/auth";
 
-export default function LoginPage() {
+export default function SignupPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("confirmPassword", confirmPassword);
+
+      await registerUser(formData);
+      router.push(
+        "/login?message=Conta criada com sucesso! Faça login para continuar."
+      );
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Erro ao criar conta");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden bg-[#0D0D12]">
       {/* Luz azul - topo esquerdo */}
@@ -30,31 +67,60 @@ export default function LoginPage() {
               </h1>
               <Image
                 src={codeLegendsLogo}
-                alt="Login"
+                alt="Cadastro"
                 width={149}
                 height={16}
               />
             </CardHeader>
 
             <CardContent>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="space-y-5 pb-6">
+                  {error && (
+                    <div className="text-red-500 text-sm text-center">
+                      {error}
+                    </div>
+                  )}
                   <Input
                     className="h-[52px] rounded-full bg-[#121214] text-white border border-[#25252A] px-4"
                     placeholder="Seu nome completo"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
                   />
                   <Input
                     className="h-[52px] rounded-full bg-[#121214] text-white border border-[#25252A] px-4"
                     placeholder="Seu e-mail"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                   <Input
                     className="h-[52px] rounded-full bg-[#121214] text-white border border-[#25252A] px-4"
-                    placeholder="Deve ter no minimo 7 caracteres"
+                    placeholder="Deve ter no mínimo 8 caracteres"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                   <Input
                     className="h-[52px] rounded-full bg-[#121214] text-white border border-[#25252A] px-4"
-                    placeholder="Deve ter no minimo 7 caracteres"
+                    placeholder="Confirme sua senha"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
                   />
+                  <PrimaryButton
+                    className="font-semibold h-[52px]"
+                    type="submit"
+                    disabled={isLoading}
+                  >
+                    {isLoading
+                      ? "Criando conta..."
+                      : "Cadastre-se gratuitamente"}
+                  </PrimaryButton>
                   <p className="text-[14px] text-muted-foreground text-center">
                     Ao se cadastrar, você aceita nossos{" "}
                     <span className="text-[#00C8FF]">termos de uso</span> e a
@@ -64,11 +130,18 @@ export default function LoginPage() {
                     </span>
                     .
                   </p>
-                  <PrimaryButton className="font-semibold h-[52px]">
-                    Criar conta
-                  </PrimaryButton>
                 </div>
               </form>
+
+              <DividerWithText text="JÁ TEM UMA CONTA?" />
+
+              <div className="flex flex-col items-center space-y-4 mt-4 mb-3">
+                <Link href="/login" className="w-full">
+                  <PrimaryButton className="h-[52px]" variant="secondary">
+                    Fazer login
+                  </PrimaryButton>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>

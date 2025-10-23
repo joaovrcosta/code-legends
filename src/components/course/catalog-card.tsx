@@ -11,7 +11,6 @@ import {
   ScrollText,
 } from "lucide-react";
 import { Plus, Star } from "@phosphor-icons/react/dist/ssr";
-// import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export const courses: CatalogCardProps[] = [
   {

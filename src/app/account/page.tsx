@@ -4,19 +4,35 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Crown, KeyRound, Medal } from "lucide-react";
 import Link from "next/link";
+import { getCurrentUser } from "@/actions/user/get-current-user";
+import { getUserCertificates } from "@/actions/user/get-user-certificates";
+import { redirect } from "next/navigation";
 
-export default function AccountPage() {
+export default async function AccountPage() {
+  const user = await getCurrentUser();
+  const certificates = await getUserCertificates();
+
+  if (!user) {
+    redirect("/login");
+  }
   return (
     <div className="space-y-4">
       <div className="lg:flex hidden items-center space-x-2 px-4 py-8 mt-8">
         <Avatar className="h-[52px] w-[52px]">
-          <AvatarImage src="https://avatars.githubusercontent.com/u/70654718?s=400&u=415dc8fde593b5dcbdef181e6186a8d80daf72fc&v=4" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage src={user.avatar || ""} />
+          <AvatarFallback>
+            {user.name?.charAt(0).toUpperCase() || "U"}
+          </AvatarFallback>
         </Avatar>
         <div>
-          <p>João Victor</p>
+          <p>{user.name}</p>
+          <p className="text-xs text-muted-foreground">{user.email}</p>
           <p className="text-xs text-muted-foreground">
-            Gerencie a sua conta e suas informações
+            Membro desde{" "}
+            {new Date(user.createdAt).toLocaleDateString("pt-BR", {
+              year: "numeric",
+              month: "long",
+            })}
           </p>
         </div>
       </div>
@@ -40,9 +56,27 @@ export default function AccountPage() {
           </p>
         </CardHeader>
         <CardContent className="flex lg:flex-wrap flex-col lg:space-y-0 space-y-3 lg:gap-4 gap-0  px-0">
-          <CertificateCard courseName="ReactJS" />
-          <CertificateCard courseName="Performance" />
-          <CertificateCard courseName="HTML" />
+          {certificates.length > 0 ? (
+            certificates.map((certificate) => (
+              <CertificateCard
+                key={certificate.id}
+                courseName={certificate.course.title}
+                completedAt={certificate.completedAt}
+              />
+            ))
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-muted-foreground text-sm">
+                Você ainda não concluiu nenhum curso.
+              </p>
+              <Link
+                href="/courses"
+                className="text-[#00c8ff] text-sm hover:underline mt-2 inline-block"
+              >
+                Explorar cursos
+              </Link>
+            </div>
+          )}
         </CardContent>
       </Card>
 
