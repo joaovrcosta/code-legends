@@ -1,29 +1,36 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
-import { getCurrentSession } from "../auth/session";
+import { getAuthToken } from "../auth/session";
+
+const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
 
 export async function getUserCertificates() {
   try {
-    const user = await getCurrentSession();
+    // Obter o token de autenticação do NextAuth
+    const token = await getAuthToken();
 
-    if (!user?.id) {
+    if (!token) {
+      console.error("Token de autenticação não encontrado");
       return [];
     }
 
-    // Buscar cursos concluídos pelo usuário
-    const completedCourses = await prisma.userCourse.findMany({
-      where: {
-        userId: user.id,
-        isCompleted: true,
+    // Buscar certificados do usuário via API
+    const response = await fetch(`${API_BASE_URL}/certificate`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      include: {
-        course: true,
-      },
-      orderBy: { completedAt: "desc" },
+      cache: "no-store",
     });
 
-    return completedCourses;
+    if (!response.ok) {
+      console.error("Erro na resposta da API:", response.statusText);
+      return [];
+    }
+
+    const certificates = await response.json();
+    return certificates;
   } catch (error) {
     console.error("Erro ao buscar certificados do usuário:", error);
     return [];

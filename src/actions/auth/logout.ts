@@ -1,9 +1,7 @@
 "use server";
 
-import { redirect } from "next/navigation";
-import { destroySession } from "./session";
+import { signOut } from "@/auth/authSetup";
 
 export async function logout() {
-  await destroySession();
-  redirect("/login");
+  await signOut({ redirectTo: "/login" });
 }
