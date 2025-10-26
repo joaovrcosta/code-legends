@@ -15,7 +15,7 @@ export async function getUserCertificates() {
     }
 
     // Buscar certificados do usuário via API
-    const response = await fetch(`${API_BASE_URL}/certificate`, {
+    const response = await fetch(`${API_BASE_URL}/certificates`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
