@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getUserCourses } from "@/actions/user/get-user-courses";
 import { Badge } from "../ui/badge";
 import { UserCoursesResponse } from "@/types/user-course.ts";
+import Image from "next/image";
 
 export async function MyCourses() {
   const userCourses: UserCoursesResponse = await getUserCourses();
@@ -36,11 +37,12 @@ export async function MyCourses() {
                 className="flex items-center justify-between p-3 bg-transparent border border-[#333333] rounded-lg"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-[#00c8ff] rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">
-                      {fav.course.title.charAt(0)}
-                    </span>
-                  </div>
+                  <Image
+                    src={fav.course.icon}
+                    alt={fav.course.title}
+                    width={80}
+                    height={80}
+                  />
                   <div>
                     <h3 className="text-white font-medium">
                       {fav.course.title}
