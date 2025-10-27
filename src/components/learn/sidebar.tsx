@@ -10,15 +10,25 @@ import {
   Sticker,
 } from "@phosphor-icons/react";
 import Link from "next/link";
-import { Path } from "@phosphor-icons/react/dist/ssr";
+import {
+  BookmarksSimpleIcon,
+  Calendar,
+  Path,
+  TrendUpIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
 const links = [
   { name: "Aprender", path: "/learn", icon: Path },
+  {
+    name: "Meu aprendizado",
+    path: "/learn/my-learning",
+    icon: BookmarksSimpleIcon,
+  },
   { name: "Catálogo", path: "/learn/catalog", icon: BookOpenText },
   // { name: "Quartel General", path: "/learn/hq", icon: Shield },
-  { name: "Estatísticas", path: "/learn/statistcs", icon: ChartPieSlice },
-  { name: "Projetos", path: "/learn/use-cases", icon: PuzzlePiece },
-  { name: "Emblemas", path: "/learn/badges", icon: Sticker },
+  { name: "Progresso", path: "/learn/tracking", icon: TrendUpIcon },
+  { name: "Projetos", path: "/learn/projects", icon: PuzzlePiece },
+  { name: "Eventos", path: "/learn/badges", icon: Calendar },
 ];
 
 const Sidebar = () => {
@@ -40,7 +50,7 @@ const Sidebar = () => {
                 <li key={link.path}>
                   <Link
                     href={link.path}
-                    className={`relative flex items-center h-[52px] px-4 space-x-3 transition-colors overflow-hidden ${
+                    className={`relative flex text-[14px] items-center h-[52px] px-4 space-x-3 transition-colors overflow-hidden ${
                       isActive
                         ? "bg-blue-gradient-500 text-white font-semibold"
                         : "text-[#C4C4CC] hover:bg-[#2E2E32]"
