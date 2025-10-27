@@ -48,7 +48,7 @@ export async function requireAuth(): Promise<User> {
  */
 export async function getAuthToken(): Promise<string | null> {
   const session = await auth();
-  return (session as any)?.accessToken || null;
+  return (session as { accessToken?: string })?.accessToken || null;
 }
 
 // Funções deprecadas mantidas para compatibilidade

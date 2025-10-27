@@ -2,7 +2,6 @@ import { Album } from "lucide-react";
 import { Card, CardHeader, CardContent } from "../ui/card";
 import Link from "next/link";
 import { getUserCourses } from "@/actions/user/get-user-courses";
-import { Badge } from "../ui/badge";
 import { UserCoursesResponse } from "@/types/user-course.ts";
 import Image from "next/image";
 

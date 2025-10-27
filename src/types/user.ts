@@ -13,10 +13,8 @@ export interface UserMeResponse {
   user: User;
 }
 
-// Tipo para o usuário autenticado (com mais informações)
-export interface AuthenticatedUser extends User {
-  // Adicione aqui campos extras que sua API pode retornar
-}
+// Tipo para o usuário autenticado (alias para User)
+export type AuthenticatedUser = User;
 
 // Tipo para dados de registro
 export interface UserRegisterData {

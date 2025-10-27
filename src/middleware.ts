@@ -2,28 +2,30 @@ import { auth } from "./auth/authSetup";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export default auth((req: NextRequest & { auth: any }) => {
-  const { pathname } = req.nextUrl;
-  const isLoggedIn = !!req.auth;
+export default auth(
+  (req: NextRequest & { auth: { user?: { id?: string } } | null }) => {
+    const { pathname } = req.nextUrl;
+    const isLoggedIn = !!req.auth;
 
-  // Rotas públicas
-  const publicRoutes = ["/login", "/signup"];
-  const isPublicRoute = publicRoutes.some(
-    (route) => pathname === route || pathname.startsWith(route + "/")
-  );
+    // Rotas públicas
+    const publicRoutes = ["/login", "/signup"];
+    const isPublicRoute = publicRoutes.some(
+      (route) => pathname === route || pathname.startsWith(route + "/")
+    );
 
-  // Se estiver logado e tentar acessar login/signup, redirecionar para /learn
-  if (isLoggedIn && (pathname === "/login" || pathname === "/signup")) {
-    return NextResponse.redirect(new URL("/learn", req.url));
+    // Se estiver logado e tentar acessar login/signup, redirecionar para /learn
+    if (isLoggedIn && (pathname === "/login" || pathname === "/signup")) {
+      return NextResponse.redirect(new URL("/learn", req.url));
+    }
+
+    // Se não estiver logado e não for rota pública, redirecionar para login
+    if (!isLoggedIn && !isPublicRoute) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+
+    return NextResponse.next();
   }
-
-  // Se não estiver logado e não for rota pública, redirecionar para login
-  if (!isLoggedIn && !isPublicRoute) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
-
-  return NextResponse.next();
-});
+);
 
 export const config = {
   matcher: [

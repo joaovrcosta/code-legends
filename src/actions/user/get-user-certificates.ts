@@ -1,10 +1,11 @@
 "use server";
 
 import { getAuthToken } from "../auth/session";
+import type { CertificateResponse } from "@/types/certificate";
 
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
 
-export async function getUserCertificates() {
+export async function getUserCertificates(): Promise<CertificateResponse> {
   try {
     // Obter o token de autenticação do NextAuth
     const token = await getAuthToken();

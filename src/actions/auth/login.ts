@@ -19,9 +19,9 @@ export async function loginUser(formData: FormData) {
       redirect: true,
       redirectTo: "/learn",
     });
-  } catch (error: any) {
+  } catch (error) {
     // Se for um erro de credenciais
-    if (error?.type === "CredentialsSignin") {
+    if ((error as { type?: string })?.type === "CredentialsSignin") {
       throw new Error("Email ou senha incorretos");
     }
     // Se for um redirect (sucesso), deixar passar

@@ -3,7 +3,19 @@ import Credentials from "next-auth/providers/credentials";
 
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
 
-async function refreshAccessToken(token: any) {
+interface TokenWithRefresh {
+  id?: string;
+  name?: string;
+  email?: string;
+  picture?: string;
+  refreshToken?: string;
+  accessToken?: string;
+  accessTokenExpires?: number;
+  error?: string;
+  [key: string]: unknown;
+}
+
+async function refreshAccessToken(token: TokenWithRefresh) {
   try {
     const response = await fetch(`${API_BASE_URL}/token/refresh`, {
       method: "POST",
@@ -29,8 +41,8 @@ async function refreshAccessToken(token: any) {
       accessTokenExpires: Date.now() + 10 * 60 * 1000, // 10 minutos
       error: undefined,
     };
-  } catch (error: any) {
-    console.error("❌ Erro ao renovar token:", error.message);
+  } catch (error) {
+    console.error("❌ Erro ao renovar token:", (error as Error).message);
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -38,7 +50,7 @@ async function refreshAccessToken(token: any) {
   }
 }
 
-// @ts-ignore - NextAuth v5 beta tem incompatibilidades de tipos
+// @ts-expect-error - NextAuth v5 beta tem incompatibilidades de tipos
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
@@ -121,22 +133,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user }: { token: TokenWithRefresh; user?: unknown }) {
       // Login inicial - armazenar todos os dados
       if (user) {
+        const userData = user as {
+          id: string;
+          name: string;
+          email: string;
+          image?: string;
+          accessToken: string;
+          refreshToken?: string;
+          accessTokenExpires: number;
+        };
         return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          picture: user.image,
-          accessToken: user.accessToken,
-          refreshToken: user.refreshToken,
-          accessTokenExpires: user.accessTokenExpires,
+          id: userData.id,
+          name: userData.name,
+          email: userData.email,
+          picture: userData.image,
+          accessToken: userData.accessToken,
+          refreshToken: userData.refreshToken,
+          accessTokenExpires: userData.accessTokenExpires,
         };
       }
 
       // Token ainda válido - retornar sem alterações
-      if (Date.now() < token.accessTokenExpires) {
+      if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
         return token;
       }
 
@@ -150,14 +171,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return refreshedToken;
     },
-    async session({ session, token }: any) {
+    async session({
+      session,
+      token,
+    }: {
+      session: {
+        user: { id?: string; name?: string; email?: string; image?: string };
+        accessToken?: string;
+        error?: string;
+      };
+      token: TokenWithRefresh;
+    }) {
       if (token) {
-        session.user.id = token.id;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.image = token.picture;
-        (session as any).accessToken = token.accessToken;
-        (session as any).error = token.error;
+        session.user.id = token.id as string;
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
+        session.user.image = token.picture as string | undefined;
+        session.accessToken = token.accessToken;
+        session.error = token.error as string | undefined;
       }
       return session;
     },
