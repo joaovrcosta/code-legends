@@ -15,6 +15,8 @@ import {
   Calendar,
   Path,
   TrendUpIcon,
+  Question,
+  DiscordLogo,
 } from "@phosphor-icons/react/dist/ssr";
 
 const links = [
@@ -29,6 +31,16 @@ const links = [
   { name: "Progresso", path: "/learn/tracking", icon: TrendUpIcon },
   { name: "Projetos", path: "/learn/projects", icon: PuzzlePiece },
   { name: "Eventos", path: "/learn/badges", icon: Calendar },
+];
+
+const utilLinks = [
+  {
+    name: "Discord",
+    url: "https://discord.gg/codelegends",
+    icon: DiscordLogo,
+    external: true,
+  },
+  { name: "Ajuda", url: "/help", icon: Question },
 ];
 
 const Sidebar = () => {
@@ -79,6 +91,29 @@ const Sidebar = () => {
             })}
           </ul>
         </nav>
+      </div>
+
+      {/* Links úteis */}
+      <div className="border-t border-[#2E2E32] pt-4 px-2">
+        <ul className="space-y-2">
+          {utilLinks.map((link) => (
+            <li key={link.name}>
+              <Link
+                href={link.url}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
+                className="flex text-[14px] items-center h-[42px] px-2 lg:space-x-3 space-x-0 text-[#C4C4CC] hover:bg-[#2E2E32] rounded-lg transition-colors"
+              >
+                <span>
+                  <link.icon size={24} weight="regular" />
+                </span>
+                {isOpen && (
+                  <span className="whitespace-nowrap">{link.name}</span>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
