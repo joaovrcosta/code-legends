@@ -3,7 +3,7 @@ import { Card } from "../ui/card";
 
 interface CertificateCardProps {
   courseName: string;
-  completedAt?: Date | null;
+  completedAt?: Date | string | null;
 }
 
 export function CertificateCard({

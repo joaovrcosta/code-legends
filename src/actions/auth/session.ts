@@ -1,59 +1,62 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { auth } from "@/auth/authSetup";
+import { redirect } from "next/navigation";
+import type { User } from "@/types/user";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
+/**
+ * Obtém a sessão atual do usuário usando NextAuth
+ */
+export async function getCurrentSession(): Promise<User | null> {
+  const session = await auth();
 
+  if (!session?.user) {
+    return null;
+  }
+
+  return {
+    id: session.user.id || "",
+    name: session.user.name || "",
+    email: session.user.email || "",
+    avatar: session.user.image || undefined,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * Versão que força redirect quando não autenticado
+ */
+export async function requireAuth(): Promise<User> {
+  const session = await auth();
+
+  if (!session?.user) {
+    console.log("Usuário não autenticado, redirecionando para login...");
+    redirect("/login");
+  }
+
+  return {
+    id: session.user.id || "",
+    name: session.user.name || "",
+    email: session.user.email || "",
+    avatar: session.user.image || undefined,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * Obtém o token de acesso da sessão atual
+ */
+export async function getAuthToken(): Promise<string | null> {
+  const session = await auth();
+  return (session as { accessToken?: string })?.accessToken || null;
+}
+
+// Funções deprecadas mantidas para compatibilidade
 export async function createSession(token: string) {
-  const cookieStore = await cookies();
-
-  // Salvar o token JWT no cookie
-  cookieStore.set("auth_token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 7 dias
-  });
-
+  // Deprecated: NextAuth gerencia as sessões automaticamente
   return token;
 }
 
-export async function getCurrentSession() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("auth_token")?.value;
-
-  if (!token) {
-    return null;
-  }
-
-  try {
-    // Buscar dados do usuário usando o token da rota /me
-    const response = await fetch(`${API_BASE_URL}/users/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      cache: "no-store", // Sempre buscar dados atualizados
-    });
-
-    if (!response.ok) {
-      console.error("Erro ao buscar usuário da API:", response.status);
-      return null;
-    }
-
-    const user = await response.json();
-    return user;
-  } catch (error) {
-    console.error("Erro ao obter sessão:", error);
-    return null;
-  }
-}
-
-export async function getAuthToken() {
-  const cookieStore = await cookies();
-  return cookieStore.get("auth_token")?.value || null;
-}
-
 export async function destroySession() {
-  const cookieStore = await cookies();
-  cookieStore.delete("auth_token");
+  // Deprecated: Use signOut() do next-auth/react no client
 }

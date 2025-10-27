@@ -1,35 +1,31 @@
+import { auth } from "./auth/authSetup";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+export default auth(
+  (req: NextRequest & { auth: { user?: { id?: string } } | null }) => {
+    const { pathname } = req.nextUrl;
+    const isLoggedIn = !!req.auth;
 
-  // Rotas públicas que não precisam de autenticação
-  const publicRoutes = ["/login", "/signup", "/logout"];
+    // Rotas públicas
+    const publicRoutes = ["/login", "/signup"];
+    const isPublicRoute = publicRoutes.some(
+      (route) => pathname === route || pathname.startsWith(route + "/")
+    );
 
-  // Verificar se a rota atual é pública
-  const isPublicRoute = publicRoutes.some((route) =>
-    pathname.startsWith(route)
-  );
-
-  // Verificar se existe o token de autenticação
-  const authToken = request.cookies.get("auth_token");
-
-  // Se for uma rota pública e o usuário estiver logado, redirecionar para /learn
-  if (isPublicRoute && authToken) {
-    return NextResponse.redirect(new URL("/learn", request.url));
-  }
-
-  // Se não for uma rota pública, verificar autenticação
-  if (!isPublicRoute) {
-    if (!authToken) {
-      // Redirecionar para login se não estiver autenticado
-      return NextResponse.redirect(new URL("/login", request.url));
+    // Se estiver logado e tentar acessar login/signup, redirecionar para /learn
+    if (isLoggedIn && (pathname === "/login" || pathname === "/signup")) {
+      return NextResponse.redirect(new URL("/learn", req.url));
     }
-  }
 
-  return NextResponse.next();
-}
+    // Se não estiver logado e não for rota pública, redirecionar para login
+    if (!isLoggedIn && !isPublicRoute) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+
+    return NextResponse.next();
+  }
+);
 
 export const config = {
   matcher: [
