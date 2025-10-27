@@ -41,8 +41,8 @@ export function StrikeSection() {
         >
           <div className="p-4 text-sm w-full">
             <p>
-              <span className="font-bold bg-yellow-lightning-500 bg-clip-text text-transparent">
-                STREAK
+              <span className="font-bold bg-yellow-lightning-500 bg-clip-text text-lg text-transparent">
+                Streak
               </span>
             </p>
 
@@ -68,6 +68,35 @@ export function StrikeSection() {
                 <p className="text-[11px] text-[#C4C4CC] text-center">
                   Total de dias
                 </p>
+              </div>
+            </div>
+
+            {/* Progresso Semanal */}
+            <div className="mt-6 bg-[#25252A]/30 rounded-[20px] p-4">
+              <div className="flex items-center justify-between mb-6">
+                {["D", "S", "T", "Q", "Q", "S", "S"].map((day, index) => (
+                  <div key={index} className="flex flex-col items-center">
+                    <span className="text-xs text-[#C4C4CC] mb-2">{day}</span>
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        index === 1 ? "bg-yellow-lightning-500" : "bg-[#25252A]"
+                      }`}
+                    >
+                      {index === 1 && (
+                        <Flame size={20} weight="fill" className="text-white" />
+                      )}
+                      {index === 6 && (
+                        <div className="w-6 h-6 rounded-full bg-white/20" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="relative h-4 bg-[#25252A] rounded-full overflow-hidden">
+                <div
+                  className="absolute h-full bg-yellow-lightning-500 rounded-full"
+                  style={{ width: "14%" }}
+                />
               </div>
             </div>
           </div>
