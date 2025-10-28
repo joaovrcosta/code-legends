@@ -2,23 +2,39 @@
 
 import { usePathname } from "next/navigation";
 import useSidebarStore from "@/stores/sidebarStore";
-import {
-  PuzzlePiece,
-  BookOpenText,
-  ChartPieSlice,
-  CaretRight,
-  Sticker,
-} from "@phosphor-icons/react";
+import { PuzzlePiece, BookOpenText, CaretRight } from "@phosphor-icons/react";
 import Link from "next/link";
-import { Path } from "@phosphor-icons/react/dist/ssr";
+import {
+  Path,
+  TrendUpIcon,
+  Question,
+  DiscordLogo,
+  CalendarDotsIcon,
+  BookBookmarkIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
 const links = [
   { name: "Aprender", path: "/learn", icon: Path },
+  {
+    name: "Meu aprendizado",
+    path: "/learn/my-learning",
+    icon: BookBookmarkIcon,
+  },
   { name: "Catálogo", path: "/learn/catalog", icon: BookOpenText },
   // { name: "Quartel General", path: "/learn/hq", icon: Shield },
-  { name: "Estatísticas", path: "/learn/statistcs", icon: ChartPieSlice },
-  { name: "Projetos", path: "/learn/use-cases", icon: PuzzlePiece },
-  { name: "Emblemas", path: "/learn/badges", icon: Sticker },
+  { name: "Progresso", path: "/learn/tracking", icon: TrendUpIcon },
+  { name: "Projetos", path: "/learn/projects", icon: PuzzlePiece },
+  { name: "Eventos", path: "/learn/badges", icon: CalendarDotsIcon },
+];
+
+const utilLinks = [
+  {
+    name: "Discord",
+    url: "https://discord.gg/codelegends",
+    icon: DiscordLogo,
+    external: true,
+  },
+  { name: "Ajuda", url: "/help", icon: Question },
 ];
 
 const Sidebar = () => {
@@ -40,7 +56,7 @@ const Sidebar = () => {
                 <li key={link.path}>
                   <Link
                     href={link.path}
-                    className={`relative flex items-center h-[52px] px-4 space-x-3 transition-colors overflow-hidden ${
+                    className={`relative flex text-[14px] items-center h-[52px] px-4 space-x-3 transition-colors overflow-hidden ${
                       isActive
                         ? "bg-blue-gradient-500 text-white font-semibold"
                         : "text-[#C4C4CC] hover:bg-[#2E2E32]"
@@ -69,6 +85,29 @@ const Sidebar = () => {
             })}
           </ul>
         </nav>
+      </div>
+
+      {/* Links úteis */}
+      <div className="border-t border-[#2E2E32] pt-4 px-2">
+        <ul className="space-y-2">
+          {utilLinks.map((link) => (
+            <li key={link.name}>
+              <Link
+                href={link.url}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
+                className="flex text-[14px] items-center h-[42px] px-2 lg:space-x-3 space-x-0 text-[#C4C4CC] hover:bg-[#2E2E32] rounded-lg transition-colors"
+              >
+                <span>
+                  <link.icon size={24} weight="regular" />
+                </span>
+                {isOpen && (
+                  <span className="whitespace-nowrap">{link.name}</span>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

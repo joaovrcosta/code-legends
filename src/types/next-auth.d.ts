@@ -4,21 +4,32 @@ declare module "next-auth" {
       id: string;
       name: string;
       email: string;
-      avatar?: string;
+      image?: string;
     };
+    accessToken?: string;
+    error?: string;
   }
 
   interface User {
     id: string;
     name: string;
     email: string;
-    avatar?: string;
+    image?: string;
+    accessToken?: string;
+    refreshToken?: string;
+    accessTokenExpires?: number;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
     id: string;
-    avatar?: string;
+    name: string;
+    email: string;
+    picture?: string;
+    accessToken?: string;
+    refreshToken?: string;
+    accessTokenExpires?: number;
+    error?: string;
   }
 }

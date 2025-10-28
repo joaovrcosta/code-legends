@@ -14,7 +14,7 @@ export default function LearnLayout({
         <LearnHeader />
       </div>
 
-      <div className="flex flex-1 lg:pt-[74px] pt-[64px]">
+      <div className="flex flex-1 lg:pt-[79px] pt-[64px]">
         <div className="lg:block hidden max-w-64">
           <Sidebar />
         </div>

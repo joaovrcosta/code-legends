@@ -1,9 +1,6 @@
 "use server";
 
-import { redirect } from "next/navigation";
-import { createSession } from "./session";
-
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
+import { signIn } from "@/auth/authSetup";
 
 export async function loginUser(formData: FormData) {
   const email = formData.get("email") as string;
@@ -15,37 +12,19 @@ export async function loginUser(formData: FormData) {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/users/auth`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+    // Usar NextAuth para fazer login
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: true,
+      redirectTo: "/learn",
     });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || "Email ou senha incorretos");
-    }
-
-    const data = await response.json();
-
-    if (!data.token) {
-      throw new Error("Token não recebido da API");
-    }
-
-    // Criar sessão com o token JWT
-    await createSession(data.token);
-
-    // Redirecionar para /learn após login bem-sucedido
-    redirect("/learn");
   } catch (error) {
-    if (error instanceof Error) {
-      throw error;
+    // Se for um erro de credenciais
+    if ((error as { type?: string })?.type === "CredentialsSignin") {
+      throw new Error("Email ou senha incorretos");
     }
-    throw new Error("Erro ao fazer login");
+    // Se for um redirect (sucesso), deixar passar
+    throw error;
   }
 }

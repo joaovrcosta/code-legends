@@ -1,55 +1,59 @@
 "use client";
 
-import * as React from "react";
-import * as TabsPrimitive from "@radix-ui/react-tabs";
+import { useState } from "react";
 
-import { cn } from "@/lib/utils";
+interface Tab {
+  id: string;
+  label: string;
+  content?: React.ReactNode;
+}
 
-const Tabs = TabsPrimitive.Root;
+interface TabsProps {
+  tabs: Tab[];
+  defaultTab?: string;
+  onChange?: (tabId: string) => void;
+}
 
-const TabsList = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.List
-    ref={ref}
-    className={cn(
-      "inline-flex h-9 items-center justify-center bg-muted p-1 text-muted-foreground",
-      className
-    )}
-    {...props}
-  />
-));
-TabsList.displayName = TabsPrimitive.List.displayName;
+export function Tabs({ tabs, defaultTab, onChange }: TabsProps) {
+  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id);
 
-const TabsTrigger = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#00C8FF] data-[state=active]:border-b  data-[state=active]:border-[#00C8FF]  data-[state=active]:shadow",
-      className
-    )}
-    {...props}
-  />
-));
-TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+    onChange?.(tabId);
+  };
 
-const TabsContent = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Content
-    ref={ref}
-    className={cn(
-      "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-      className
-    )}
-    {...props}
-  />
-));
-TabsContent.displayName = TabsPrimitive.Content.displayName;
+  const activeTabData = tabs.find((tab) => tab.id === activeTab);
 
-export { Tabs, TabsList, TabsTrigger, TabsContent };
+  return (
+    <div className="w-full">
+      {/* Tab Navigation */}
+      <div className="flex items-center gap-1 border-b border-[#25252A] mb-4">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => handleTabChange(tab.id)}
+            className={`
+              relative px-4 py-3 text-sm font-medium transition-colors
+              ${
+                activeTab === tab.id
+                  ? "text-white"
+                  : "text-[#C4C4CC] hover:text-white"
+              }
+            `}
+          >
+            {tab.label}
+            {/* Active Indicator */}
+            {activeTab === tab.id && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-gradient-500" />
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      {activeTabData?.content && (
+        <div className="mt-4">{activeTabData.content}</div>
+      )}
+    </div>
+  );
+}
