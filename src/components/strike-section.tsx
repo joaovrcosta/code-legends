@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import {
   Tooltip,
@@ -13,13 +16,21 @@ import {
 } from "./ui/dropdown-menu";
 
 export function StrikeSection() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
-          <div className="flex items-center space-x-3 border py-2 px-3 border-[#25252A] hover:bg-[#25252A] rounded-[20px] hover:border-[#FFB733]">
-            <Flame size={24} weight="regular" />
-            <span className="text-base text-[#fff]">0</span>
+          <div
+            className={`flex items-center space-x-3 border py-2 px-3 rounded-[20px] transition-colors ${
+              isOpen
+                ? "bg-[#25252A] border-[#FFB733]"
+                : "border-[#25252A] hover:bg-[#25252A] hover:border-[#FFB733]"
+            }`}
+          >
+            <Flame size={24} weight="fill" className="text-[#515155]" />
+            <span className="text-base text-[#515155]">0</span>
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent
@@ -40,18 +51,20 @@ export function StrikeSection() {
                  "
         >
           <div className="p-4 text-sm w-full">
-            <p>
-              <span className="font-bold bg-yellow-lightning-500 bg-clip-text text-lg text-transparent">
-                Streak
-              </span>
-            </p>
-
+            <div className="flex items-center gap-2 mb-1">
+              <p>
+                <span className="font-bold bg-yellow-lightning-500 bg-clip-text text-lg text-transparent">
+                  Streak
+                </span>
+              </p>
+              <Flame size={24} weight="fill" className="text-[#cf2649]" />
+            </div>
             <p className="text-sm text-[#C4C4CC]">
               Assista uma aula para aumentar seu streak
             </p>
 
             <div className="grid grid-cols-3 gap-3 mt-4 w-full">
-              <div className="flex flex-col items-center justify-center border border-[#25252A] rounded-[20px] p-4 min-w-0">
+              <div className="flex flex-col bg-[#25252A] items-center justify-center border border-[#25252A] rounded-[20px] p-4 min-w-0">
                 <h3 className="text-2xl font-bold text-white">0</h3>
                 <p className="text-[11px] text-[#C4C4CC] text-center">
                   Streak atual

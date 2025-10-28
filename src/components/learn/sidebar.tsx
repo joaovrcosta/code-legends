@@ -2,21 +2,15 @@
 
 import { usePathname } from "next/navigation";
 import useSidebarStore from "@/stores/sidebarStore";
-import {
-  PuzzlePiece,
-  BookOpenText,
-  ChartPieSlice,
-  CaretRight,
-  Sticker,
-} from "@phosphor-icons/react";
+import { PuzzlePiece, BookOpenText, CaretRight } from "@phosphor-icons/react";
 import Link from "next/link";
 import {
-  BookmarksSimpleIcon,
-  Calendar,
   Path,
   TrendUpIcon,
   Question,
   DiscordLogo,
+  CalendarDotsIcon,
+  BookBookmarkIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
 const links = [
@@ -24,13 +18,13 @@ const links = [
   {
     name: "Meu aprendizado",
     path: "/learn/my-learning",
-    icon: BookmarksSimpleIcon,
+    icon: BookBookmarkIcon,
   },
   { name: "Catálogo", path: "/learn/catalog", icon: BookOpenText },
   // { name: "Quartel General", path: "/learn/hq", icon: Shield },
   { name: "Progresso", path: "/learn/tracking", icon: TrendUpIcon },
   { name: "Projetos", path: "/learn/projects", icon: PuzzlePiece },
-  { name: "Eventos", path: "/learn/badges", icon: Calendar },
+  { name: "Eventos", path: "/learn/badges", icon: CalendarDotsIcon },
 ];
 
 const utilLinks = [
