@@ -19,18 +19,18 @@ import {
   ThumbsUpIcon,
   TrendUp,
   Trophy,
+  VideoCameraIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { ArrowLeft } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import imgBackground from "../../../../../public/react-desktop-hero-image.png";
 
 export function ReactJSCourseBanner() {
   const pathName = usePathname();
 
   const [showSticky, setShowSticky] = useState(false);
-
-  console.log(showSticky);
 
   useEffect(() => {
     const scrollContainer = document.querySelector(
@@ -74,17 +74,17 @@ export function ReactJSCourseBanner() {
             <Button className="bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold px-6 py-2 h-[42px]">
               Assistir <PlayIcon weight="fill" />
             </Button>
-            <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#969291] hover:bg-[#424141]">
+            <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
               <PlusIcon />
             </button>
-            <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#969291] hover:bg-[#424141]">
+            <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
               <ThumbsUpIcon />
             </button>
           </div>
         </div>
       </div>
 
-      <section className="relative bg-gray-gradient gap-16 border-b border-[#25252A] lg:p-14 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
+      <section className="relative bg-gray-gradient gap-16 border-b border-[#25252A] lg:py-14 lg:px-16 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
         {/* Blur gradient overlay - Netflix style */}
         <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none" />
         <div className="flex-col flex-1 relative z-10">
@@ -139,10 +139,10 @@ export function ReactJSCourseBanner() {
               <Button className="w-[220px] h-[50px] bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold">
                 Assistir <PlayIcon weight="fill" />
               </Button>
-              <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#969291] hover:bg-[#424141]">
-                <PlusIcon />
+              <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
+                <PlusIcon className="" />
               </button>
-              <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#969291] hover:bg-[#424141]">
+              <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
                 <ThumbsUpIcon />
               </button>
             </div>
@@ -164,9 +164,9 @@ export function ReactJSCourseBanner() {
               </p>
             </li>
             <li className="flex w-full items-center gap-3 py-4  border-b border-[#25252A]">
-              <Files size={24} className="text-[#00C8FF]" />
+              <VideoCameraIcon size={24} className="text-[#00C8FF]" />
               <p className="whitespace-nowrap">
-                <strong>11</strong> Lições
+                <strong>+19h</strong> de contéudo
               </p>
             </li>
             <li className="flex w-full items-center gap-3 py-4  border-b border-[#25252A]">
