@@ -25,7 +25,6 @@ import { ArrowLeft } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import imgBackground from "../../../../../public/react-desktop-hero-image.png";
 
 export function ReactJSCourseBanner() {
   const pathName = usePathname();
@@ -43,7 +42,7 @@ export function ReactJSCourseBanner() {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setShowSticky(scrollContainer.scrollTop > 430);
+          setShowSticky(scrollContainer.scrollTop > 440);
           ticking = false;
         });
         ticking = true;
@@ -60,31 +59,31 @@ export function ReactJSCourseBanner() {
     <>
       <div
         className={cn(
-          "sticky top-0 z-50 transition-all duration-300 border-b border-[#25252A] bg-[#151518] p-3",
+          "sticky top-[-1px] z-50 transition-all shadow-2xl duration-300 border-b border-[#25252A] bg-[#151518] p-3",
           showSticky
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-4 pointer-events-none h-0 overflow-hidden p-0"
         )}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between lg:px-4 px-0">
           <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xl">
             ReactJS
           </span>
           <div className="flex items-center gap-3">
-            <Button className="bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold px-6 py-2 h-[42px]">
-              Assistir <PlayIcon weight="fill" />
-            </Button>
             <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
               <PlusIcon />
             </button>
             <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
               <ThumbsUpIcon />
             </button>
+            <Button className="bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold px-6 py-2 h-[42px]">
+              <PlayIcon weight="fill" /> Iniciar
+            </Button>
           </div>
         </div>
       </div>
 
-      <section className="relative bg-gray-gradient gap-16 border-b border-[#25252A] lg:py-12 lg:px-16 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
+      <section className="relative bg-gray-gradient lg:gap-20 gap-8 border-b border-[#25252A] lg:py-12 lg:px-16 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
         {/* Blur gradient overlay - Netflix style */}
         <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none" />
         <div className="flex-col flex-1 relative z-10">
@@ -116,10 +115,10 @@ export function ReactJSCourseBanner() {
               >
                 <Image src={codeLegendsLogo} alt="Code Legends" />
               </div> */}
-              <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent lg:text-4xl text-xl lg:text-left text-center">
+              <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent lg:text-2xl text-xl lg:text-left text-center">
                 ReactJS
               </span>
-              <p className="lg:text-base text-sm mt-2 text-center lg:text-left max-w-[620px] text-muted-foreground">
+              <p className="lg:text-base text-sm mt-2 text-center lg:text-left max-w-[620px] text-[#c0c0d1]">
                 In this React course, you’ll build powerful interactive
                 applications with one of the most popular JavaScript libraries.
               </p>
@@ -138,16 +137,18 @@ export function ReactJSCourseBanner() {
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-4">
-              <Button className="w-[220px] h-[50px] bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold">
-                <PlayIcon weight="fill" /> Assistir
+            <div className="flex items-start lg:justify-start justify-between gap-4 w-full">
+              <Button className="max-w-[220px] w-full h-[50px] text-lg bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold">
+                <PlayIcon weight="fill" /> Iniciar
               </Button>
-              <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
-                <PlusIcon className="" />
-              </button>
-              <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
-                <ThumbsUpIcon />
-              </button>
+              <div className="flex gap-4">
+                <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
+                  <PlusIcon className="" />
+                </button>
+                <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
+                  <ThumbsUpIcon />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -177,7 +178,7 @@ export function ReactJSCourseBanner() {
               <p className="whitespace-nowrap">Intermediario</p>
             </li>
           </ul>
-          <div className="mt-4">
+          <div className="mt-4 h-full">
             <p className="text-[12px] text-muted-foreground">INSTRUTOR</p>
             <div className="flex items-center gap-3 mt-4">
               <Avatar className="h-[42px] w-[42px]">

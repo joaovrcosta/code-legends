@@ -8,7 +8,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CaretDown, Check } from "@phosphor-icons/react/dist/ssr";
+import {
+  CaretDown,
+  Check,
+  GithubLogo,
+  LinkedinLogo,
+  Clock,
+  VideoCamera,
+  GraduationCap,
+  Calendar,
+  Question,
+} from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function CourseOverview() {
   const [showMore, setShowMore] = useState(false);
@@ -44,10 +56,12 @@ export function CourseOverview() {
     },
   ];
 
+  const [showMoreBio, setShowMoreBio] = useState(false);
+
   return (
-    <div className="max-w-[802px] space-y-4">
+    <div className="max-w-[920px] space-y-4">
       {/* Section 1: O que você aprenderá */}
-      <Card className="p-0 text-white">
+      <Card className="p-0 text-white bg-gray-gradient rounded-[20px]">
         <CardHeader className="px-4 py-6 border-b border-[#25252A]">
           <h3 className="text-lg font-semibold">O que você aprenderá</h3>
         </CardHeader>
@@ -83,7 +97,7 @@ export function CourseOverview() {
       </Card>
 
       {/* Section 2: Programa de Estudos */}
-      <Card className="p-0 text-white">
+      <Card className="p-0 text-white bg-gray-gradient rounded-[20px]">
         <CardHeader className="px-4 py-6 border-b border-[#25252A]">
           <div className="flex items-center justify-between">
             <div>
@@ -143,6 +157,119 @@ export function CourseOverview() {
             </AccordionItem>
           ))}
         </Accordion>
+      </Card>
+
+      {/* Section 3: Educador */}
+      <Card className="p-0 text-white bg-gray-gradient rounded-[20px]">
+        <CardHeader className="px-4 py-6 border-b border-[#25252A]">
+          <h3 className="text-lg font-semibold">Educador</h3>
+        </CardHeader>
+        <div className="px-4 py-6">
+          <div className="flex items-start gap-4 mb-4">
+            <Avatar className="h-12 w-12">
+              <AvatarImage src="https://avatars.githubusercontent.com/u/70654718?v=4" />
+              <AvatarFallback>JG</AvatarFallback>
+            </Avatar>
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <h4 className="text-base font-semibold text-white mb-1">
+                    João Victor
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    Software Engineer • TypeScript • ReactJS • NodeJS
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button className="h-[36px] w-[36px] flex items-center justify-center rounded-lg border border-[#25252A] hover:bg-[#25252A] transition-colors">
+                    <GithubLogo size={20} className="text-[#C4C4CC]" />
+                  </button>
+                  <button className="h-[36px] w-[36px] flex items-center justify-center rounded-lg border border-[#25252A] hover:bg-[#25252A] transition-colors">
+                    <LinkedinLogo size={20} className="text-[#C4C4CC]" />
+                  </button>
+                </div>
+              </div>
+              <p className="text-sm text-[#C4C4CC] leading-relaxed">
+                {showMoreBio
+                  ? "Sou desenvolvedor web com experiência em JavaScript, TypeScript, Node.js e React.js. Ao longo da minha carreira, colaborei com diversos setores, incluindo agências de publicidade, consultorias, startups e escolas de programação."
+                  : "Sou desenvolvedor web com experiência em JavaScript, TypeScript..."}
+              </p>
+              <button
+                onClick={() => setShowMoreBio(!showMoreBio)}
+                className="mt-2 text-sm text-[#00C8FF] hover:text-[#00a8d4] flex items-center gap-1"
+              >
+                {showMoreBio ? "Ler menos" : "Ler mais"}
+                <CaretDown
+                  size={16}
+                  className={`transition-transform ${
+                    showMoreBio ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* Section 4: Detalhes */}
+      <Card className="p-0 text-white bg-gray-gradient rounded-[20px]">
+        <CardHeader className="px-4 py-6 border-b border-[#25252A]">
+          <h3 className="text-lg font-semibold">Detalhes</h3>
+        </CardHeader>
+        <div className="px-4 py-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Horas de estudo */}
+            <div className="flex items-start gap-3">
+              <div className="h-10 w-10 rounded-lg bg-[#1A1A1E] flex items-center justify-center flex-shrink-0">
+                <Clock size={20} className="text-[#00C8FF]" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-1 mb-1">
+                  <p className="text-xs text-[#C4C4CC]">Horas de estudo</p>
+                  <Question size={12} className="text-[#7e7e89] cursor-help" />
+                </div>
+                <p className="text-base font-semibold text-white">Aprox. 2h</p>
+              </div>
+            </div>
+
+            {/* Aulas */}
+            <div className="flex items-start gap-3">
+              <div className="h-10 w-10 rounded-lg bg-[#1A1A1E] flex items-center justify-center flex-shrink-0">
+                <VideoCamera size={20} className="text-[#00C8FF]" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-[#C4C4CC] mb-1">Aulas</p>
+                <p className="text-base font-semibold text-white">
+                  13 aulas em 1h 14min
+                </p>
+              </div>
+            </div>
+
+            {/* Alunos desta trilha */}
+            <div className="flex items-start gap-3">
+              <div className="h-10 w-10 rounded-lg bg-[#1A1A1E] flex items-center justify-center flex-shrink-0">
+                <GraduationCap size={20} className="text-[#00C8FF]" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-[#C4C4CC] mb-1">
+                  Alunos desta trilha
+                </p>
+                <p className="text-base font-semibold text-white">1.888</p>
+              </div>
+            </div>
+
+            {/* Fim do acesso */}
+            <div className="flex items-start gap-3">
+              <div className="h-10 w-10 rounded-lg bg-[#1A1A1E] flex items-center justify-center flex-shrink-0">
+                <Calendar size={20} className="text-[#00C8FF]" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-[#C4C4CC] mb-1">Fim do acesso</p>
+                <p className="text-base font-semibold text-white">03/11/2025</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </Card>
     </div>
   );
