@@ -21,8 +21,6 @@ import {
   Trophy,
 } from "@phosphor-icons/react/dist/ssr";
 import { ArrowLeft } from "lucide-react";
-import { Tabs } from "@/components/ui/tabs";
-import codeLegendsLogo from "../../../../../public/tiny-logo-code.png";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function ReactJSCourseBanner() {
@@ -30,6 +28,26 @@ export function ReactJSCourseBanner() {
 
   return (
     <>
+      {/* Sticky Header - appears on scroll */}
+      <div className="sticky top-0 z-50 bg-[#151518] border-b border-[#25252A] px-4 py-3 hidden lg:block">
+        <div className="flex items-center justify-between">
+          <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xl">
+            ReactJS
+          </span>
+          <div className="flex items-center gap-3">
+            <Button className="bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold px-6 py-2 h-[42px]">
+              Visitar <PlayIcon weight="fill" />
+            </Button>
+            <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#969291] hover:bg-[#424141]">
+              <PlusIcon />
+            </button>
+            <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#969291] hover:bg-[#424141]">
+              <ThumbsUpIcon />
+            </button>
+          </div>
+        </div>
+      </div>
+
       <section className="relative bg-gray-gradient gap-16 border-b border-[#25252A] lg:p-14 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
         {/* Blur gradient overlay - Netflix style */}
         <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none" />
