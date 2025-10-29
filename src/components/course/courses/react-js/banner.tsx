@@ -30,8 +30,10 @@ export function ReactJSCourseBanner() {
 
   return (
     <>
-      <section className="bg-gray-gradient gap-16 border-b border-[#25252A] lg:p-14 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
-        <div className="flex-col flex-1">
+      <section className="relative bg-gray-gradient gap-16 border-b border-[#25252A] lg:p-14 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
+        {/* Blur gradient overlay - Netflix style */}
+        <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none" />
+        <div className="flex-col flex-1 relative z-10">
           <div className="w-full lg:hidden block">
             <Link href="/learn/catalog" className="lg:hidden block">
               <div className="flex items-center gap-2 cursor-pointer mb-2 text-sm text-[#7e7e89]">
@@ -93,7 +95,7 @@ export function ReactJSCourseBanner() {
           </div>
         </div>
 
-        <div className="flex-1 w-full">
+        <div className="flex-1 w-full relative z-10">
           <ul>
             <li className="flex w-full items-center gap-3 py-4 border-b border-[#25252A]">
               <Certificate size={24} className="text-[#00C8FF]" />
