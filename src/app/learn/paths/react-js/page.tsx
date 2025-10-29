@@ -1,6 +1,12 @@
 import { ReactJSCourseBanner } from "@/components/course/courses/react-js/banner";
 import { CourseContent } from "@/components/course/courses/react-js/content";
+import { Button } from "@/components/ui/button";
 import { Tabs } from "@/components/ui/tabs";
+import {
+  PlayIcon,
+  PlusIcon,
+  ThumbsUpIcon,
+} from "@phosphor-icons/react/dist/ssr";
 
 export const dynamic = "force-dynamic";
 

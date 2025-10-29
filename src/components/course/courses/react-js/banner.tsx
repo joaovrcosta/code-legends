@@ -22,14 +22,50 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { ArrowLeft } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export function ReactJSCourseBanner() {
   const pathName = usePathname();
 
+  const [showSticky, setShowSticky] = useState(false);
+
+  console.log(showSticky);
+
+  useEffect(() => {
+    const scrollContainer = document.querySelector(
+      '[class*="overflow-y-auto"]'
+    ) as HTMLElement;
+    if (!scrollContainer) return;
+
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setShowSticky(scrollContainer.scrollTop > 10);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    scrollContainer.addEventListener("scroll", handleScroll);
+    handleScroll(); // initial state
+
+    return () => scrollContainer.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <>
-      {/* Sticky Header - appears on scroll */}
-      <div className="sticky top-0 z-50 bg-[#151518] border-b border-[#25252A] px-4 py-3 hidden lg:block">
+      <div
+        className={cn(
+          "sticky top-0 z-50 transition-all duration-300 border-b border-[#25252A]",
+          showSticky
+            ? "opacity-100 translate-y-0 bg-[#151518] p-3"
+            : "opacity-0 -translate-y-4 pointer-events-none h-[1px]"
+        )}
+      >
         <div className="flex items-center justify-between">
           <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xl">
             ReactJS
