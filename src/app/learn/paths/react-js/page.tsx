@@ -23,7 +23,7 @@ const myLearningTabs = [
   },
   {
     id: "completed",
-    label: "Sobre",
+    label: "Contéudo",
     content: (
       <div>
         <CourseContent />

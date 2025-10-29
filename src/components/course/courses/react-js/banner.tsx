@@ -119,8 +119,8 @@ export function ReactJSCourseBanner() {
                 ReactJS
               </span>
               <p className="lg:text-base text-sm mt-2 text-center lg:text-left max-w-[620px] text-[#c0c0d1]">
-                In this React course, you’ll build powerful interactive
-                applications with one of the most popular JavaScript libraries.
+                Neste curso de React, você criará aplicativos interativos
+                poderosos com uma das bibliotecas JavaScript mais populares.
               </p>
             </div>
 
