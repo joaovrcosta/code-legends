@@ -84,22 +84,25 @@ export function ReactJSCourseBanner() {
         </div>
       </div>
 
-      <section className="relative bg-gray-gradient gap-16 border-b border-[#25252A] lg:py-14 lg:px-16 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
+      <section className="relative bg-gray-gradient gap-16 border-b border-[#25252A] lg:py-12 lg:px-16 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
         {/* Blur gradient overlay - Netflix style */}
         <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none" />
         <div className="flex-col flex-1 relative z-10">
           <div className="w-full lg:hidden block">
-            <Link href="/learn/catalog" className="lg:hidden block">
+            <Link href="/learn/catalog" className="lg:hidden block ">
               <div className="flex items-center gap-2 cursor-pointer mb-2 text-sm text-[#7e7e89]">
                 <ArrowLeft size={16} className="text-[#7e7e89]" />
                 Voltar
               </div>
             </Link>
           </div>
-          <Link href="/learn/catalog" className="lg:block hidden">
-            <div className="flex items-center gap-2 cursor-pointer mb-2 text-sm text-[#7e7e89] hover:text-[#505055]">
-              <ArrowLeft size={16} className="text-[#7e7e89]" />
-              Voltar
+          <Link
+            href="/learn/catalog"
+            className="lg:block hidden hover:bg-[#25252A] max-w-[80px] p-1 flex items-start rounded-lg justify-center mb-4 text-[#7e7e89] hover:text-white"
+          >
+            <div className="flex items-center justify-center gap-3">
+              <ArrowLeft size={16} className="" />
+              <p className="text-[12px] ">Voltar</p>
             </div>
           </Link>
           <div className="lg:block lg:mr-6 mr-0 flex items-center justify-center">
@@ -137,7 +140,7 @@ export function ReactJSCourseBanner() {
 
             <div className="flex items-center justify-center gap-4">
               <Button className="w-[220px] h-[50px] bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold">
-                Assistir <PlayIcon weight="fill" />
+                <PlayIcon weight="fill" /> Assistir
               </Button>
               <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
                 <PlusIcon className="" />

@@ -1,5 +1,6 @@
 import { ReactJSCourseBanner } from "@/components/course/courses/react-js/banner";
 import { CourseContent } from "@/components/course/courses/react-js/content";
+import { CourseOverview } from "@/components/course/courses/react-js/overview";
 import { Button } from "@/components/ui/button";
 import { Tabs } from "@/components/ui/tabs";
 import {
@@ -13,14 +14,24 @@ export const dynamic = "force-dynamic";
 const myLearningTabs = [
   {
     id: "in-progress",
-    label: "Conteúdo",
+    label: "Programa de Estudos",
+    content: (
+      <div>
+        <CourseOverview />
+      </div>
+    ),
+  },
+  {
+    id: "completed",
+    label: "Sobre",
     content: (
       <div>
         <CourseContent />
       </div>
     ),
   },
-  { id: "completed", label: "Sobre", content: <div>Completos</div> },
+
+  { id: "about", label: "Projetos", content: <div>Completos</div> },
 ];
 
 export default function ReactJsPage() {
