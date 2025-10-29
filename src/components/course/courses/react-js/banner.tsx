@@ -43,7 +43,7 @@ export function ReactJSCourseBanner() {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setShowSticky(scrollContainer.scrollTop > 10);
+          setShowSticky(scrollContainer.scrollTop > 430);
           ticking = false;
         });
         ticking = true;
@@ -60,10 +60,10 @@ export function ReactJSCourseBanner() {
     <>
       <div
         className={cn(
-          "sticky top-0 z-50 transition-all duration-300 border-b border-[#25252A]",
+          "sticky top-0 z-50 transition-all duration-300 border-b border-[#25252A] bg-[#151518] p-3",
           showSticky
-            ? "opacity-100 translate-y-0 bg-[#151518] p-3"
-            : "opacity-0 -translate-y-4 pointer-events-none h-[1px]"
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-4 pointer-events-none h-0 overflow-hidden p-0"
         )}
       >
         <div className="flex items-center justify-between">
@@ -72,7 +72,7 @@ export function ReactJSCourseBanner() {
           </span>
           <div className="flex items-center gap-3">
             <Button className="bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold px-6 py-2 h-[42px]">
-              Visitar <PlayIcon weight="fill" />
+              Assistir <PlayIcon weight="fill" />
             </Button>
             <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#969291] hover:bg-[#424141]">
               <PlusIcon />
@@ -137,7 +137,7 @@ export function ReactJSCourseBanner() {
 
             <div className="flex items-center justify-center gap-4">
               <Button className="w-[220px] h-[50px] bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold">
-                Visitar <PlayIcon weight="fill" />
+                Assistir <PlayIcon weight="fill" />
               </Button>
               <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#969291] hover:bg-[#424141]">
                 <PlusIcon />
