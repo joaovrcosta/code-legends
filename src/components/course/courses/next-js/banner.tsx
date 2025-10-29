@@ -35,10 +35,10 @@ export function NextCourseBanner() {
       <section className="flex items-center justify-between mt-4 mb-4">
         <ul className="flex gap-3 mt-4 mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
           {[
-            { href: "/courses/next-js", label: "Curso" },
-            { href: "/courses/next-js/quizes", label: "Quizes" },
-            { href: "/courses/next-js/materials", label: "Material" },
-            { href: "/courses/next-js/projects", label: "Projetos" },
+            { href: "/paths/next-js", label: "Curso" },
+            { href: "/paths/next-js/quizes", label: "Quizes" },
+            { href: "/paths/next-js/materials", label: "Material" },
+            { href: "/paths/next-js/projects", label: "Projetos" },
           ].map(({ href, label }) => (
             <li
               key={href}

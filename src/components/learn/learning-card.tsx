@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Lesson {
   id: string;
@@ -46,7 +47,7 @@ export function LearningCard({
 
   return (
     <div
-      className={`border border-[#25252A] rounded-lg overflow-hidden transition-colors ${
+      className={`border border-[#25252A] rounded-[20px] overflow-hidden transition-colors ${
         isExpanded ? "bg-gray-gradient-second" : "bg-gray-gradient"
       }`}
     >
@@ -179,9 +180,11 @@ export function LearningCard({
               <span>Pin to top</span>
             </button>
             <div className="flex items-center gap-3">
-              <button className="text-sm text-[#00C8FF] hover:underline">
-                View syllabus
-              </button>
+              <Link href="/learn/paths/react-js">
+                <button className="text-sm text-[#00C8FF] hover:underline">
+                  View syllabus
+                </button>
+              </Link>
               <Button className="bg-blue-gradient-500 hover:opacity-90 text-white font-semibold px-6 py-2 rounded-lg">
                 Continuar
               </Button>

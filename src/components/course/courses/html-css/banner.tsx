@@ -52,8 +52,8 @@ export function HTMLCSSCourseBanner() {
       <section className="flex items-center justify-between mt-4 mb-4">
         <ul className="flex gap-3 mt-4 mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
           {[
-            { href: "/courses/html-css", label: "Contéudo" },
-            { href: "/courses/html-css/about", label: "Sobre" },
+            { href: "/paths/html-css", label: "Contéudo" },
+            { href: "/paths/html-css/about", label: "Sobre" },
           ].map(({ href, label }) => (
             <li
               key={href}

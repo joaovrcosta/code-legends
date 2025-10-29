@@ -24,7 +24,7 @@ export function MyCatalogCarousel() {
         <CarouselItem className="basis-auto w-[380px]">
           <PersonalCatalog
             name="ReactJS"
-            url="/courses/react-js"
+            url="/paths/react-js"
             color="blue"
             status="continue"
             isCurrent={true}
@@ -37,7 +37,7 @@ export function MyCatalogCarousel() {
         <CarouselItem className="basis-auto w-[380px]">
           <PersonalCatalog
             name="Tailwind CSS Pro"
-            url="/courses/react-js"
+            url="/paths/react-js"
             color="blue"
             status="completed"
             image={tailwindIcon}

@@ -38,17 +38,24 @@ export function StrikeSection() {
           side="bottom"
           sideOffset={8}
           className="
-                   w-screen
-                   sm:w-full
-                   bg-[#1A1A1E] 
-                   border-0
-                   sm:border
-                   border-[#25252A] 
-                   rounded-none
-                   sm:rounded-[20px] 
-                   shadow-2xl 
-                   z-50
-                 "
+          w-screen 
+          max-w-none 
+          left-0 
+          right-0 
+          rounded-none 
+          border-none 
+          bg-[#1A1A1E] 
+          shadow-2xl 
+          z-50
+      
+          sm:w-auto 
+          sm:max-w-sm 
+          sm:rounded-[20px] 
+          sm:border 
+          sm:border-[#25252A] 
+          sm:left-auto 
+          sm:right-auto
+        "
         >
           <div className="p-4 text-sm w-full">
             <div className="flex items-center gap-2 mb-1">

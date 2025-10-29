@@ -1,3 +1,4 @@
+import { reactCourseData } from "../../../../../db";
 import {
   Accordion,
   AccordionContent,
@@ -12,14 +13,10 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { Lock, Play } from "lucide-react";
 import Link from "next/link";
-import { reactCourseData } from "../../../../db";
 
-// Marcar como dinâmica pois usa cookies() no header
-export const dynamic = "force-dynamic";
-
-export default function ReactJsPage() {
+export function CourseContent() {
   return (
-    <div>
+    <div className="">
       {reactCourseData.courseModules.map((course, index) => (
         <section
           key={index}

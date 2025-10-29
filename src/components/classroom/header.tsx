@@ -48,7 +48,7 @@ export default function ClassroomHeader() {
                 </Link>
               </div>
             </div>
-            <Link href="/courses/react-js">
+            <Link href="/paths/react-js">
               <div className="border rounded-[8px] border-[#25252a] py-2 lg:block hidden px-3 hover:bg-[#25252a] cursor-pointer transition-all duration-150 ease-in-out">
                 <span className="text-[14px]">ReactJS</span>
               </div>

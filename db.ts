@@ -42,7 +42,7 @@ export interface ReactCourse {
 export const reactCourseData: ReactCourse = {
   title: "ReactJS",
   description:
-    "Aprenda os conceitos básicos de desenvolvimento web para criar seu próprio site.",
+    "In this React course, you’ll build powerful interactive applications with one of the most popular JavaScript libraries.",
 
   courseModules: [
     {
