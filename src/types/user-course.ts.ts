@@ -36,3 +36,21 @@ export type FavoriteCourse = {
 export type UserCoursesResponse = {
   favoriteCourses: FavoriteCourse[];
 };
+
+export type EnrolledCourse = {
+  id: string;
+  userId: string;
+  courseId: string;
+  enrolledAt: string;
+  lastAccessedAt: string;
+  isCompleted: boolean;
+  completedAt: string | null;
+  currentModuleId: string;
+  currentTaskId: number;
+  progress: number;
+  course: Course;
+};
+
+export type UserEnrolledListResponse = {
+  userCourses: EnrolledCourse[];
+};
