@@ -77,7 +77,7 @@ export function ReactJSCourseBanner() {
               <ThumbsUpIcon />
             </button>
             <Button className="bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold px-6 py-2 h-[42px]">
-              <PlayIcon weight="fill" /> Iniciar
+              <PlayIcon weight="fill" /> Continuar
             </Button>
           </div>
         </div>
@@ -126,12 +126,13 @@ export function ReactJSCourseBanner() {
 
             <div className="flex-col items-center gap-4 justify-center pb-6 mt-6 w-full">
               <div className="flex items-center gap-4">
-                <Progress value={46} className="w-full bg-[#00C8FF]" />
+                <Progress value={46} className="w-full bg-[#25252A] h-[2px]" />
+                <p className="text-sm text-center">46%</p>
                 <Trophy size={32} weight="fill" className="text-[#25252A]" />
               </div>
               <div className="flex items-center justify-between mt-2">
-                <p className="text-sm text-center mt-3">46% completo</p>
-                <button className="hover:bg-[#25252A] rounded-lg p-2">
+                <div></div>
+                <button className="hover:bg-[#25252A] rounded-lg p-2 mt-2">
                   Resetar curso
                 </button>
               </div>
@@ -139,7 +140,7 @@ export function ReactJSCourseBanner() {
 
             <div className="flex items-start lg:justify-start justify-between gap-4 w-full">
               <Button className="max-w-[220px] w-full h-[50px] text-lg bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold">
-                <PlayIcon weight="fill" /> Iniciar
+                <PlayIcon weight="fill" /> Continuar
               </Button>
               <div className="flex gap-4">
                 <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
@@ -157,25 +158,27 @@ export function ReactJSCourseBanner() {
           <ul>
             <li className="flex w-full items-center gap-3 py-4 border-b border-[#25252A]">
               <Certificate size={24} className="text-[#00C8FF]" />
-              <p className="whitespace-nowrap">
+              <p className="whitespace-nowrap text-[#a5a5a6] text-sm">
                 Ganhe um certificado de conclusão
               </p>
             </li>
             <li className="flex w-full items-center gap-3 py-4  border-b border-[#25252A]">
               <PuzzlePiece size={24} className="text-[#00C8FF]" />
-              <p className="whitespace-nowrap">
-                <strong>7</strong> Projetos
+              <p className="whitespace-nowrap text-[#a5a5a6] text-sm">
+                <strong className="text-[#c0c0d1]">7</strong> Projetos
               </p>
             </li>
             <li className="flex w-full items-center gap-3 py-4  border-b border-[#25252A]">
               <VideoCameraIcon size={24} className="text-[#00C8FF]" />
-              <p className="whitespace-nowrap">
-                <strong>+19h</strong> de contéudo
+              <p className="whitespace-nowrap text-[#a5a5a6] text-sm">
+                <strong className="text-[#c0c0d1]">+19h</strong> de contéudo
               </p>
             </li>
             <li className="flex w-full items-center gap-3 py-4  border-b border-[#25252A]">
               <TrendUp size={24} className="text-[#00C8FF]" />
-              <p className="whitespace-nowrap">Intermediario</p>
+              <p className="whitespace-nowrap text-[#a5a5a6] text-sm font-light">
+                INTERMEDIARIO
+              </p>
             </li>
           </ul>
           <div className="mt-4 h-full">

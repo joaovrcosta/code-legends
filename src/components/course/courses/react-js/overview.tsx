@@ -68,9 +68,15 @@ export function CourseOverview() {
     <div className="flex lg:flex-row flex-col gap-8">
       <div className="w-full max-w-[1240px] space-y-4">
         {/* Section 1: O que você aprenderá */}
-        <Card className="p-0 text-white bg-gray-gradient rounded-[20px]">
+        <Card className="p-0 text-whit bg-gray-gradient rounded-[20px]">
           <CardHeader className="px-4 py-6 border-b border-[#25252A]">
-            <h3 className="text-lg font-semibold">O que você aprenderá</h3>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold bg-blue-gradient-500 bg-clip-text text-transparent">
+                  O que você aprendera
+                </h3>
+              </div>
+            </div>
           </CardHeader>
           <div className="px-4 py-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
@@ -108,7 +114,9 @@ export function CourseOverview() {
           <CardHeader className="px-4 py-6 border-b border-[#25252A]">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-semibold">Programa de Estudos</h3>
+                <h3 className="text-lg font-semibold bg-blue-gradient-500 bg-clip-text text-transparent">
+                  Programa de estudos
+                </h3>
                 <p className="text-xs text-muted-foreground">
                   {curriculum.length} módulos
                 </p>
@@ -169,7 +177,13 @@ export function CourseOverview() {
         {/* Section 3: Educador */}
         <Card className="p-0 text-white bg-gray-gradient rounded-[20px]">
           <CardHeader className="px-4 py-6 border-b border-[#25252A]">
-            <h3 className="text-lg font-semibold">Educador</h3>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold bg-blue-gradient-500 bg-clip-text text-transparent">
+                  Educador
+                </h3>
+              </div>
+            </div>
           </CardHeader>
           <div className="px-4 py-6">
             <div className="flex items-start gap-4 mb-4">
@@ -221,7 +235,13 @@ export function CourseOverview() {
         {/* Section 4: Detalhes */}
         <Card className="p-0 text-white bg-gray-gradient rounded-[20px]">
           <CardHeader className="px-4 py-6 border-b border-[#25252A]">
-            <h3 className="text-lg font-semibold">Detalhes</h3>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold bg-blue-gradient-500 bg-clip-text text-transparent">
+                  Detalhes
+                </h3>
+              </div>
+            </div>
           </CardHeader>
           <div className="px-4 py-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -289,7 +309,13 @@ export function CourseOverview() {
       <div className="max-w-[500px] w-full space-y-4 lg:sticky lg:top-[100px] lg:h-fit">
         <Card className="p-0 text-white bg-gray-gradient rounded-[20px]">
           <CardHeader className="px-4 py-6 border-b border-[#25252A]">
-            <h3 className="text-lg font-semibold">Informações do curso</h3>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold bg-blue-gradient-500 bg-clip-text text-transparent">
+                  Informações
+                </h3>
+              </div>
+            </div>
           </CardHeader>
           <div className="px-4 py-6 space-y-4">
             <div>
@@ -310,14 +336,14 @@ export function CourseOverview() {
             <div>
               <p className="text-xs text-[#C4C4CC] mb-2">Tecnologias</p>
               <div className="flex flex-wrap gap-2 mt-1">
-                <span className="px-2 py-1 text-xs bg-[#1A1A1E] border-[#25252A] border rounded-full text-[#00C8FF] ">
-                  React
+                <span className="px-4 py-2 text-xs bg-[#1A1A1E] rounded-full text-[#ffffff] font-semibold ">
+                  ReactJS
                 </span>
-                <span className="px-2 py-1 text-xs bg-[#1A1A1E] border-[#25252A] border rounded-full  text-[#00C8FF] ">
-                  JavaScript
+                <span className="px-4 py-2 text-xs bg-[#1A1A1E] rounded-full text-[#ffffff] font-semibold ">
+                  Typescript
                 </span>
-                <span className="px-2 py-1 text-xs bg-[#1A1A1E] border-[#25252A] border rounded-full  text-[#00C8FF] ">
-                  Hooks
+                <span className="px-4 py-2 text-xs bg-[#1A1A1E] rounded-full text-[#ffffff] font-semibold ">
+                  NextJS
                 </span>
               </div>
             </div>
