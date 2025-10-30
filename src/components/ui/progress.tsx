@@ -11,16 +11,16 @@ const Progress = React.forwardRef<
 >(({ className, value, ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
-    className={cn(
-      "relative h-2 w-full overflow-hidden rounded-full bg-[#25252A]",
-      className
-    )}
+    className={cn("relative h-2 w-full rounded-full bg-[#25252A]", className)}
     {...props}
   >
-    <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 bg-[#00C8FF] transition-all"
-      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
-    />
+    {/* camada interna que permite o glow "sair" sem vazar do container */}
+    <div className="absolute inset-0 rounded-full overflow-visible">
+      <ProgressPrimitive.Indicator
+        className="h-full bg-[#00C8FF] shadow-[0_0_16px_0px_#00C8FF] transition-all"
+        style={{ width: `${value || 0}%` }}
+      />
+    </div>
   </ProgressPrimitive.Root>
 ));
 Progress.displayName = ProgressPrimitive.Root.displayName;

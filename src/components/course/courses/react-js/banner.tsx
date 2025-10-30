@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
+  ArrowClockwise,
   Certificate,
   Files,
   Play,
@@ -59,7 +60,7 @@ export function ReactJSCourseBanner() {
     <>
       <div
         className={cn(
-          "sticky top-[-1px] z-50 transition-all shadow-2xl duration-300 border-b border-[#25252A] bg-[#151518] p-3",
+          "sticky lg:top-[0px] top-[-1px] z-50 transition-all shadow-2xl duration-300 border-b border-[#25252A] bg-[#151518] p-3 px-4",
           showSticky
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-4 pointer-events-none h-0 overflow-hidden p-0"
@@ -83,10 +84,10 @@ export function ReactJSCourseBanner() {
         </div>
       </div>
 
-      <section className="relative bg-gray-gradient lg:gap-20 gap-8 border-b border-[#25252A] lg:py-12 lg:px-16 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
+      <section className="relative bg-gray-gradient lg:gap-20 gap-8 border-b border-[#25252A] lg:py-12 lg:px-12 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
         {/* Blur gradient overlay - Netflix style */}
         <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none" />
-        <div className="flex-col flex-1 relative z-10">
+        <div className="flex-col flex-1 relative z-10 w-full">
           <div className="w-full lg:hidden block">
             <Link href="/learn/catalog" className="lg:hidden block ">
               <div className="flex items-center gap-2 cursor-pointer mb-2 text-sm text-[#7e7e89]">
@@ -118,7 +119,7 @@ export function ReactJSCourseBanner() {
               <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent lg:text-2xl text-xl lg:text-left text-center">
                 ReactJS
               </span>
-              <p className="lg:text-base text-sm mt-2 text-center lg:text-left max-w-[620px] text-[#c0c0d1]">
+              <p className="lg:text-base text-sm mt-2 text-center lg:text-left max-w-[620px] text-white">
                 Neste curso de React, você criará aplicativos interativos
                 poderosos com uma das bibliotecas JavaScript mais populares.
               </p>
@@ -132,7 +133,12 @@ export function ReactJSCourseBanner() {
               </div>
               <div className="flex items-center justify-between mt-2">
                 <div></div>
-                <button className="hover:bg-[#25252A] rounded-lg p-2 mt-2">
+                <button className="hover:bg-[#25252A] text-[#a5a5a6] rounded-lg p-2 mt-2 flex gap-3 items-center group transition-colors duration-300">
+                  <ArrowClockwise
+                    size={24}
+                    weight="fill"
+                    className="text-[#a5a5a6] group-hover:text-[#00C8FF] transition-colors duration-300"
+                  />
                   Resetar curso
                 </button>
               </div>

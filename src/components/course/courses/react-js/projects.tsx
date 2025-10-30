@@ -4,8 +4,18 @@ import Link from "next/link";
 const projects = [
   {
     id: 1,
+    title: "Lando Norris",
+    image: "/68eb96833074e144081699.jpg",
+    description:
+      "A high-performance platform for F1 driver Lando Norris, capturing his energy and racing passion through dynamic interactions, bold visuals, and a digital experience as engaging as he is",
+    url: "#",
+    glow: "from-[#242c37] via-[#6eb5ff] to-transparent", // cinza-azulado
+    shadowColor: "#07507c", // azul claro shadow card 3
+  },
+  {
+    id: 2,
     title: "Solved",
-    image: "/68c999c44066a839808820.png",
+    image: "/project-1-haha.jpg",
     description:
       "Um sistema de design moderno para acelerar o desenvolvimento front-end.",
     url: "#",
@@ -13,9 +23,9 @@ const projects = [
     shadowColor: "#FF6138", // laranja shadow card 1
   },
   {
-    id: 2,
+    id: 3,
     title: "Tobiko",
-    image: "/68766660977be365296330.png",
+    image: "/unnamed (5).jpg",
     description:
       "Tobiko is a modern transformation platform that helps data engineers cut waste, blind spots, and preventable errors in their workflows.",
     url: "#",
@@ -23,9 +33,9 @@ const projects = [
     shadowColor: "#7f2200", // roxo shadow card 2
   },
   {
-    id: 3,
-    title: "Gaming Landing Page",
-    image: "/68f3fbd8efbfa861335790.png",
+    id: 4,
+    title: "Tech Portifólio",
+    image: "/project-2-haha.jpg",
     description: "Página inicial para games. Totalmente responsiva e estilosa.",
     url: "#",
     glow: "from-[#242c37] via-[#6eb5ff] to-transparent", // cinza-azulado
@@ -39,11 +49,12 @@ export function CourseProjects() {
       {projects.map((project) => (
         <div
           key={project.id}
-          className="group relative rounded-[20px] overflow-hidden min-h-[340px] flex flex-col justify-end z-1"
-          style={{
-            minHeight: 340,
-            boxShadow: `0 0 100px ${project.shadowColor}`,
-          }}
+          className="group relative rounded-[20px] overflow-hidden min-h-[340px] flex flex-col justify-end z-1 shadow-none hover:shadow-[0_0_150px_#00C8FF] transition-shadow duration-500 ease-in-out"
+
+          // style={{
+          //   minHeight: 340,
+          //   boxShadow: `0 0 100px ${project.shadowColor}`,
+          // }}
         >
           {/* Glow/color blur externo */}
           <div
@@ -75,7 +86,7 @@ export function CourseProjects() {
             <div className="mt-auto">
               <Link
                 href={project.url}
-                className="text-[#00C8FF] font-semibold text-base hover:underline flex items-center gap-2 group"
+                className="text-[#00C8FF] font-semibold text-sm hover:underline flex items-center gap-2 group"
               >
                 Ver estudo de caso{" "}
                 <span className="group-hover:translate-x-1 transition-transform">

@@ -65,7 +65,7 @@ export function CourseOverview() {
   const [showMoreBio, setShowMoreBio] = useState(false);
 
   return (
-    <div className="flex lg:flex-row flex-col gap-8">
+    <div className="flex lg:flex-row flex-col gap-8 mt-8">
       <div className="w-full max-w-[1240px] space-y-4">
         {/* Section 1: O que você aprenderá */}
         <Card className="p-0 text-whit bg-gray-gradient rounded-[20px]">

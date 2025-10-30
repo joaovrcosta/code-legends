@@ -16,7 +16,7 @@ import Link from "next/link";
 
 export function CourseContent() {
   return (
-    <div className="">
+    <div className="mt-8">
       {reactCourseData.courseModules.map((course, index) => (
         <section
           key={index}
