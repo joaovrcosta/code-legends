@@ -4,11 +4,13 @@ import Link from "next/link";
 const projects = [
   {
     id: 1,
-    title: "Design System",
+    title: "Solved",
     image: "/68c999c44066a839808820.png",
     description:
       "Um sistema de design moderno para acelerar o desenvolvimento front-end.",
     url: "#",
+    glow: "from-[#71b7fb] via-[#184b77] to-transparent", // azul predominante
+    shadowColor: "#FF6138", // laranja shadow card 1
   },
   {
     id: 2,
@@ -17,26 +19,38 @@ const projects = [
     description:
       "Tobiko is a modern transformation platform that helps data engineers cut waste, blind spots, and preventable errors in their workflows.",
     url: "#",
+    glow: "from-[#7f2200] via-[#7f2200] to-transparent", // roxo predominante
+    shadowColor: "#7f2200", // roxo shadow card 2
   },
   {
     id: 3,
     title: "Gaming Landing Page",
-    image: "/htmlcss-banner.png",
+    image: "/68f3fbd8efbfa861335790.png",
     description: "Página inicial para games. Totalmente responsiva e estilosa.",
     url: "#",
+    glow: "from-[#242c37] via-[#6eb5ff] to-transparent", // cinza-azulado
+    shadowColor: "#07507c", // azul claro shadow card 3
   },
 ];
 
 export function CourseProjects() {
   return (
-    <div className="grid lg:grid-cols-3 gap-8 grid-cols-1">
+    <div className="grid lg:grid-cols-2 gap-8 grid-cols-1">
       {projects.map((project) => (
         <div
           key={project.id}
-          className="group relative rounded-2xl overflow-hidden min-h-[340px] border border-[#27272A] shadow-lg flex flex-col justify-end"
-          style={{ minHeight: 340 }}
+          className="group relative rounded-[20px] overflow-hidden min-h-[340px] flex flex-col justify-end z-1"
+          style={{
+            minHeight: 340,
+            boxShadow: `0 0 100px ${project.shadowColor}`,
+          }}
         >
-          {/* Imagem de fundo como background absoluto */}
+          {/* Glow/color blur externo */}
+          <div
+            className={`pointer-events-none absolute -inset-3 z-0 rounded-[inherit] blur-xl opacity-60 bg-gradient-to-br ${project.glow}`}
+            aria-hidden="true"
+          />
+          {/* Imagem de fundo ocupando todo o card */}
           <div className="absolute inset-0 w-full h-full z-0">
             <Image
               src={project.image}
@@ -45,8 +59,10 @@ export function CourseProjects() {
               className="object-cover select-none pointer-events-none"
               priority={true}
             />
-            {/* Gradiente escuro para contraste */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#18181c] via-black/80 to-transparent" />
+            {/* Gradiente no topo */}
+            <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-[#18181c] via-black/70 to-transparent pointer-events-none" />
+            {/* Gradiente na base */}
+            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#18181c] via-black/80 to-transparent pointer-events-none" />
           </div>
           {/* Conteúdo do card por cima */}
           <div className="relative z-10 p-7 flex flex-col justify-end h-full min-h-[340px]">

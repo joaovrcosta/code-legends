@@ -36,7 +36,7 @@ const myLearningTabs = [
     id: "about",
     label: "Projetos",
     content: (
-      <div>
+      <div className="mt-8">
         <CourseProjects />
       </div>
     ),

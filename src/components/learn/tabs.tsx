@@ -30,7 +30,7 @@ export function Tabs() {
   }, []);
 
   return (
-    <div className="w-full flex items-center lg:block hidden">
+    <div className="w-full flex items-center lg:block hidden z-50">
       {isMobile ? (
         <Sheet>
           <SheetTrigger asChild>
