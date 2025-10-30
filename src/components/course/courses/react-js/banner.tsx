@@ -18,14 +18,25 @@ import {
   PlusIcon,
   PuzzlePiece,
   ThumbsUpIcon,
+  ThumbsDown,
   TrendUp,
   Trophy,
   VideoCameraIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import { ArrowLeft } from "lucide-react";
+import {
+  ArrowLeft,
+  ChartNoAxesColumnIncreasing,
+  ChartNoAxesColumnIncreasingIcon,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 export function ReactJSCourseBanner() {
   const pathName = usePathname();
@@ -116,10 +127,10 @@ export function ReactJSCourseBanner() {
               >
                 <Image src={codeLegendsLogo} alt="Code Legends" />
               </div> */}
-              <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent lg:text-2xl text-xl lg:text-left text-center">
+              <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent lg:text-4xl text-xl lg:text-left text-center">
                 ReactJS
               </span>
-              <p className="lg:text-base text-sm mt-2 text-center lg:text-left max-w-[620px] text-white">
+              <p className="lg:text-base text-sm mt-2 text-center lg:text-left max-w-[620px] text-[#a5a5a6]">
                 Neste curso de React, você criará aplicativos interativos
                 poderosos com uma das bibliotecas JavaScript mais populares.
               </p>
@@ -152,9 +163,29 @@ export function ReactJSCourseBanner() {
                 <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
                   <PlusIcon className="" />
                 </button>
-                <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
-                  <ThumbsUpIcon />
-                </button>
+                {/* Dropdown shadcn para reações */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
+                      <ThumbsUpIcon />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    side="top"
+                    align="center"
+                    sideOffset={10}
+                    className="rounded-full px-2 py-1 bg-[#1e1e22] border border-[#2a2a2f] flex items-center gap-2 shadow-[0_0_16px_#000]"
+                  >
+                    <DropdownMenuItem className="rounded-full flex items-center justify-center h-[50px] w-[50px] px-2 py-1 hover:bg-[#2a2a2f] text-white">
+                      <ThumbsDown className="w-8 h-8" />{" "}
+                      {/* ou w-full h-full */}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="rounded-full flex items-center justify-center h-[50px] w-[50px] px-2 py-1 hover:bg-[#2a2a2f] text-white">
+                      <ThumbsUpIcon className="w-8 h-8" />{" "}
+                      {/* ou w-full h-full */}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </div>
@@ -181,7 +212,10 @@ export function ReactJSCourseBanner() {
               </p>
             </li>
             <li className="flex w-full items-center gap-3 py-4  border-b border-[#25252A]">
-              <TrendUp size={24} className="text-[#00C8FF]" />
+              <ChartNoAxesColumnIncreasingIcon
+                size={24}
+                className="text-orange-500"
+              />
               <p className="whitespace-nowrap text-[#a5a5a6] text-sm font-light">
                 INTERMEDIARIO
               </p>
