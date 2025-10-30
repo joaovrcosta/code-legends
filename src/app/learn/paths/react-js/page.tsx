@@ -1,6 +1,7 @@
 import { ReactJSCourseBanner } from "@/components/course/courses/react-js/banner";
 import { CourseContent } from "@/components/course/courses/react-js/content";
 import { CourseOverview } from "@/components/course/courses/react-js/overview";
+import { CourseProjects } from "@/components/course/courses/react-js/projects";
 import { Button } from "@/components/ui/button";
 import { Tabs } from "@/components/ui/tabs";
 import {
@@ -31,7 +32,15 @@ const myLearningTabs = [
     ),
   },
 
-  { id: "about", label: "Projetos", content: <div>Completos</div> },
+  {
+    id: "about",
+    label: "Projetos",
+    content: (
+      <div>
+        <CourseProjects />
+      </div>
+    ),
+  },
 ];
 
 export default function ReactJsPage() {
