@@ -172,8 +172,25 @@ export function CatalogCard({
   className,
   isCurrent,
   isFavorite,
+  tags,
 }: CatalogCardProps) {
   const imageSrc = image || reactIcon;
+
+  // Função para determinar a cor baseada nas tags
+  const getColorByTags = (tags?: string[]): string => {
+    if (!tags || tags.length === 0) return color;
+
+    const upperTags = tags.map((tag) => tag.toUpperCase());
+
+    if (upperTags.includes("FRONT-END")) return "blue";
+    if (upperTags.includes("BACK-END")) return "orange";
+    if (upperTags.includes("EMPREENDEDORISMO")) return "red";
+    if (upperTags.includes("DESIGN")) return "purple";
+
+    return color;
+  };
+
+  const finalColor = getColorByTags(tags);
 
   const colorClass =
     {
@@ -188,7 +205,7 @@ export function CatalogCard({
       gray: "text-gray-400",
       lime: "bg-lime-gradient-500 bg-clip-text text-transparent",
       purple: "bg-purple-gradient-500 bg-clip-text text-transparent",
-    }[color] || "text-gray-400";
+    }[finalColor] || "text-gray-400";
 
   const { label, className: statusClass, icon } = getStatusInfo(status);
   const iconElement = icon(isFavorite);
