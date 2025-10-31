@@ -110,7 +110,7 @@ export function CourseDropdownMenu() {
                       alt={enrolledCourse.course.title}
                       width={70}
                       height={70}
-                      className="object-contain"
+                      className="object-contain h-[70px] w-[70px]"
                     />
                     <div className="flex flex-col">
                       <span className="text-sm">

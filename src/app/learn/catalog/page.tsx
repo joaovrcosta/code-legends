@@ -2,8 +2,12 @@ import { NewContentCaroussel } from "@/components/learn/catolog/new-content-caro
 import { RecommendationsCarousel } from "@/components/learn/catolog/recommendations-carousel";
 import { CategoriesCarousel } from "@/components/learn/catolog/categories-carousel";
 import { MyCatalogCarousel } from "@/components/learn/catolog/my-catalog-carousel";
+import { getUserEnrolledList, listCourses } from "@/actions";
 
-export default function CoursesPage() {
+export default async function CoursesPage() {
+  const courses = await listCourses();
+  const { userCourses } = await getUserEnrolledList();
+
   return (
     <div className="w-full">
       <div className="flex flex-col items-start xl:mt-10 mt-6">
@@ -26,7 +30,7 @@ export default function CoursesPage() {
               Seus cursos
             </span>
           </div>
-          <MyCatalogCarousel />
+          <MyCatalogCarousel userCourses={userCourses} />
 
           {/* Seus cursos */}
 
@@ -48,13 +52,13 @@ export default function CoursesPage() {
                 Recomendações
               </span>
             </div>
-            <RecommendationsCarousel />
+            <RecommendationsCarousel courses={courses.courses} />
             <div className="flex items-center space-x-2 py-4 pt-4">
               <span className="text-muted-foreground text-[14px] font-semibold">
                 Acesse gratuitamente
               </span>
             </div>
-            <RecommendationsCarousel />
+            <RecommendationsCarousel courses={courses.courses} />
             {/* <Catalog /> */}
             {/* <Filters /> */}
           </div>

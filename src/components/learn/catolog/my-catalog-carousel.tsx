@@ -7,31 +7,14 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { useEffect, useState } from "react";
-import { getUserEnrolledList } from "@/actions";
 import type { EnrolledCourse } from "@/types/user-course.ts";
 import Link from "next/link";
 
-export function MyCatalogCarousel() {
-  const [userCourses, setUserCourses] = useState<EnrolledCourse[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchEnrolledCourses() {
-      try {
-        const { userCourses: courses } = await getUserEnrolledList();
-        setUserCourses(courses || []);
-      } catch (error) {
-        console.error("Erro ao buscar cursos inscritos:", error);
-        setUserCourses([]);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchEnrolledCourses();
-  }, []);
-
+export function MyCatalogCarousel({
+  userCourses,
+}: {
+  userCourses: EnrolledCourse[];
+}) {
   // Determina o curso atual (o mais recentemente acessado)
   const currentCourseId =
     userCourses.length > 0
@@ -49,8 +32,6 @@ export function MyCatalogCarousel() {
     return "not-started";
   };
 
-  console.log(userCourses);
-
   return (
     <Carousel>
       <CarouselContent className="-ml-3">
@@ -65,35 +46,33 @@ export function MyCatalogCarousel() {
         </CarouselItem>
 
         {/* Cards dos cursos inscritos */}
-        {!isLoading &&
-          userCourses.map((enrolledCourse) => {
-            const progressPercent = Math.round(enrolledCourse.progress * 100);
-            const isCurrent = enrolledCourse.id === currentCourseId;
+        {userCourses.map((enrolledCourse) => {
+          const progressPercent = Math.round(enrolledCourse.progress * 100);
+          const isCurrent = enrolledCourse.id === currentCourseId;
 
-            return (
-              <CarouselItem
-                key={enrolledCourse.id}
-                className="basis-auto w-[380px]"
-              >
-                <PersonalCatalog
-                  name={enrolledCourse.course.title}
-                  image={
-                    enrolledCourse.course.icon ||
-                    enrolledCourse.course.thumbnail
-                  }
-                  url={`/classroom/${enrolledCourse.course.slug}`}
-                  color="blue"
-                  status={getStatus(
-                    enrolledCourse.progress,
-                    enrolledCourse.isCompleted
-                  )}
-                  isCurrent={isCurrent}
-                  isFavorite={true}
-                  progress={progressPercent}
-                />
-              </CarouselItem>
-            );
-          })}
+          return (
+            <CarouselItem
+              key={enrolledCourse.id}
+              className="basis-auto w-[380px]"
+            >
+              <PersonalCatalog
+                name={enrolledCourse.course.title}
+                image={
+                  enrolledCourse.course.icon || enrolledCourse.course.thumbnail
+                }
+                url={`/classroom/${enrolledCourse.course.slug}`}
+                color="blue"
+                status={getStatus(
+                  enrolledCourse.progress,
+                  enrolledCourse.isCompleted
+                )}
+                isCurrent={isCurrent}
+                isFavorite={true}
+                progress={progressPercent}
+              />
+            </CarouselItem>
+          );
+        })}
       </CarouselContent>
 
       {/* <CarouselPrevious />

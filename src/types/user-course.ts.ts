@@ -54,3 +54,38 @@ export type EnrolledCourse = {
 export type UserEnrolledListResponse = {
   userCourses: EnrolledCourse[];
 };
+
+export type InstructorWithSlug = {
+  id: string;
+  name: string;
+  avatar: string;
+  slug: string | null;
+};
+
+export type CourseWithCount = {
+  id: string;
+  title: string;
+  slug: string;
+  active: boolean;
+  thumbnail: string;
+  createdAt: string;
+  updatedAt: string;
+  releaseAt: string;
+  isFree: boolean;
+  subscriptions: number;
+  level: "beginner" | "intermediate" | "advanced";
+  icon: string;
+  tags: string[];
+  description: string;
+  instructorId: string;
+  categoryId: string | null;
+  instructor: InstructorWithSlug;
+  category: unknown | null;
+  _count: {
+    userCourses: number;
+  };
+};
+
+export type CoursesListResponse = {
+  courses: CourseWithCount[];
+};

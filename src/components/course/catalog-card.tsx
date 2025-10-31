@@ -160,6 +160,7 @@ interface CatalogCardProps {
   isCurrent?: boolean;
   isFavorite?: boolean;
   status?: "in-progress" | "completed" | "not-started" | "career" | "continue";
+  tags?: string[];
 }
 
 export function CatalogCard({
