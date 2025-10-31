@@ -81,6 +81,7 @@ export type CourseWithCount = {
   categoryId: string | null;
   instructor: InstructorWithSlug;
   category: unknown | null;
+  isEnrolled: boolean;
   _count: {
     userCourses: number;
   };

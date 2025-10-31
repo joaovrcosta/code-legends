@@ -46,6 +46,8 @@ export function RecommendationsCarousel({
                 status="not-started"
                 isCurrent={false}
                 tags={course.tags}
+                courseId={course.id}
+                isEnrolled={course.isEnrolled}
               />
             </CarouselItem>
           ))}

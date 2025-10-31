@@ -1,3 +1,5 @@
+"use client";
+
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import reactIcon from "../../../public/react-course-icon.svg";
@@ -10,7 +12,10 @@ import {
   ChartNoAxesColumnIncreasing,
   ScrollText,
 } from "lucide-react";
-import { Plus, Star } from "@phosphor-icons/react/dist/ssr";
+import { Check, Plus, Star } from "@phosphor-icons/react/dist/ssr";
+import { enrollInCourse } from "@/actions/course";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const courses: CatalogCardProps[] = [
   {
@@ -96,6 +101,48 @@ export function Catalog() {
   );
 }
 
+// Componente para o botão de enroll
+function EnrollButton({
+  courseId,
+  onEnrollSuccess,
+}: {
+  courseId?: string;
+  onEnrollSuccess?: () => void;
+}) {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleEnroll = async () => {
+    if (!courseId || isLoading) return;
+
+    try {
+      setIsLoading(true);
+      await enrollInCourse(courseId);
+      onEnrollSuccess?.();
+      router.refresh();
+    } catch (error) {
+      console.error("Erro ao inscrever:", error);
+      alert(
+        error instanceof Error ? error.message : "Erro ao inscrever no curso"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleEnroll}
+      disabled={!courseId || isLoading}
+      className="bg-gray-gradient-first rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
+        <Plus size={28} className="text-white hover:text-[#35BED5]" />
+      </div>
+    </button>
+  );
+}
+
 function getStatusInfo(status?: CatalogCardProps["status"]) {
   switch (status) {
     case "in-progress":
@@ -161,6 +208,9 @@ interface CatalogCardProps {
   isFavorite?: boolean;
   status?: "in-progress" | "completed" | "not-started" | "career" | "continue";
   tags?: string[];
+  courseId?: string;
+  isEnrolled?: boolean;
+  onEnrollSuccess?: () => void;
 }
 
 export function CatalogCard({
@@ -173,8 +223,13 @@ export function CatalogCard({
   isCurrent,
   isFavorite,
   tags,
+  courseId,
+  onEnrollSuccess,
+  isEnrolled,
 }: CatalogCardProps) {
   const imageSrc = image || reactIcon;
+
+  console.log(isEnrolled);
 
   // Função para determinar a cor baseada nas tags
   const getColorByTags = (tags?: string[]): string => {
@@ -269,12 +324,16 @@ export function CatalogCard({
               <ScrollText size={20} className="text-gray-600" />
             </Link>
           </div>
-          {url && (
-            <Link href="/learn" className="bg-gray-gradient-first rounded-full">
-              <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
-                <Plus size={28} className="text-white hover:text-[#35BED5]" />
-              </div>
-            </Link>
+
+          {isEnrolled ? (
+            <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
+              <Check size={20} className="text-white hover:text-[#35BED5]" />
+            </div>
+          ) : (
+            <EnrollButton
+              courseId={courseId}
+              onEnrollSuccess={onEnrollSuccess}
+            />
           )}
         </div>
       </div>
