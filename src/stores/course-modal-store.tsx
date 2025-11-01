@@ -1,6 +1,6 @@
 // store/courseModalStore.ts
 import { create } from "zustand";
-import type { Lesson } from "@/types/roadmap";
+import type { Lesson, LessonStatus } from "@/types/roadmap";
 
 interface CourseModalStore {
   isOpen: boolean;
@@ -12,6 +12,7 @@ interface CourseModalStore {
   goToPreviousLesson: () => void;
   openModalWithLesson: (lesson: Lesson) => void;
   currentLesson: Lesson | null;
+  updateCurrentLessonStatus: (status: LessonStatus) => void;
 }
 
 export const useCourseModalStore = create<CourseModalStore>((set, get) => ({
@@ -65,4 +66,17 @@ export const useCourseModalStore = create<CourseModalStore>((set, get) => ({
       currentIndex: 0,
       currentLesson: lesson,
     }),
+
+  updateCurrentLessonStatus: (status: LessonStatus) => {
+    const { currentLesson, lessons, currentIndex } = get();
+    if (currentLesson) {
+      const updatedLesson = { ...currentLesson, status };
+      const updatedLessons = [...lessons];
+      updatedLessons[currentIndex] = updatedLesson;
+      set({
+        currentLesson: updatedLesson,
+        lessons: updatedLessons,
+      });
+    }
+  },
 }));

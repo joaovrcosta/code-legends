@@ -21,12 +21,11 @@ interface TitleAccordinProps {
 export function TitleAccordion({ title }: TitleAccordinProps) {
   const [isMarking, setIsMarking] = useState(false);
   const { activeCourse, fetchActiveCourse } = useActiveCourseStore();
-  const { currentLesson, goToNextLesson, lessons, currentIndex } =
+  const { currentLesson, lessons, currentIndex, updateCurrentLessonStatus } =
     useCourseModalStore();
 
   // Verifica se a lição atual já está marcada como completada
   const isMarked = currentLesson?.status === "completed";
-  const hasNextLesson = currentIndex < lessons.length - 1;
 
   const handleMarkAsWatched = async () => {
     if (!currentLesson?.id || isMarking || isMarked) return;
@@ -35,16 +34,11 @@ export function TitleAccordion({ title }: TitleAccordinProps) {
       setIsMarking(true);
       await continueCourse(currentLesson.id);
 
+      // Atualiza o status da lição atual no modal imediatamente
+      updateCurrentLessonStatus("completed");
+
       // Atualiza o curso ativo para refletir o progresso
       await fetchActiveCourse();
-
-      // Avança automaticamente para a próxima aula se houver
-      if (hasNextLesson) {
-        // Aguarda um pouco antes de avançar para o usuário ver o feedback
-        setTimeout(() => {
-          goToNextLesson();
-        }, 1500);
-      }
     } catch (error) {
       console.error("Erro ao marcar como assistido:", error);
       alert("Erro ao marcar como assistido. Tente novamente.");
