@@ -34,7 +34,11 @@ export const LessonPopover = ({
   currentCourseSlug: string;
   allLessons?: Lesson[];
 }) => {
-  const { openModalWithLessons, openModalWithLesson } = useCourseModalStore();
+  const {
+    openModalWithLessons,
+    openModalWithLesson,
+    isOpen: isModalOpen,
+  } = useCourseModalStore();
 
   const handleWatchClick = () => {
     if (!locked) {
@@ -51,7 +55,7 @@ export const LessonPopover = ({
 
   return (
     <div>
-      {showContinue && lesson.isCurrent ? (
+      {showContinue && lesson.isCurrent && !isModalOpen ? (
         <Popover open={true}>
           <PopoverTrigger asChild>
             <div
@@ -93,7 +97,7 @@ export const LessonPopover = ({
           </PopoverContent>
         </Popover>
       ) : (
-        <Popover open={openPopover === lesson.id}>
+        <Popover open={openPopover === lesson.id && !isModalOpen}>
           <PopoverTrigger asChild>
             <div
               className="cursor-pointer w-[64px] h-[64px] rounded-full border-2 flex items-center justify-center bg-[#1a1a1e]"
