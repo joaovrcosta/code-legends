@@ -92,10 +92,10 @@ export function TitleAccordion({ title }: TitleAccordinProps) {
                       : "Completar lição"}
                   </div>
                 </div>
-                <div className="lg:hidden flex items-center gap-2">
-                  <div className="flex items-center gap-2 border border-[#25252A] px-3 py-1 rounded-full text-sm text-white whitespace-nowrap font-normal">
+                <div className="lg:hidden flex flex-col items-center gap-2">
+                  {/* <div className="flex items-center gap-2 border border-[#25252A] px-3 py-1 rounded-full text-sm text-white whitespace-nowrap font-normal">
                     <MessageCircle size={16} />
-                  </div>
+                  </div> */}
                   <div
                     onClick={(e) => {
                       e.stopPropagation();

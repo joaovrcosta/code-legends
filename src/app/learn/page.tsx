@@ -21,6 +21,7 @@ export default function LearnPage() {
   const prevOpenPopoverRef = useRef<number | null>(null);
   const prevIsModalOpenRef = useRef<boolean>(false);
   const hasScrolledRef = useRef<boolean>(false);
+  const lastCompletedTimestampRef = useRef<number | null>(null);
   const {
     activeCourse,
     isLoading: isLoadingActiveCourse,
@@ -68,10 +69,28 @@ export default function LearnPage() {
     );
   }, [allLessons]);
 
+  // Função para fazer scroll até a lição atual
+  const scrollToCurrentLesson = useCallback(() => {
+    if (!firstIncompleteLesson || !roadmap) return;
+
+    // Aguarda um pequeno delay para garantir que o DOM foi atualizado
+    const timeoutId = setTimeout(() => {
+      const lessonElement = taskRefs.current[firstIncompleteLesson.id];
+      if (lessonElement) {
+        lessonElement.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [firstIncompleteLesson, roadmap]);
+
   // Fecha o popover quando o modal abre e reativa "Começar" quando o modal fecha
   useEffect(() => {
     const wasModalOpen = prevIsModalOpenRef.current;
-    
+
     if (isModalOpen) {
       // Modal abriu: fecha o popover
       setOpenPopover(null);
@@ -80,9 +99,20 @@ export default function LearnPage() {
       // Modal foi fechado: reativa o popover "Começar" na primeira lição incompleta
       if (firstIncompleteLesson) {
         setShowContinue(true);
+        // Faz scroll até a lição atual após fechar o modal
+        // Aguarda um delay para garantir que o DOM foi atualizado
+        setTimeout(() => {
+          const lessonElement = taskRefs.current[firstIncompleteLesson.id];
+          if (lessonElement) {
+            lessonElement.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          }
+        }, 500);
       }
     }
-    
+
     // Atualiza a referência com o valor atual
     prevIsModalOpenRef.current = isModalOpen;
   }, [isModalOpen, firstIncompleteLesson]);
@@ -93,11 +123,11 @@ export default function LearnPage() {
     const wasOpen = prevOpenPopoverRef.current !== null;
     const isClosed = openPopover === null;
     const modalDidntCloseIt = !isModalOpen;
-    
+
     if (wasOpen && isClosed && modalDidntCloseIt && firstIncompleteLesson) {
       setShowContinue(true);
     }
-    
+
     // Atualiza a referência com o valor atual
     prevOpenPopoverRef.current = openPopover;
   }, [openPopover, isModalOpen, firstIncompleteLesson]);
@@ -113,13 +143,40 @@ export default function LearnPage() {
   useEffect(() => {
     if (lessonCompletedTimestamp && activeCourse?.id) {
       // Aguarda um pequeno delay para garantir que a API foi atualizada
-      const timeoutId = setTimeout(() => {
-        fetchRoadmap();
+      const timeoutId = setTimeout(async () => {
+        await fetchRoadmap();
       }, 500);
 
       return () => clearTimeout(timeoutId);
     }
   }, [lessonCompletedTimestamp, activeCourse?.id, fetchRoadmap]);
+
+  // Faz scroll quando o roadmap é atualizado após completar uma lição
+  useEffect(() => {
+    // Verifica se há uma nova lição completada e se ainda não fizemos scroll para ela
+    if (
+      lessonCompletedTimestamp &&
+      lessonCompletedTimestamp !== lastCompletedTimestampRef.current &&
+      roadmap &&
+      firstIncompleteLesson
+    ) {
+      // Marca que já fizemos scroll para este timestamp
+      lastCompletedTimestampRef.current = lessonCompletedTimestamp;
+
+      // Aguarda um delay para garantir que o DOM foi atualizado
+      const timeoutId = setTimeout(() => {
+        const lessonElement = taskRefs.current[firstIncompleteLesson.id];
+        if (lessonElement) {
+          lessonElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }, 800); // Delay maior para garantir que o roadmap foi atualizado
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [roadmap, firstIncompleteLesson, lessonCompletedTimestamp]);
 
   // Faz scroll até a lição atual quando a página carrega
   useEffect(() => {
