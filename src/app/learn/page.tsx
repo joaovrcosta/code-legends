@@ -20,6 +20,7 @@ export default function LearnPage() {
   const taskRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const prevOpenPopoverRef = useRef<number | null>(null);
   const prevIsModalOpenRef = useRef<boolean>(false);
+  const hasScrolledRef = useRef<boolean>(false);
   const {
     activeCourse,
     isLoading: isLoadingActiveCourse,
@@ -119,6 +120,30 @@ export default function LearnPage() {
       return () => clearTimeout(timeoutId);
     }
   }, [lessonCompletedTimestamp, activeCourse?.id, fetchRoadmap]);
+
+  // Faz scroll até a lição atual quando a página carrega
+  useEffect(() => {
+    if (
+      !hasScrolledRef.current &&
+      !isLoading &&
+      roadmap &&
+      firstIncompleteLesson
+    ) {
+      // Aguarda um pequeno delay para garantir que o DOM foi renderizado
+      const timeoutId = setTimeout(() => {
+        const lessonElement = taskRefs.current[firstIncompleteLesson.id];
+        if (lessonElement) {
+          lessonElement.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          hasScrolledRef.current = true;
+        }
+      }, 300);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isLoading, roadmap, firstIncompleteLesson]);
 
   const togglePopover = (id: number) => {
     setOpenPopover((prev) => (prev === id ? null : id));
