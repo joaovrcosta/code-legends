@@ -90,3 +90,19 @@ export type CourseWithCount = {
 export type CoursesListResponse = {
   courses: CourseWithCount[];
 };
+
+export type ActiveCourse = {
+  id: string;
+  title: string;
+  slug: string;
+  thumbnail: string;
+  description: string;
+  progress: number;
+  isCompleted: boolean;
+  currentModuleId: string;
+  currentTaskId: number;
+};
+
+export type ActiveCourseResponse = {
+  course: ActiveCourse;
+};

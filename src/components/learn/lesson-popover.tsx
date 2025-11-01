@@ -78,9 +78,7 @@ export const LessonPopover = ({
             side="top"
           >
             <div className="flex flex-col items-center justify-center gap-2">
-              <span className="text-white text-sm font-semibold">
-                Continuar
-              </span>
+              <span className="text-white text-sm font-semibold">Começar</span>
             </div>
             <PopoverArrow className="fill-[#25252A] mb-3 w-4 h-4 transform translate-y-[-2px]" />
           </PopoverContent>

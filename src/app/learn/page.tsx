@@ -7,7 +7,7 @@ import { PrimaryButton } from "@/components/ui/primary-button";
 import DividerWithText from "@/components/divider-with-text";
 import { FastForward } from "@phosphor-icons/react/dist/ssr";
 import { getCourseRoadmap } from "@/actions/course";
-import { useEnrolledCoursesStore } from "@/stores/enrolled-courses-store";
+import { useActiveCourseStore } from "@/stores/active-course-store";
 import type { RoadmapResponse, Lesson } from "@/types/roadmap";
 import { LessonPopover } from "@/components/learn/lesson-popover";
 
@@ -17,28 +17,27 @@ export default function LearnPage() {
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const taskRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
-  const userCourses = useEnrolledCoursesStore((state) => state.userCourses);
+  const {
+    activeCourse,
+    isLoading: isLoadingActiveCourse,
+    fetchActiveCourse,
+  } = useActiveCourseStore();
 
-  // Busca o curso atual (mais recentemente acessado)
-  const currentCourse =
-    userCourses.length > 0
-      ? userCourses.reduce((latest, course) =>
-          new Date(course.lastAccessedAt) > new Date(latest.lastAccessedAt)
-            ? course
-            : latest
-        )
-      : null;
+  // Busca o curso ativo quando o componente monta
+  useEffect(() => {
+    fetchActiveCourse();
+  }, [fetchActiveCourse]);
 
   useEffect(() => {
     async function fetchRoadmap() {
-      if (!currentCourse?.courseId) {
+      if (!activeCourse?.id) {
         setIsLoading(false);
         return;
       }
 
       try {
         setIsLoading(true);
-        const roadmapData = await getCourseRoadmap(currentCourse.courseId);
+        const roadmapData = await getCourseRoadmap(activeCourse.id);
         setRoadmap(roadmapData);
       } catch (error) {
         console.error("Erro ao buscar roadmap:", error);
@@ -47,8 +46,10 @@ export default function LearnPage() {
       }
     }
 
-    fetchRoadmap();
-  }, [currentCourse?.courseId]);
+    if (activeCourse) {
+      fetchRoadmap();
+    }
+  }, [activeCourse?.id]);
 
   const togglePopover = (id: number) => {
     setOpenPopover((prev) => (prev === id ? null : id));
@@ -66,7 +67,7 @@ export default function LearnPage() {
   const isLessonCompleted = (status: string) => status === "completed";
   const isLessonLocked = (status: string) => status === "locked";
 
-  if (isLoading) {
+  if (isLoadingActiveCourse || isLoading) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
         <p className="text-muted-foreground">Carregando roadmap...</p>
@@ -74,12 +75,12 @@ export default function LearnPage() {
     );
   }
 
-  if (!roadmap || !currentCourse) {
+  if (!roadmap || !activeCourse) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">
-            Nenhum curso encontrado ou você não está inscrito em nenhum curso.
+            Nenhum curso ativo encontrado. Selecione um curso para começar.
           </p>
           <Link href="/learn/catalog">
             <PrimaryButton>Explorar cursos</PrimaryButton>
@@ -172,9 +173,7 @@ export default function LearnPage() {
                                     setShowContinue={setShowContinue}
                                     completed={completed}
                                     locked={locked}
-                                    currentCourseSlug={
-                                      currentCourse.course.slug
-                                    }
+                                    currentCourseSlug={activeCourse.slug}
                                   />
                                   {!isLeft && (
                                     <div

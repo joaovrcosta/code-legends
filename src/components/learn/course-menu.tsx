@@ -14,11 +14,13 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getUserEnrolledList } from "@/actions";
 import type { EnrolledCourse } from "@/types/user-course.ts";
+import { useActiveCourseStore } from "@/stores/active-course-store";
 
 export function CourseDropdownMenu() {
   const [open, setOpen] = useState(false);
   const [userCourses, setUserCourses] = useState<EnrolledCourse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { activeCourse, fetchActiveCourse } = useActiveCourseStore();
 
   useEffect(() => {
     async function fetchEnrolledCourses() {
@@ -34,17 +36,19 @@ export function CourseDropdownMenu() {
     }
 
     fetchEnrolledCourses();
-  }, []);
+    fetchActiveCourse();
+  }, [fetchActiveCourse]);
 
-  // Determina o curso atual (primeiro curso ou o mais recentemente acessado)
+  // Usa o curso ativo se disponível, senão usa o mais recentemente acessado como fallback
   const currentCourse =
-    userCourses.length > 0
+    activeCourse ||
+    (userCourses.length > 0
       ? userCourses.reduce((latest, course) =>
           new Date(course.lastAccessedAt) > new Date(latest.lastAccessedAt)
             ? course
             : latest
         )
-      : null;
+      : null);
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -54,19 +58,37 @@ export function CourseDropdownMenu() {
             open ? "border-[#00C8FF]" : "border-[#25252A]"
           }`}
         >
-          {currentCourse?.course.icon ? (
-            <Image
-              src={currentCourse.course.icon}
-              alt={currentCourse.course.title}
-              height={32}
-              width={32}
-              className="object-contain lg:h-[32px] lg:w-[32px] h-[40px] w-[40px]"
-            />
-          ) : (
-            <div className="w-5 h-5 bg-[#25252A] rounded" />
-          )}
+          {(() => {
+            // ActiveCourse tem propriedades diretas, EnrolledCourse tem course aninhado
+            const icon =
+              "course" in (currentCourse || {})
+                ? currentCourse?.course.icon
+                : null;
+            const title =
+              "course" in (currentCourse || {})
+                ? currentCourse?.course.title
+                : currentCourse?.title;
+
+            return icon ? (
+              <Image
+                src={icon}
+                alt={title || "Curso"}
+                height={32}
+                width={32}
+                className="object-contain lg:h-[32px] lg:w-[32px] h-[40px] w-[40px]"
+              />
+            ) : (
+              <div className="w-5 h-5 bg-[#25252A] rounded" />
+            );
+          })()}
           <p className="lg:block hidden">
-            {currentCourse?.course.title || "Meus Cursos"}
+            {(() => {
+              const title =
+                "course" in (currentCourse || {})
+                  ? currentCourse?.course.title
+                  : currentCourse?.title;
+              return title || "Meus Cursos";
+            })()}
           </p>
         </div>
       </DropdownMenuTrigger>
