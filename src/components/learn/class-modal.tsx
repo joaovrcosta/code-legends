@@ -21,10 +21,15 @@ export const AulaModal = () => {
   const {
     isOpen,
     currentLesson,
+    lessons,
+    currentIndex,
     closeModal,
     goToNextLesson,
     goToPreviousLesson,
   } = useCourseModalStore();
+
+  const hasNextLesson = currentIndex < lessons.length - 1;
+  const hasPreviousLesson = currentIndex > 0;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && closeModal()}>
@@ -79,8 +84,9 @@ export const AulaModal = () => {
             <Button
               variant="outline"
               className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] bg-black rounded-none text-base border-none 
-      rounded-bl-[20px]"
+      rounded-bl-[20px] disabled:opacity-50"
               onClick={goToPreviousLesson}
+              disabled={!hasPreviousLesson}
             >
               <SkipBack weight="fill" size={16} />
               Aula anterior
@@ -91,8 +97,9 @@ export const AulaModal = () => {
             <Button
               variant="default"
               onClick={goToNextLesson}
+              disabled={!hasNextLesson}
               className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-[#0F0F12] text-[#3F3F41] 
-      rounded-br-[20px]"
+      rounded-br-[20px] disabled:opacity-50"
             >
               Próxima aula <SkipForward weight="fill" size={16} />
             </Button>

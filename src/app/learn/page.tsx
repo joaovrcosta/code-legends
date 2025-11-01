@@ -55,13 +55,17 @@ export default function LearnPage() {
     setOpenPopover((prev) => (prev === id ? null : id));
   };
 
+  // Coleta todas as lições de todos os módulos e grupos
+  const allLessons = roadmap
+    ? roadmap.modules
+        .flatMap((module) => module.groups)
+        .flatMap((group) => group.lessons)
+    : [];
+
   // Encontra a primeira lição não completada para mostrar o popover "Continuar"
-  const firstIncompleteLesson = roadmap?.modules
-    .flatMap((module) => module.groups)
-    .flatMap((group) => group.lessons)
-    .find(
-      (lesson) => lesson.status !== "completed" && lesson.status !== "locked"
-    );
+  const firstIncompleteLesson = allLessons.find(
+    (lesson) => lesson.status !== "completed" && lesson.status !== "locked"
+  );
 
   // Função para determinar se a lição está completa baseada no status
   const isLessonCompleted = (status: string) => status === "completed";
@@ -174,6 +178,7 @@ export default function LearnPage() {
                                     completed={completed}
                                     locked={locked}
                                     currentCourseSlug={activeCourse.slug}
+                                    allLessons={allLessons}
                                   />
                                   {!isLeft && (
                                     <div

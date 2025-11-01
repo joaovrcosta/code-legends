@@ -1,3 +1,5 @@
+"use client";
+
 import { MessageCircle } from "lucide-react";
 import {
   Accordion,
@@ -6,12 +8,50 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Check } from "@phosphor-icons/react/dist/ssr";
+import { continueCourse } from "@/actions/course";
+import { useState } from "react";
+import { useActiveCourseStore } from "@/stores/active-course-store";
+import { useCourseModalStore } from "@/stores/course-modal-store";
 
 interface TitleAccordinProps {
   title: string | undefined;
 }
 
 export function TitleAccordion({ title }: TitleAccordinProps) {
+  const [isMarking, setIsMarking] = useState(false);
+  const { activeCourse, fetchActiveCourse } = useActiveCourseStore();
+  const { currentLesson, goToNextLesson, lessons, currentIndex } =
+    useCourseModalStore();
+
+  // Verifica se a lição atual já está marcada como completada
+  const isMarked = currentLesson?.status === "completed";
+  const hasNextLesson = currentIndex < lessons.length - 1;
+
+  const handleMarkAsWatched = async () => {
+    if (!currentLesson?.id || isMarking || isMarked) return;
+
+    try {
+      setIsMarking(true);
+      await continueCourse(currentLesson.id);
+
+      // Atualiza o curso ativo para refletir o progresso
+      await fetchActiveCourse();
+
+      // Avança automaticamente para a próxima aula se houver
+      if (hasNextLesson) {
+        // Aguarda um pouco antes de avançar para o usuário ver o feedback
+        setTimeout(() => {
+          goToNextLesson();
+        }, 1500);
+      }
+    } catch (error) {
+      console.error("Erro ao marcar como assistido:", error);
+      alert("Erro ao marcar como assistido. Tente novamente.");
+    } finally {
+      setIsMarking(false);
+    }
+  };
   return (
     <>
       <Accordion type="single" collapsible className="mt-4">
@@ -28,8 +68,35 @@ export function TitleAccordion({ title }: TitleAccordinProps) {
                   </p>
                 </div>
 
-                <div className="lg:flex hidden items-center gap-2 border border-[#25252A] px-3 py-1 rounded-full text-sm text-white whitespace-nowrap mr-4 font-normal">
-                  <MessageCircle size={16} /> 3 comentários
+                <div className="flex items-center gap-1">
+                  <div className="lg:flex hidden items-center gap-2 border border-[#25252A] px-3 py-1 rounded-full text-sm text-white whitespace-nowrap mr-4 font-normal">
+                    <MessageCircle size={16} /> 3 comentários
+                  </div>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleMarkAsWatched();
+                    }}
+                    className={`lg:flex hidden items-center gap-2 border px-3 py-1 rounded-full text-sm text-white whitespace-nowrap mr-4 font-normal transition-all ${
+                      isMarking || isMarked || !currentLesson
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer hover:border-green-500"
+                    } ${
+                      isMarked
+                        ? "border-green-500 bg-green-500/10"
+                        : "border-[#25252A]"
+                    }`}
+                  >
+                    <Check
+                      size={16}
+                      className={isMarked ? "text-green-500" : "text-green-500"}
+                    />{" "}
+                    {isMarking
+                      ? "Marcando..."
+                      : isMarked
+                      ? "Marcado como assistido"
+                      : "Marcar como assistido"}
+                  </div>
                 </div>
                 <div className="lg:hidden flex items-center gap-2 border border-[#25252A] px-3 py-1 rounded-full text-sm text-white whitespace-nowrap font-normal">
                   <MessageCircle size={16} />

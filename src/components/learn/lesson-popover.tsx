@@ -22,6 +22,7 @@ export const LessonPopover = ({
   completed,
   locked,
   currentCourseSlug,
+  allLessons,
 }: {
   lesson: Lesson;
   openPopover: number | null;
@@ -31,12 +32,20 @@ export const LessonPopover = ({
   completed: boolean;
   locked: boolean;
   currentCourseSlug: string;
+  allLessons?: Lesson[];
 }) => {
-  const { openModalWithLesson } = useCourseModalStore();
+  const { openModalWithLessons, openModalWithLesson } = useCourseModalStore();
 
   const handleWatchClick = () => {
     if (!locked) {
-      openModalWithLesson(lesson);
+      // Se temos todas as lições, abre o modal com todas para permitir navegação
+      if (allLessons && allLessons.length > 0) {
+        const currentIndex = allLessons.findIndex((l) => l.id === lesson.id);
+        openModalWithLessons(allLessons, currentIndex >= 0 ? currentIndex : 0);
+      } else {
+        // Fallback: abre apenas a lição atual
+        openModalWithLesson(lesson);
+      }
     }
   };
 
