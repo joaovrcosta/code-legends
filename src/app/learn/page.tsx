@@ -8,6 +8,7 @@ import DividerWithText from "@/components/divider-with-text";
 import { FastForward } from "@phosphor-icons/react/dist/ssr";
 import { getCourseRoadmap } from "@/actions/course";
 import { useActiveCourseStore } from "@/stores/active-course-store";
+import { useCourseModalStore } from "@/stores/course-modal-store";
 import type { RoadmapResponse, Lesson } from "@/types/roadmap";
 import { LessonPopover } from "@/components/learn/lesson-popover";
 
@@ -22,11 +23,19 @@ export default function LearnPage() {
     isLoading: isLoadingActiveCourse,
     fetchActiveCourse,
   } = useActiveCourseStore();
+  const { isOpen: isModalOpen } = useCourseModalStore();
 
   // Busca o curso ativo quando o componente monta
   useEffect(() => {
     fetchActiveCourse();
   }, [fetchActiveCourse]);
+
+  // Fecha o popover quando o modal abre
+  useEffect(() => {
+    if (isModalOpen) {
+      setOpenPopover(null);
+    }
+  }, [isModalOpen]);
 
   useEffect(() => {
     async function fetchRoadmap() {
