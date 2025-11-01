@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Progress } from "../ui/progress";
 import { useEffect, useState, useMemo } from "react";
 import { useActiveCourseStore } from "@/stores/active-course-store";
+import { useCourseModalStore } from "@/stores/course-modal-store";
 import { getCourseRoadmap } from "@/actions/course";
 import type { RoadmapResponse } from "@/types/roadmap";
 import level1complete from "../../../public/level-1.png";
@@ -13,6 +14,7 @@ import { CertificateIcon } from "@phosphor-icons/react/dist/ssr";
 
 export function LevelProgressBar() {
   const { activeCourse } = useActiveCourseStore();
+  const { lessonCompletedTimestamp } = useCourseModalStore();
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
 
   useEffect(() => {
@@ -20,6 +22,11 @@ export function LevelProgressBar() {
       if (!activeCourse?.id) return;
 
       try {
+        // Se uma lição foi completada, aguarda um delay para garantir que a API foi atualizada
+        if (lessonCompletedTimestamp) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+
         const roadmapData = await getCourseRoadmap(activeCourse.id);
         setRoadmap(roadmapData);
       } catch (error) {
@@ -28,7 +35,7 @@ export function LevelProgressBar() {
     }
 
     fetchRoadmap();
-  }, [activeCourse?.id]);
+  }, [activeCourse?.id, lessonCompletedTimestamp]);
 
   const { currentModule, nextModule, currentLevel, nextLevel } = useMemo(() => {
     if (!roadmap || !roadmap.modules || roadmap.modules.length === 0) {

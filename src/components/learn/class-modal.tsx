@@ -95,10 +95,10 @@ export const AulaModal = () => {
               <LevelProgressBar />
             </div>
             <Button
-              variant="default"
+              variant="outline"
               onClick={goToNextLesson}
               disabled={!hasNextLesson}
-              className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-[#0F0F12] text-[#3F3F41] 
+              className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-black border-none
       rounded-br-[20px] disabled:opacity-50"
             >
               Próxima aula <SkipForward weight="fill" size={16} />

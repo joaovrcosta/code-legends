@@ -298,7 +298,7 @@ export default function LearnPage() {
                                 <div className="flex items-center justify-center space-x-4 mb-6 pt-7 max-w-[384px]">
                                   {isLeft && (
                                     <div
-                                      className={`h-[42px] w-[256px] rounded-tl-[55px] border-t border-l ${
+                                      className={`h-[42px] lg:w-[256px] w-[212px] rounded-tl-[55px] border-t border-l ${
                                         completed
                                           ? "border-[#00C8FF]"
                                           : "border-[#25252A]"
@@ -321,7 +321,7 @@ export default function LearnPage() {
                                   />
                                   {!isLeft && (
                                     <div
-                                      className={`h-[42px] w-[256px] rounded-tr-[55px] border-t border-r ${
+                                      className={`h-[42px] lg:w-[256px] w-[212px] rounded-tr-[55px] border-t border-r ${
                                         completed
                                           ? "border-[#00C8FF]"
                                           : "border-[#25252A]"
