@@ -19,6 +19,7 @@ export default function LearnPage() {
   const [isLoading, setIsLoading] = useState(true);
   const taskRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const prevOpenPopoverRef = useRef<number | null>(null);
+  const prevIsModalOpenRef = useRef<boolean>(false);
   const {
     activeCourse,
     isLoading: isLoadingActiveCourse,
@@ -66,14 +67,24 @@ export default function LearnPage() {
     );
   }, [allLessons]);
 
-  // Fecha o popover quando o modal abre
+  // Fecha o popover quando o modal abre e reativa "Começar" quando o modal fecha
   useEffect(() => {
+    const wasModalOpen = prevIsModalOpenRef.current;
+    
     if (isModalOpen) {
+      // Modal abriu: fecha o popover
       setOpenPopover(null);
-      // Reseta a referência para não reativar o "Começar" quando o modal fechar
       prevOpenPopoverRef.current = null;
+    } else if (wasModalOpen && !isModalOpen) {
+      // Modal foi fechado: reativa o popover "Começar" na primeira lição incompleta
+      if (firstIncompleteLesson) {
+        setShowContinue(true);
+      }
     }
-  }, [isModalOpen]);
+    
+    // Atualiza a referência com o valor atual
+    prevIsModalOpenRef.current = isModalOpen;
+  }, [isModalOpen, firstIncompleteLesson]);
 
   // Quando o popover "Assistir" é fechado, mostra o popover "Começar" novamente na lição atual
   useEffect(() => {
@@ -82,7 +93,7 @@ export default function LearnPage() {
     const isClosed = openPopover === null;
     const modalDidntCloseIt = !isModalOpen;
     
-    if (wasOpen && isClosed && modalDidntCloseIt && firstIncompleteLesson?.isCurrent) {
+    if (wasOpen && isClosed && modalDidntCloseIt && firstIncompleteLesson) {
       setShowContinue(true);
     }
     

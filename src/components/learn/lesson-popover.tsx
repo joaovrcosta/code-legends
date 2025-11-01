@@ -55,7 +55,7 @@ export const LessonPopover = ({
 
   return (
     <div>
-      {showContinue && lesson.isCurrent && !isModalOpen ? (
+      {showContinue && !isModalOpen ? (
         <Popover open={true}>
           <PopoverTrigger asChild>
             <div
