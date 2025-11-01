@@ -39,56 +39,27 @@ export function CourseDropdownMenu() {
     fetchActiveCourse();
   }, [fetchActiveCourse]);
 
-  // Usa o curso ativo se disponível, senão usa o mais recentemente acessado como fallback
-  const currentCourse =
-    activeCourse ||
-    (userCourses.length > 0
-      ? userCourses.reduce((latest, course) =>
-          new Date(course.lastAccessedAt) > new Date(latest.lastAccessedAt)
-            ? course
-            : latest
-        )
-      : null);
-
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <div
-          className={`bg-gray-gradient-first items-center border py-3 px-4 rounded-[12px] hover:bg-[#25252A] cursor-pointer flex max-h-[42px] transition-colors ${
+          className={`bg-gray-gradient-first items-center border py-3 px-4 gap-2 rounded-[12px] hover:bg-[#25252A] cursor-pointer flex max-h-[42px] transition-colors ${
             open ? "border-[#00C8FF]" : "border-[#25252A]"
           }`}
         >
-          {(() => {
-            // ActiveCourse tem propriedades diretas, EnrolledCourse tem course aninhado
-            const icon =
-              "course" in (currentCourse || {})
-                ? currentCourse?.course.icon
-                : null;
-            const title =
-              "course" in (currentCourse || {})
-                ? currentCourse?.course.title
-                : currentCourse?.title;
-
-            return icon ? (
-              <Image
-                src={icon}
-                alt={title || "Curso"}
-                height={32}
-                width={32}
-                className="object-contain lg:h-[32px] lg:w-[32px] h-[40px] w-[40px]"
-              />
-            ) : (
-              <div className="w-5 h-5 bg-[#25252A] rounded" />
-            );
-          })()}
+          {activeCourse?.icon ? (
+            <Image
+              src={activeCourse.icon}
+              alt={activeCourse.title || "Curso"}
+              height={32}
+              width={32}
+              className="object-contain lg:h-[32px] lg:w-[32px] h-[40px] w-[40px]"
+            />
+          ) : (
+            <div className="w-5 h-5 bg-[#25252A] rounded" />
+          )}
           <p className="lg:block hidden">
-            {(() => {
-              const title =
-                "course" in (currentCourse || {})
-                  ? currentCourse?.course.title
-                  : currentCourse?.title;
-              return title || "Meus Cursos";
-            })()}
+            {activeCourse?.title || "Meus Cursos"}
           </p>
         </div>
       </DropdownMenuTrigger>
@@ -142,11 +113,11 @@ export function CourseDropdownMenu() {
                       <span className="text-sm">
                         {enrolledCourse.course.title}
                       </span>
-                      {enrolledCourse.progress > 0 && (
+                      {/* {enrolledCourse.progress > 0 && (
                         <span className="text-xs text-muted-foreground">
                           {Math.round(enrolledCourse.progress * 100)}% concluído
                         </span>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </Link>

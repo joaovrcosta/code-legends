@@ -101,6 +101,7 @@ export type ActiveCourse = {
   isCompleted: boolean;
   currentModuleId: string;
   currentTaskId: number;
+  icon: string;
 };
 
 export type ActiveCourseResponse = {
