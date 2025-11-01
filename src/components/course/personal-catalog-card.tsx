@@ -26,8 +26,6 @@ export function PersonalCatalog({
 }: CatalogCardProps) {
   const imageSrc = image || reactIcon;
 
-  console.log(image);
-
   const colorClass =
     {
       white: "text-[#c4c4cc]",

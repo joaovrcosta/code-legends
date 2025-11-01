@@ -15,7 +15,7 @@ import {
 import { Check, Plus, Star } from "@phosphor-icons/react/dist/ssr";
 import { enrollInCourse } from "@/actions/course";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEnrolledCoursesStore } from "@/stores/enrolled-courses-store";
 
 export const courses: CatalogCardProps[] = [
   {
@@ -110,7 +110,9 @@ function EnrollButton({
   onEnrollSuccess?: () => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const refreshEnrolledCourses = useEnrolledCoursesStore(
+    (state) => state.refreshEnrolledCourses
+  );
 
   const handleEnroll = async () => {
     if (!courseId || isLoading) return;
@@ -119,7 +121,9 @@ function EnrollButton({
       setIsLoading(true);
       await enrollInCourse(courseId);
       onEnrollSuccess?.();
-      router.refresh();
+
+      // Atualiza apenas a lista de cursos inscritos sem recarregar toda a página
+      await refreshEnrolledCourses();
     } catch (error) {
       console.error("Erro ao inscrever:", error);
       alert(
@@ -229,8 +233,6 @@ export function CatalogCard({
 }: CatalogCardProps) {
   const imageSrc = image || reactIcon;
 
-  console.log(isEnrolled);
-
   // Função para determinar a cor baseada nas tags
   const getColorByTags = (tags?: string[]): string => {
     if (!tags || tags.length === 0) return color;
@@ -326,8 +328,11 @@ export function CatalogCard({
           </div>
 
           {isEnrolled ? (
-            <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
-              <Check size={20} className="text-white hover:text-[#35BED5]" />
+            <div className="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:text-[#35BED5]">
+              <Check
+                size={20}
+                className="text-green-500 hover:text-[#35BED5]"
+              />
             </div>
           ) : (
             <EnrollButton
