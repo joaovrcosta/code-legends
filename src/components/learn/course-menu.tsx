@@ -49,7 +49,11 @@ export function CourseDropdownMenu() {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <div className="bg-gray-gradient-first items-center border py-3 px-4 rounded-[12px] border-[#25252A] hover:bg-[#25252A] cursor-pointer flex max-h-[42px]">
+        <div
+          className={`bg-gray-gradient-first items-center border py-3 px-4 rounded-[12px] hover:bg-[#25252A] cursor-pointer flex max-h-[42px] transition-colors ${
+            open ? "border-[#00C8FF]" : "border-[#25252A]"
+          }`}
+        >
           {currentCourse?.course.icon ? (
             <Image
               src={currentCourse.course.icon}
