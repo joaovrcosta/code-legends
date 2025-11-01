@@ -100,7 +100,7 @@ export const LessonPopover = ({
         <Popover open={openPopover === lesson.id && !isModalOpen}>
           <PopoverTrigger asChild>
             <div
-              className="cursor-pointer w-[64px] h-[64px] rounded-full border-2 flex items-center justify-center bg-[#1a1a1e]"
+              className="cursor-pointer  w-[64px] h-[64px] rounded-full border-2 flex items-center justify-center bg-[#1a1a1e]"
               style={{
                 borderColor: completed
                   ? "#00C8FF"
@@ -120,7 +120,7 @@ export const LessonPopover = ({
               ) : locked ? (
                 <Lock size={20} className="text-gray-600" />
               ) : (
-                <CirclePlay size={24} className="text-[#00C8FF]" />
+                <CirclePlay size={24} className="text-[#00C8FF] " />
               )}
             </div>
           </PopoverTrigger>

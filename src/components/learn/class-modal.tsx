@@ -51,7 +51,7 @@ export const AulaModal = () => {
                 <DialogTitle className="w-full">
                   <div className="lg:flex flex-col text-center w-full items-center justify-center hidden">
                     <p className="text-sm font-light text-[#787878]">
-                      {currentLesson.type}
+                      Chapter {currentIndex + 1}
                     </p>
                     <h3 className="text-[20px] font-normal mt-1">
                       {currentLesson.title}
