@@ -13,6 +13,7 @@ interface CourseModalStore {
   openModalWithLesson: (lesson: Lesson) => void;
   currentLesson: Lesson | null;
   updateCurrentLessonStatus: (status: LessonStatus) => void;
+  lessonCompletedTimestamp: number | null;
 }
 
 export const useCourseModalStore = create<CourseModalStore>((set, get) => ({
@@ -20,6 +21,7 @@ export const useCourseModalStore = create<CourseModalStore>((set, get) => ({
   lessons: [],
   currentIndex: 0,
   currentLesson: null,
+  lessonCompletedTimestamp: null,
 
   openModalWithLessons: (lessons, startIndex = 0) =>
     set({
@@ -73,10 +75,17 @@ export const useCourseModalStore = create<CourseModalStore>((set, get) => ({
       const updatedLesson = { ...currentLesson, status };
       const updatedLessons = [...lessons];
       updatedLessons[currentIndex] = updatedLesson;
-      set({
+      const updates: Partial<CourseModalStore> = {
         currentLesson: updatedLesson,
         lessons: updatedLessons,
-      });
+      };
+      
+      // Se a lição foi marcada como concluída, atualiza o timestamp
+      if (status === "completed" && currentLesson.status !== "completed") {
+        updates.lessonCompletedTimestamp = Date.now();
+      }
+      
+      set(updates);
     }
   },
 }));

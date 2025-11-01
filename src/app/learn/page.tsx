@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import DividerWithText from "@/components/divider-with-text";
 import { FastForward } from "@phosphor-icons/react/dist/ssr";
@@ -23,7 +23,26 @@ export default function LearnPage() {
     isLoading: isLoadingActiveCourse,
     fetchActiveCourse,
   } = useActiveCourseStore();
-  const { isOpen: isModalOpen } = useCourseModalStore();
+  const { isOpen: isModalOpen, lessonCompletedTimestamp } =
+    useCourseModalStore();
+
+  // Função para buscar o roadmap
+  const fetchRoadmap = useCallback(async () => {
+    if (!activeCourse?.id) {
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const roadmapData = await getCourseRoadmap(activeCourse.id);
+      setRoadmap(roadmapData);
+    } catch (error) {
+      console.error("Erro ao buscar roadmap:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [activeCourse?.id]);
 
   // Busca o curso ativo quando o componente monta
   useEffect(() => {
@@ -37,28 +56,24 @@ export default function LearnPage() {
     }
   }, [isModalOpen]);
 
+  // Carrega o roadmap quando o curso ativo muda
   useEffect(() => {
-    async function fetchRoadmap() {
-      if (!activeCourse?.id) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-        const roadmapData = await getCourseRoadmap(activeCourse.id);
-        setRoadmap(roadmapData);
-      } catch (error) {
-        console.error("Erro ao buscar roadmap:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
     if (activeCourse) {
       fetchRoadmap();
     }
-  }, [activeCourse?.id]);
+  }, [activeCourse?.id, fetchRoadmap]);
+
+  // Atualiza o roadmap quando uma lição é marcada como concluída no modal
+  useEffect(() => {
+    if (lessonCompletedTimestamp && activeCourse?.id) {
+      // Aguarda um pequeno delay para garantir que a API foi atualizada
+      const timeoutId = setTimeout(() => {
+        fetchRoadmap();
+      }, 500);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [lessonCompletedTimestamp, activeCourse?.id, fetchRoadmap]);
 
   const togglePopover = (id: number) => {
     setOpenPopover((prev) => (prev === id ? null : id));

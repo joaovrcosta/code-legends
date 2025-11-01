@@ -88,12 +88,39 @@ export function TitleAccordion({ title }: TitleAccordinProps) {
                     {isMarking
                       ? "Marcando..."
                       : isMarked
-                      ? "Marcado como assistido"
-                      : "Marcar como assistido"}
+                      ? "Completado"
+                      : "Completar lição"}
                   </div>
                 </div>
-                <div className="lg:hidden flex items-center gap-2 border border-[#25252A] px-3 py-1 rounded-full text-sm text-white whitespace-nowrap font-normal">
-                  <MessageCircle size={16} />
+                <div className="lg:hidden flex items-center gap-2">
+                  <div className="flex items-center gap-2 border border-[#25252A] px-3 py-1 rounded-full text-sm text-white whitespace-nowrap font-normal">
+                    <MessageCircle size={16} />
+                  </div>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleMarkAsWatched();
+                    }}
+                    className={`flex items-center gap-2 border px-3 py-1 rounded-full text-sm text-white whitespace-nowrap font-normal transition-all ${
+                      isMarking || isMarked || !currentLesson
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer hover:border-green-500"
+                    } ${
+                      isMarked
+                        ? "border-green-500 bg-green-500/10"
+                        : "border-[#25252A]"
+                    }`}
+                  >
+                    <Check
+                      size={16}
+                      className={isMarked ? "text-green-500" : "text-green-500"}
+                    />
+                    {isMarking
+                      ? "Marcando..."
+                      : isMarked
+                      ? "Completado"
+                      : "Completar"}
+                  </div>
                 </div>
               </div>
             </AccordionTrigger>
