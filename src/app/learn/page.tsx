@@ -2,21 +2,92 @@
 
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import DividerWithText from "@/components/divider-with-text";
 import { FastForward } from "@phosphor-icons/react/dist/ssr";
-import { reactCourseData } from "../../../db";
-import { TaskPopover } from "@/components/learn/task-popover";
+import { getCourseRoadmap } from "@/actions/course";
+import { useEnrolledCoursesStore } from "@/stores/enrolled-courses-store";
+import type { RoadmapResponse, Lesson } from "@/types/roadmap";
+import { LessonPopover } from "@/components/learn/lesson-popover";
 
 export default function LearnPage() {
   const [openPopover, setOpenPopover] = useState<number | null>(null);
   const [showContinue, setShowContinue] = useState<boolean>(true);
+  const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const taskRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  const userCourses = useEnrolledCoursesStore((state) => state.userCourses);
+
+  // Busca o curso atual (mais recentemente acessado)
+  const currentCourse =
+    userCourses.length > 0
+      ? userCourses.reduce((latest, course) =>
+          new Date(course.lastAccessedAt) > new Date(latest.lastAccessedAt)
+            ? course
+            : latest
+        )
+      : null;
+
+  useEffect(() => {
+    async function fetchRoadmap() {
+      if (!currentCourse?.courseId) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const roadmapData = await getCourseRoadmap(currentCourse.courseId);
+        setRoadmap(roadmapData);
+      } catch (error) {
+        console.error("Erro ao buscar roadmap:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchRoadmap();
+  }, [currentCourse?.courseId]);
 
   const togglePopover = (id: number) => {
     setOpenPopover((prev) => (prev === id ? null : id));
   };
+
+  // Encontra a primeira lição não completada para mostrar o popover "Continuar"
+  const firstIncompleteLesson = roadmap?.modules
+    .flatMap((module) => module.groups)
+    .flatMap((group) => group.lessons)
+    .find(
+      (lesson) => lesson.status !== "completed" && lesson.status !== "locked"
+    );
+
+  // Função para determinar se a lição está completa baseada no status
+  const isLessonCompleted = (status: string) => status === "completed";
+  const isLessonLocked = (status: string) => status === "locked";
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center w-full h-screen">
+        <p className="text-muted-foreground">Carregando roadmap...</p>
+      </div>
+    );
+  }
+
+  if (!roadmap || !currentCourse) {
+    return (
+      <div className="flex items-center justify-center w-full h-screen">
+        <div className="text-center">
+          <p className="text-muted-foreground mb-4">
+            Nenhum curso encontrado ou você não está inscrito em nenhum curso.
+          </p>
+          <Link href="/learn/catalog">
+            <PrimaryButton>Explorar cursos</PrimaryButton>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center w-full">
@@ -31,18 +102,20 @@ export default function LearnPage() {
                 <Link href="/learn/catalog">
                   <div className="flex items-center gap-2 cursor-pointer mb-2 text-xs text-[#7e7e89]">
                     <ArrowLeft size={16} className="text-[#7e7e89]" />
-                    SEÇÃO 1, AULA 3
+                    {roadmap.modules[0]?.title || "Curso"} -{" "}
+                    {roadmap.modules[0]?.groups[0]?.title || "Início"}
                   </div>
                 </Link>
                 <div className="flex items-center gap-3">
-                  {/* <div className="border p-3 rounded-[20px] border-[#25252A] hover:bg-[#25252A] cursor-pointer hidden lg:block">
-                    <Image src={reactImg} alt="" height={36} width={36} />
-                  </div> */}
                   <div>
                     <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
-                      ReactJS
+                      {roadmap.course.title}
                     </span>
-                    <p className="text-xl">CSS Modules</p>
+                    <p className="text-xl">
+                      {roadmap.modules[0]?.groups[0]?.lessons.find(
+                        (l) => l.isCurrent
+                      )?.title || "Selecione uma aula"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -54,70 +127,92 @@ export default function LearnPage() {
 
           <div className="lg:pb-14 pb-20 w-full lg:mt-0 md:mt-0 mt-40">
             <section className="mt-0 space-y-12 px-4 mb-12">
-              {reactCourseData.courseModules[0].submodules.map(
-                (submodule, subIndex) => (
-                  <div
-                    key={subIndex}
-                    className="flex flex-col items-center justify-center"
-                  >
-                    <DividerWithText text={submodule.submoduleName} />
-                    {submodule.tasks.map((task, index) => {
-                      const isLeft = index % 2 === 0;
-                      return (
+              {roadmap.modules.map((module, moduleIndex) => (
+                <div key={module.id}>
+                  {module.groups.map(
+                    (group, groupIndex) =>
+                      group.lessons.length > 0 && (
                         <div
-                          key={task.id}
-                          className="max-w-[384px]"
-                          ref={(el) => {
-                            taskRefs.current[task.id] = el;
-                          }}
+                          key={group.id}
+                          className="flex flex-col items-center justify-center"
                         >
-                          <div className="flex items-center justify-center space-x-4 mb-6 pt-7 max-w-[384px]">
-                            {isLeft && (
+                          <DividerWithText text={group.title} />
+                          {group.lessons.map((lesson, lessonIndex) => {
+                            const isLeft = lessonIndex % 2 === 0;
+                            const completed = isLessonCompleted(lesson.status);
+                            const locked = isLessonLocked(lesson.status);
+                            const isCurrent = lesson.isCurrent;
+
+                            return (
                               <div
-                                className={`h-[42px] w-[256px] rounded-tl-[55px] border-t border-l ${
-                                  task.completed
-                                    ? "border-[#00C8FF]"
-                                    : "border-[#25252A]"
-                                }`}
-                              ></div>
-                            )}
-                            <TaskPopover
-                              task={task}
-                              openPopover={openPopover}
-                              togglePopover={togglePopover}
-                              showContinue={showContinue}
-                              setShowContinue={setShowContinue}
-                            />
-                            {!isLeft && (
-                              <div
-                                className={`h-[42px] w-[256px] rounded-tr-[55px] border-t border-r ${
-                                  task.completed
-                                    ? "border-[#00C8FF]"
-                                    : "border-[#25252A]"
-                                }`}
-                              ></div>
-                            )}
-                          </div>
+                                key={lesson.id}
+                                className="max-w-[384px]"
+                                ref={(el) => {
+                                  taskRefs.current[lesson.id] = el;
+                                }}
+                              >
+                                <div className="flex items-center justify-center space-x-4 mb-6 pt-7 max-w-[384px]">
+                                  {isLeft && (
+                                    <div
+                                      className={`h-[42px] w-[256px] rounded-tl-[55px] border-t border-l ${
+                                        completed
+                                          ? "border-[#00C8FF]"
+                                          : "border-[#25252A]"
+                                      }`}
+                                    ></div>
+                                  )}
+                                  <LessonPopover
+                                    lesson={lesson}
+                                    openPopover={openPopover}
+                                    togglePopover={togglePopover}
+                                    showContinue={
+                                      showContinue &&
+                                      firstIncompleteLesson?.id === lesson.id
+                                    }
+                                    setShowContinue={setShowContinue}
+                                    completed={completed}
+                                    locked={locked}
+                                    currentCourseSlug={
+                                      currentCourse.course.slug
+                                    }
+                                  />
+                                  {!isLeft && (
+                                    <div
+                                      className={`h-[42px] w-[256px] rounded-tr-[55px] border-t border-r ${
+                                        completed
+                                          ? "border-[#00C8FF]"
+                                          : "border-[#25252A]"
+                                      }`}
+                                    ></div>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
-                      );
-                    })}
-                  </div>
-                )
-              )}
+                      )
+                  )}
+                  {/* Mostra seção bloqueada se o módulo não estiver completo */}
+                  {moduleIndex < roadmap.modules.length - 1 &&
+                    !module.isCompleted && (
+                      <div className="w-full flex items-center justify-center mt-12">
+                        <section className="flex items-center justify-center p-8 border border-[#25252A] rounded-[20px] flex-col space-y-3 max-w-[384px] w-full">
+                          <p className="text-sm">
+                            {roadmap.modules[moduleIndex + 1]?.title}
+                          </p>
+                          <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent">
+                            {roadmap.modules[moduleIndex + 1]?.title}
+                          </span>
+                          <PrimaryButton disabled>
+                            Módulo bloqueado{" "}
+                            <FastForward size={32} weight="fill" />
+                          </PrimaryButton>
+                        </section>
+                      </div>
+                    )}
+                </div>
+              ))}
             </section>
-            {reactCourseData.courseModules[1] && (
-              <div className="w-full flex items-center justify-center">
-                <section className="flex items-center justify-center p-8 border border-[#25252A] rounded-[20px] flex-col space-y-3 max-w-[384px] w-full">
-                  <p className="text-sm">Seção 2</p>
-                  <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent">
-                    {reactCourseData.courseModules[1].moduleName}
-                  </span>
-                  <PrimaryButton>
-                    Pular sessão <FastForward size={32} weight="fill" />
-                  </PrimaryButton>
-                </section>
-              </div>
-            )}
           </div>
         </div>
       </div>

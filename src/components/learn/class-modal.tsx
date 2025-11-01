@@ -18,8 +18,13 @@ import { SkipForward } from "@phosphor-icons/react";
 import { SkipBack } from "@phosphor-icons/react/dist/ssr";
 
 export const AulaModal = () => {
-  const { isOpen, currentTask, closeModal, goToNextTask, goToPreviousTask } =
-    useCourseModalStore();
+  const {
+    isOpen,
+    currentLesson,
+    closeModal,
+    goToNextLesson,
+    goToPreviousLesson,
+  } = useCourseModalStore();
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && closeModal()}>
@@ -29,7 +34,7 @@ export const AulaModal = () => {
              bg-[radial-gradient(circle_at_center,_#344c68_0%,_#121214_70%)]
              text-white p-0 h-full shadow-2xl shadow-[#00C8FF]/10"
       >
-        {currentTask && (
+        {currentLesson && (
           <>
             <DialogHeader className="py-4 pb-0 bg-transparent rounded-t-[20px] lg:border-b lg:border-[#25252A] border-none lg:mb-4 mb-0">
               <div className="flex items-center justify-between w-full px-4">
@@ -41,10 +46,10 @@ export const AulaModal = () => {
                 <DialogTitle className="w-full">
                   <div className="lg:flex flex-col text-center w-full items-center justify-center hidden">
                     <p className="text-sm font-light text-[#787878]">
-                      Chapter 1
+                      {currentLesson.type}
                     </p>
                     <h3 className="text-[20px] font-normal mt-1">
-                      Iniciando com ReactJS
+                      {currentLesson.title}
                     </h3>
                   </div>
                 </DialogTitle>
@@ -57,15 +62,15 @@ export const AulaModal = () => {
             </DialogHeader>
 
             <div className="lg:max-h-[720px] h-full overflow-y-auto lg:px-4 px-0">
-              {currentTask?.type === "video" && (
+              {currentLesson?.type === "video" && (
                 <VideoComponent
-                  title={currentTask.title}
-                  // description={currentTask.description}
-                  src={currentTask.videoUrl}
+                  title={currentLesson.title}
+                  src={currentLesson.video_url}
                 />
               )}
-              {currentTask?.type === "article" && <ComponentsArticle />}
-              {currentTask?.type === "quiz" && <p>Quiz bb</p>}
+              {currentLesson?.type === "article" && <ComponentsArticle />}
+              {currentLesson?.type === "quiz" && <p>Quiz bb</p>}
+              {currentLesson?.type === "project" && <p>Projeto</p>}
             </div>
           </>
         )}
@@ -75,7 +80,7 @@ export const AulaModal = () => {
               variant="outline"
               className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] bg-black rounded-none text-base border-none 
       rounded-bl-[20px]"
-              onClick={goToPreviousTask}
+              onClick={goToPreviousLesson}
             >
               <SkipBack weight="fill" size={16} />
               Aula anterior
@@ -85,7 +90,7 @@ export const AulaModal = () => {
             </div>
             <Button
               variant="default"
-              onClick={goToNextTask}
+              onClick={goToNextLesson}
               className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-[#0F0F12] text-[#3F3F41] 
       rounded-br-[20px]"
             >
