@@ -59,7 +59,9 @@ export const LessonPopover = ({
         <Popover open={true}>
           <PopoverTrigger asChild>
             <div
-              className="cursor-pointer w-[64px] h-[64px] rounded-full border-2 flex items-center justify-center bg-[#1a1a1e]"
+              className={`cursor-pointer w-[64px] h-[64px] rounded-full border-2 flex items-center justify-center bg-[#1a1a1e] ${
+                completed || lesson.isCurrent ? "shadow-[0_0_24px_#00C8FF]" : ""
+              }`}
               style={{
                 borderColor: completed
                   ? "#00C8FF"
@@ -100,7 +102,9 @@ export const LessonPopover = ({
         <Popover open={openPopover === lesson.id && !isModalOpen}>
           <PopoverTrigger asChild>
             <div
-              className="cursor-pointer  w-[64px] h-[64px] rounded-full border-2 flex items-center justify-center bg-[#1a1a1e]"
+              className={`cursor-pointer  w-[64px] h-[64px] rounded-full border-2 flex items-center justify-center bg-[#1a1a1e] ${
+                completed || lesson.isCurrent ? "shadow-[0_0_24px_#00C8FF]" : ""
+              }`}
               style={{
                 borderColor: completed
                   ? "#00C8FF"
