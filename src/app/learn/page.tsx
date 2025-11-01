@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import DividerWithText from "@/components/divider-with-text";
 import { FastForward } from "@phosphor-icons/react/dist/ssr";
@@ -18,6 +18,7 @@ export default function LearnPage() {
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const taskRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  const prevOpenPopoverRef = useRef<number | null>(null);
   const {
     activeCourse,
     isLoading: isLoadingActiveCourse,
@@ -49,12 +50,45 @@ export default function LearnPage() {
     fetchActiveCourse();
   }, [fetchActiveCourse]);
 
+  // Coleta todas as lições de todos os módulos e grupos
+  const allLessons = useMemo(() => {
+    return roadmap
+      ? roadmap.modules
+          .flatMap((module) => module.groups)
+          .flatMap((group) => group.lessons)
+      : [];
+  }, [roadmap]);
+
+  // Encontra a primeira lição não completada para mostrar o popover "Continuar"
+  const firstIncompleteLesson = useMemo(() => {
+    return allLessons.find(
+      (lesson) => lesson.status !== "completed" && lesson.status !== "locked"
+    );
+  }, [allLessons]);
+
   // Fecha o popover quando o modal abre
   useEffect(() => {
     if (isModalOpen) {
       setOpenPopover(null);
+      // Reseta a referência para não reativar o "Começar" quando o modal fechar
+      prevOpenPopoverRef.current = null;
     }
   }, [isModalOpen]);
+
+  // Quando o popover "Assistir" é fechado, mostra o popover "Começar" novamente na lição atual
+  useEffect(() => {
+    // Verifica se o popover estava aberto e agora foi fechado (não foi por causa do modal)
+    const wasOpen = prevOpenPopoverRef.current !== null;
+    const isClosed = openPopover === null;
+    const modalDidntCloseIt = !isModalOpen;
+    
+    if (wasOpen && isClosed && modalDidntCloseIt && firstIncompleteLesson?.isCurrent) {
+      setShowContinue(true);
+    }
+    
+    // Atualiza a referência com o valor atual
+    prevOpenPopoverRef.current = openPopover;
+  }, [openPopover, isModalOpen, firstIncompleteLesson]);
 
   // Carrega o roadmap quando o curso ativo muda
   useEffect(() => {
@@ -78,18 +112,6 @@ export default function LearnPage() {
   const togglePopover = (id: number) => {
     setOpenPopover((prev) => (prev === id ? null : id));
   };
-
-  // Coleta todas as lições de todos os módulos e grupos
-  const allLessons = roadmap
-    ? roadmap.modules
-        .flatMap((module) => module.groups)
-        .flatMap((group) => group.lessons)
-    : [];
-
-  // Encontra a primeira lição não completada para mostrar o popover "Continuar"
-  const firstIncompleteLesson = allLessons.find(
-    (lesson) => lesson.status !== "completed" && lesson.status !== "locked"
-  );
 
   // Função para determinar se a lição está completa baseada no status
   const isLessonCompleted = (status: string) => status === "completed";
