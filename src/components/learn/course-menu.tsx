@@ -74,7 +74,7 @@ export function CourseDropdownMenu() {
       >
         <DropdownMenuLabel className="p-4">
           <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
-            Trocar de curso
+            Meus cursos
           </span>
         </DropdownMenuLabel>
 

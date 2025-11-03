@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import DividerWithText from "@/components/divider-with-text";
-import { FastForward } from "@phosphor-icons/react/dist/ssr";
+import { FastForward, Lock } from "@phosphor-icons/react/dist/ssr";
 import { getCourseRoadmap } from "@/actions/course";
 import { useActiveCourseStore } from "@/stores/active-course-store";
 import { useCourseModalStore } from "@/stores/course-modal-store";
@@ -344,15 +344,14 @@ export default function LearnPage() {
                     !module.isCompleted && (
                       <div className="w-full flex items-center justify-center mt-12">
                         <section className="flex items-center justify-center p-8 border border-[#25252A] rounded-[20px] flex-col space-y-3 max-w-[384px] w-full">
-                          <p className="text-sm">
+                          <p className="text-sm text-center">
                             {roadmap.modules[moduleIndex + 1]?.title}
                           </p>
-                          <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent">
+                          <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-center">
                             {roadmap.modules[moduleIndex + 1]?.title}
                           </span>
                           <PrimaryButton disabled>
-                            Módulo bloqueado{" "}
-                            <FastForward size={32} weight="fill" />
+                            Módulo bloqueado <Lock />
                           </PrimaryButton>
                         </section>
                       </div>
