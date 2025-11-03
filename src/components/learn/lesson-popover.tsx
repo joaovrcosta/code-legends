@@ -23,6 +23,7 @@ export const LessonPopover = ({
   locked,
   currentCourseSlug,
   allLessons,
+  isFirstInModule,
 }: {
   lesson: Lesson;
   openPopover: number | null;
@@ -33,6 +34,7 @@ export const LessonPopover = ({
   locked: boolean;
   currentCourseSlug: string;
   allLessons?: Lesson[];
+  isFirstInModule?: boolean;
 }) => {
   const {
     openModalWithLessons,
@@ -53,6 +55,9 @@ export const LessonPopover = ({
     }
   };
 
+  // O glow só deve aparecer na lição atual
+  const shouldShowShadow = lesson.isCurrent;
+
   return (
     <div>
       {showContinue && !isModalOpen ? (
@@ -60,7 +65,7 @@ export const LessonPopover = ({
           <PopoverTrigger asChild>
             <div
               className={`cursor-pointer w-[64px] h-[64px] rounded-full border-2 flex items-center justify-center bg-[#1a1a1e] ${
-                completed || lesson.isCurrent ? "shadow-[0_0_24px_#00C8FF]" : ""
+                shouldShowShadow ? "shadow-[0_0_24px_#00C8FF]" : ""
               }`}
               style={{
                 borderColor: completed
@@ -103,7 +108,7 @@ export const LessonPopover = ({
           <PopoverTrigger asChild>
             <div
               className={`cursor-pointer  w-[64px] h-[64px] rounded-full border-2 flex items-center justify-center bg-[#1a1a1e] ${
-                completed || lesson.isCurrent ? "shadow-[0_0_24px_#00C8FF]" : ""
+                shouldShowShadow ? "shadow-[0_0_24px_#00C8FF]" : ""
               }`}
               style={{
                 borderColor: completed

@@ -286,6 +286,9 @@ export default function LearnPage() {
                             const completed = isLessonCompleted(lesson.status);
                             const locked = isLessonLocked(lesson.status);
                             const isCurrent = lesson.isCurrent;
+                            // Verifica se é a primeira lição do módulo (primeira do primeiro grupo do módulo)
+                            const isFirstInModule =
+                              groupIndex === 0 && lessonIndex === 0;
 
                             return (
                               <div
@@ -318,6 +321,7 @@ export default function LearnPage() {
                                     locked={locked}
                                     currentCourseSlug={activeCourse.slug}
                                     allLessons={allLessons}
+                                    isFirstInModule={isFirstInModule}
                                   />
                                   {!isLeft && (
                                     <div
