@@ -9,10 +9,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Plus } from "lucide-react";
+import { Plus, Check } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { getUserEnrolledList } from "@/actions";
+import { startCourse } from "@/actions/course/start";
 import type { EnrolledCourse } from "@/types/user-course.ts";
 import { useActiveCourseStore } from "@/stores/active-course-store";
 
@@ -20,6 +21,7 @@ export function CourseDropdownMenu() {
   const [open, setOpen] = useState(false);
   const [userCourses, setUserCourses] = useState<EnrolledCourse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [changingCourse, setChangingCourse] = useState<string | null>(null);
   const { activeCourse, fetchActiveCourse } = useActiveCourseStore();
 
   useEffect(() => {
@@ -88,41 +90,79 @@ export function CourseDropdownMenu() {
           </div>
         ) : (
           <>
-            {userCourses.map((enrolledCourse) => (
-              <DropdownMenuItem
-                key={enrolledCourse.id}
-                asChild
-                className="pl-2 pr-4 w-full min-w-[352px] text-white border-none rounded-[20px]"
-              >
-                <Link
-                  href={`/classroom/${enrolledCourse.course.slug}`}
-                  onClick={() => setOpen(false)}
-                >
-                  <div className="flex items-center gap-3">
-                    <Image
-                      src={
-                        enrolledCourse.course.icon ||
-                        enrolledCourse.course.thumbnail
-                      }
-                      alt={enrolledCourse.course.title}
-                      width={70}
-                      height={70}
-                      className="object-contain h-[70px] w-[70px]"
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-sm">
-                        {enrolledCourse.course.title}
-                      </span>
-                      {/* {enrolledCourse.progress > 0 && (
+            {[...userCourses]
+              .sort((a, b) => {
+                const aIsActive = activeCourse?.id === a.courseId;
+                const bIsActive = activeCourse?.id === b.courseId;
+                // Curso ativo vem primeiro
+                if (aIsActive && !bIsActive) return -1;
+                if (!aIsActive && bIsActive) return 1;
+                return 0;
+              })
+              .map((enrolledCourse) => {
+                const isActive = activeCourse?.id === enrolledCourse.courseId;
+                const isChanging = changingCourse === enrolledCourse.courseId;
+
+                const handleCourseClick = async () => {
+                  // Se já está ativo, apenas fecha o menu
+                  if (isActive) {
+                    setOpen(false);
+                    return;
+                  }
+
+                  // Se não está ativo, inicia o curso
+                  setChangingCourse(enrolledCourse.courseId);
+                  try {
+                    await startCourse(enrolledCourse.courseId);
+                    await fetchActiveCourse();
+                    setOpen(false);
+                  } catch (error) {
+                    console.error("Erro ao mudar de curso:", error);
+                    setChangingCourse(null);
+                  }
+                };
+
+                return (
+                  <DropdownMenuItem
+                    key={enrolledCourse.id}
+                    className={`pl-2 pr-4 w-full min-w-[352px] text-white border-none rounded-[20px] ${
+                      isChanging
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
+                    onClick={handleCourseClick}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Image
+                        src={
+                          enrolledCourse.course.icon ||
+                          enrolledCourse.course.thumbnail
+                        }
+                        alt={enrolledCourse.course.title}
+                        width={70}
+                        height={70}
+                        className="object-contain h-[70px] w-[70px]"
+                      />
+                      <div className="flex flex-col flex-1">
+                        <span className="text-sm">
+                          {enrolledCourse.course.title}
+                        </span>
+                        {/* {enrolledCourse.progress > 0 && (
                         <span className="text-xs text-muted-foreground">
                           {Math.round(enrolledCourse.progress * 100)}% concluído
                         </span>
                       )} */}
+                      </div>
+                      {isActive && (
+                        <Check
+                          size={20}
+                          className="text-[#00C8FF] flex-shrink-0"
+                        />
+                      )}
                     </div>
-                  </div>
-                </Link>
-              </DropdownMenuItem>
-            ))}
+                  </DropdownMenuItem>
+                );
+              })}
           </>
         )}
 

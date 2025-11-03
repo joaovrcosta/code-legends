@@ -69,6 +69,7 @@ export function MyCatalogCarousel({
                 isCurrent={isCurrent}
                 isFavorite={true}
                 progress={progressPercent}
+                courseId={enrolledCourse.courseId}
               />
             </CarouselItem>
           );
