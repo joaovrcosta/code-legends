@@ -50,7 +50,7 @@ export function TitleAccordion({ title }: TitleAccordinProps) {
     <>
       <Accordion type="single" collapsible className="mt-4">
         <AccordionItem value="item-1">
-          <div className="w-full max-w-[1020px] mx-auto rounded-[20px] bg-[#0C0C0F] border border-[#2A2A2A] shadow-xl mb-4">
+          <div className="w-full mx-auto rounded-[20px] bg-[#0C0C0F] border border-[#2A2A2A] shadow-xl mb-4">
             <AccordionTrigger className="group w-full lg:px-8 px-6 lg:py-8 py-6">
               <div className="flex justify-between w-full items-center">
                 <div>

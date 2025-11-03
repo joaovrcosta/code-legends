@@ -233,6 +233,8 @@ export default function LearnPage() {
     );
   }
 
+  console.log(roadmap.modules[0].groups[0].lessons);
+
   return (
     <div className="flex items-center justify-center w-full">
       <div className="w-full space-y-4">
