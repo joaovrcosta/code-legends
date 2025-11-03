@@ -243,6 +243,7 @@ export function CatalogCard({
     if (upperTags.includes("BACK-END")) return "orange";
     if (upperTags.includes("EMPREENDEDORISMO")) return "red";
     if (upperTags.includes("DESIGN")) return "purple";
+    if (upperTags.includes("SOFT SKILLS")) return "lime";
 
     return color;
   };
@@ -263,6 +264,8 @@ export function CatalogCard({
       lime: "bg-lime-gradient-500 bg-clip-text text-transparent",
       purple: "bg-purple-gradient-500 bg-clip-text text-transparent",
     }[finalColor] || "text-gray-400";
+
+  console.log(colorClass);
 
   const { label, className: statusClass, icon } = getStatusInfo(status);
   const iconElement = icon(isFavorite);

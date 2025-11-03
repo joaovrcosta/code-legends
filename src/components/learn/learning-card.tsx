@@ -23,6 +23,13 @@ interface Lesson {
   locked?: boolean;
 }
 
+interface Module {
+  id: string;
+  title: string;
+  isActive: boolean;
+  lessons?: Lesson[];
+}
+
 interface LearningCardProps {
   title: string;
   type: "course" | "skill-path";
@@ -30,7 +37,11 @@ interface LearningCardProps {
   description?: string;
   icon?: string;
   lessons?: Lesson[];
+  modules?: Module[];
+  courseId?: string;
   isPinned?: boolean;
+  isLoadingModules?: boolean;
+  onExpand?: (courseId: string) => void;
 }
 
 export function LearningCard({
@@ -40,10 +51,25 @@ export function LearningCard({
   description,
   icon,
   lessons = [],
+  modules = [],
+  courseId,
   isPinned = false,
+  isLoadingModules = false,
+  onExpand,
 }: LearningCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const isCourse = type === "course";
+  const hasModules = modules.length > 0;
+
+  const handleExpand = () => {
+    const newExpandedState = !isExpanded;
+    setIsExpanded(newExpandedState);
+
+    // Se está expandindo, não tem módulos carregados e tem courseId, carrega o roadmap
+    if (newExpandedState && !hasModules && courseId && onExpand) {
+      onExpand(courseId);
+    }
+  };
 
   return (
     <div
@@ -75,9 +101,9 @@ export function LearningCard({
                     className="text-[#00C8FF]"
                   />
                 )} */}
-                <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-sm">
+                {/* <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-sm">
                   ReactJS
-                </span>
+                </span> */}
               </div>
               <h3 className="text-base font-semibold text-white line-clamp-2">
                 {title}
@@ -86,7 +112,7 @@ export function LearningCard({
           </div>
 
           <button
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={handleExpand}
             className="ml-2 flex-shrink-0 text-[#C4C4CC] hover:text-white transition-colors"
           >
             {isExpanded ? <CaretUp size={20} /> : <CaretDown size={20} />}
@@ -104,14 +130,114 @@ export function LearningCard({
       </div>
 
       {/* Expanded Content */}
-      {isExpanded && description && (
+      {isExpanded && (
         <div className="border-t border-[#25252A] p-4  pt-6 bg-[#0F0F0F]">
-          <h4 className="text-sm font-semibold text-white mb-3">
-            {description}
-          </h4>
+          {description && (
+            <h4 className="text-sm font-semibold text-white mb-3">
+              {description}
+            </h4>
+          )}
 
-          {/* Lessons List */}
-          {lessons.length > 0 && (
+          {/* Loading state */}
+          {isLoadingModules && !hasModules && (
+            <div className="flex items-center justify-center py-8">
+              <p className="text-muted-foreground text-sm">
+                Carregando módulos...
+              </p>
+            </div>
+          )}
+
+          {/* Modules List */}
+          {hasModules && !isLoadingModules && (
+            <div className="space-y-4 p-0">
+              {modules.map((module) => (
+                <div key={module.id} className="space-y-2">
+                  <h5
+                    className={`text-sm font-semibold ${
+                      module.isActive ? "text-[#00C8FF]" : "text-[#C4C4CC]"
+                    }`}
+                  >
+                    {module.title}
+                    {module.isActive && (
+                      <span className="ml-2 text-xs text-[#00C8FF]">
+                        (Ativo)
+                      </span>
+                    )}
+                  </h5>
+
+                  {/* Lessons do módulo ativo */}
+                  {module.isActive &&
+                    module.lessons &&
+                    module.lessons.length > 0 && (
+                      <div className="space-y-2 ml-0 mt-2">
+                        {module.lessons.map((lesson: Lesson) => (
+                          <div
+                            key={lesson.id}
+                            className={`
+                            flex items-center gap-3 p-3 rounded-lg
+                            ${
+                              lesson.locked
+                                ? "bg-[#1A1A1E] opacity-50"
+                                : "bg-[#25252A] hover:bg-[#2E2E32] cursor-pointer transition-colors"
+                            }
+                          `}
+                          >
+                            {lesson.locked ? (
+                              <div className="w-10 h-10 rounded-lg bg-[#1A1A1E] flex items-center justify-center flex-shrink-0">
+                                <Lock
+                                  size={20}
+                                  className="text-[#C4C4CC] flex-shrink-0"
+                                />
+                              </div>
+                            ) : (
+                              <div className="w-10 h-10 rounded-lg bg-[#1A1A1E] flex items-center justify-center flex-shrink-0">
+                                <span className="text-xs text-[#C4C4CC]">
+                                  {lesson.type === "video" ? (
+                                    <VideoCamera size={20} weight="regular" />
+                                  ) : lesson.type === "quiz" ? (
+                                    "?"
+                                  ) : lesson.type === "read" ? (
+                                    "📄"
+                                  ) : (
+                                    <InfoIcon size={20} weight="regular" />
+                                  )}
+                                </span>
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-[#C4C4CC] uppercase">
+                                  {lesson.type}
+                                </span>
+                                {lesson.duration && (
+                                  <div className="flex items-center gap-1 text-[#C4C4CC]">
+                                    <Clock size={12} />
+                                    <span className="text-xs">
+                                      {lesson.duration}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                              <p
+                                className={`
+                              text-sm mt-1
+                              ${lesson.locked ? "text-[#C4C4CC]" : "text-white"}
+                            `}
+                              >
+                                {lesson.title}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Lessons List (compatibilidade - quando não tem módulos) */}
+          {!hasModules && lessons.length > 0 && !isLoadingModules && (
             <div className="space-y-2 p-4">
               {lessons.map((lesson) => (
                 <div
