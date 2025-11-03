@@ -79,9 +79,7 @@ export function PersonalCatalog({
         <div className="px-4">
           <p className="font-light text-[12px] text-[#C2C2C2]">CURSO – 12h</p>
           <div className="flex items-center space-x-1">
-            <span className={`font-bold bg-clip-text text-lg ${colorClass}`}>
-              {name}
-            </span>
+            <span className="font-bold text-white text-lg">{name}</span>
           </div>
           {/* <span className="text-xs">{progress}%</span> */}
         </div>

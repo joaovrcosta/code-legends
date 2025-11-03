@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { PrimaryButton } from "@/components/ui/primary-button";
@@ -22,6 +22,9 @@ export default function LearnPage() {
   const prevIsModalOpenRef = useRef<boolean>(false);
   const hasScrolledRef = useRef<boolean>(false);
   const lastCompletedTimestampRef = useRef<number | null>(null);
+
+  console.log(roadmap);
+
   const {
     activeCourse,
     isLoading: isLoadingActiveCourse,
@@ -232,8 +235,6 @@ export default function LearnPage() {
       </div>
     );
   }
-
-  console.log(roadmap.modules[0].groups[0].lessons);
 
   return (
     <div className="flex items-center justify-center w-full">
