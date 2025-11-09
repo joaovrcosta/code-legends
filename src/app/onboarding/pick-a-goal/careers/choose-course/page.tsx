@@ -56,8 +56,23 @@ export default function ChooseCoursePage() {
         await startCourse(course.id);
       }
       await completeOnboarding();
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      window.location.href = "/learn";
+
+      // Aguardar que o curso ativo esteja disponível na API
+      const { getActiveCourse } = await import(
+        "@/actions/user/get-active-course"
+      );
+      let activeCourse = null;
+      let attempts = 0;
+      const maxAttempts = 10;
+
+      while (!activeCourse && attempts < maxAttempts) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        activeCourse = await getActiveCourse();
+        attempts++;
+      }
+
+      // Redirecionar para /learn quando o curso estiver pronto
+      router.push("/learn");
     } catch (error) {
       console.error("Erro ao completar onboarding:", error);
       setError(
@@ -65,7 +80,6 @@ export default function ChooseCoursePage() {
           ? error.message
           : "Erro ao completar onboarding. Tente novamente."
       );
-    } finally {
       setIsLoading(false);
     }
   };

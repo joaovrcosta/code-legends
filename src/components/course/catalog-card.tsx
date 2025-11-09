@@ -265,8 +265,6 @@ export function CatalogCard({
       purple: "bg-purple-gradient-500 bg-clip-text text-transparent",
     }[finalColor] || "text-gray-400";
 
-  console.log(colorClass);
-
   const { label, className: statusClass, icon } = getStatusInfo(status);
   const iconElement = icon(isFavorite);
   return (
