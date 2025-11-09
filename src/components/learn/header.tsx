@@ -126,11 +126,14 @@ export default function LearnHeader() {
             <Input
               placeholder="Pesquisar"
               readOnly
-              className="cursor-pointer h-[42px] w-full"
+              className="cursor-pointer h-[42px] w-full hidden sm:block"
             />
+            <button className="flex sm:hidden items-center justify-center h-[42px] w-[42px] rounded-lg border border-[#25252a] hover:bg-[#25252a] transition-all duration-150 ease-in-out">
+              <Search size={24} className="text-[#c4c4cc]" />
+            </button>
             <Search
               size={24}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#c4c4cc] pointer-events-none"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#c4c4cc] pointer-events-none hidden sm:block"
             />
           </div>
         </li>
