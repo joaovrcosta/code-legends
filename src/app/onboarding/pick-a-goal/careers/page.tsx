@@ -14,15 +14,10 @@ import {
   Code,
   ComputerTowerIcon,
   PaintBrush,
+  Question,
 } from "@phosphor-icons/react/dist/ssr";
 
 const CAREERS = [
-  {
-    id: "software-engineer",
-    label: "Quero ser um software Engineer",
-    icon: Code,
-    description: "Desenvolva sistemas completos e soluções de software",
-  },
   {
     id: "front-end-developer",
     label: "Quero ser um frontend Developer",
@@ -52,6 +47,12 @@ const CAREERS = [
     label: "Quero ser um empreendedor",
     icon: Briefcase,
     description: "Construa seu próprio negócio e produtos",
+  },
+  {
+    id: "i-dont-know",
+    label: "Ainda não sei...",
+    icon: Question,
+    description: "Desenvolva sistemas completos e soluções de software",
   },
 ];
 

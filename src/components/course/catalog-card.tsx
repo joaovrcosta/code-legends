@@ -240,10 +240,10 @@ export function CatalogCard({
     const upperTags = tags.map((tag) => tag.toUpperCase());
 
     if (upperTags.includes("FRONT-END")) return "blue";
-    if (upperTags.includes("BACK-END")) return "orange";
+    if (upperTags.includes("BACK-END")) return "lime";
     if (upperTags.includes("EMPREENDEDORISMO")) return "red";
     if (upperTags.includes("DESIGN")) return "purple";
-    if (upperTags.includes("SOFT SKILLS")) return "lime";
+    if (upperTags.includes("SOFT SKILLS")) return "white";
 
     return color;
   };
