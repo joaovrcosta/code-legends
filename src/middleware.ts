@@ -28,7 +28,7 @@ export default auth(
     );
 
     // Rotas de onboarding
-    const onboardingRoutes = ["/learn/onboarding"];
+    const onboardingRoutes = ["/onboarding", "/learn/onboarding"];
     const isOnboardingRoute = onboardingRoutes.some((route) =>
       pathname.startsWith(route)
     );
@@ -37,9 +37,7 @@ export default auth(
     if (isLoggedIn && (pathname === "/login" || pathname === "/signup")) {
       // Se não completou onboarding, redirecionar para onboarding
       if (!onboardingCompleted) {
-        return NextResponse.redirect(
-          new URL("/learn/onboarding/pick-a-goal", req.url)
-        );
+        return NextResponse.redirect(new URL("/onboarding", req.url));
       }
       // Se completou, redirecionar para /learn
       return NextResponse.redirect(new URL("/learn", req.url));
@@ -53,9 +51,7 @@ export default auth(
     // Se estiver logado, não completou onboarding e não está em rota de onboarding
     if (isLoggedIn && !onboardingCompleted && !isOnboardingRoute) {
       // Redirecionar para onboarding
-      return NextResponse.redirect(
-        new URL("/learn/onboarding/pick-a-goal", req.url)
-      );
+      return NextResponse.redirect(new URL("/onboarding", req.url));
     }
 
     // Se completou onboarding e está tentando acessar rota de onboarding, redirecionar para /learn

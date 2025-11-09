@@ -27,7 +27,7 @@ export default function PickAGoalPage() {
       setIsLoading(true);
       setError("");
       await updateOnboarding({ goal: selectedGoal });
-      router.push("/learn/onboarding/careers");
+      router.push("/onboarding/careers");
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Erro ao salvar progresso"
@@ -39,9 +39,9 @@ export default function PickAGoalPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-[#0D0D12]">
-      <div className="absolute w-[400px] h-[400px] top-0 left-0 rounded-full bg-[#00b3ffa9] opacity-40 blur-[200px] pointer-events-none" />
-      <div className="absolute w-[300px] h-[300px] top-[20%] left-[30%] rounded-full bg-[#00b3ff5b] opacity-30 blur-[200px] pointer-events-none" />
-      <div className="absolute w-[500px] h-[500px] bottom-0 right-0 rounded-full bg-[#00b3ffb6] opacity-40 blur-[220px] pointer-events-none" />
+      <div className="absolute w-[200px] h-[200px] md:w-[300px] md:h-[300px] lg:w-[400px] lg:h-[400px] top-0 left-0 rounded-full bg-[#00b3ffa9] opacity-40 blur-[100px] md:blur-[150px] lg:blur-[200px] pointer-events-none" />
+      <div className="absolute w-[150px] h-[150px] md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px] top-[10%] left-[20%] md:top-[15%] md:left-[25%] lg:top-[20%] lg:left-[30%] rounded-full bg-[#00b3ff5b] opacity-30 blur-[100px] md:blur-[150px] lg:blur-[200px] pointer-events-none" />
+      <div className="absolute w-[250px] h-[250px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] bottom-0 right-0 rounded-full bg-[#00b3ffb6] opacity-40 blur-[120px] md:blur-[180px] lg:blur-[220px] pointer-events-none" />
 
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-12">
         <div className="max-w-3xl w-full space-y-8">
