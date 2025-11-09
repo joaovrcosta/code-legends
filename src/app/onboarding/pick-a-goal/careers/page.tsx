@@ -1,66 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { updateOnboarding, completeOnboarding } from "@/actions/user";
 import { PrimaryButton } from "@/components/ui/primary-button";
-import { ArrowRight, Check } from "lucide-react";
-import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
+import Image from "next/image";
 import codeLogo from "../../../../../public/code-legends-logo.svg";
-import {
-  ArrowLeft,
-  Briefcase,
-  Code,
-  ComputerTowerIcon,
-  PaintBrush,
-  Question,
-} from "@phosphor-icons/react/dist/ssr";
-
-const CAREERS = [
-  {
-    id: "front-end-developer",
-    label: "Quero ser um frontend Developer",
-    icon: Code,
-    description: "Crie interfaces incríveis e experiências de usuário",
-  },
-  {
-    id: "back-end-developer",
-    label: "Quero ser um backend Developer",
-    icon: Code,
-    description: "Construa APIs robustas e arquiteturas de servidor",
-  },
-  {
-    id: "fullstack-developer",
-    label: "Quero ser um fullstack Developer",
-    icon: Code,
-    description: "Domine tanto frontend quanto backend",
-  },
-  {
-    id: "designer",
-    label: "Quero ser um designer",
-    icon: PaintBrush,
-    description: "Designe interfaces e experiências visuais",
-  },
-  {
-    id: "entrepreneur",
-    label: "Quero ser um empreendedor",
-    icon: Briefcase,
-    description: "Construa seu próprio negócio e produtos",
-  },
-  {
-    id: "i-dont-know",
-    label: "Ainda não sei...",
-    icon: Question,
-    description: "Desenvolva sistemas completos e soluções de software",
-  },
-];
+import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
+import { listCategories } from "@/actions/course/list-categories";
+import { Category } from "@/types/categories";
 
 export default function CareersPage() {
+  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCareer, setSelectedCareer] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const data = await listCategories();
+        setCategories(data); // ✅ Corrigido — apenas define o array
+      } catch (err) {
+        console.error("Erro ao buscar categorias:", err);
+        setError("Não foi possível carregar as categorias.");
+      }
+    }
+    fetchCategories();
+  }, []);
 
   const handleContinue = async () => {
     if (!selectedCareer) return;
@@ -68,28 +37,17 @@ export default function CareersPage() {
     try {
       setIsLoading(true);
       setError("");
-
-      // Atualizar a carreira escolhida
       await updateOnboarding({ career: selectedCareer });
-
-      // Completar o onboarding
-      await completeOnboarding();
-
-      // Aguardar um pouco para garantir que a API processou a atualização
-      // e que o NextAuth tenha tempo de atualizar o token na próxima requisição
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Forçar reload completo para atualizar o token JWT
-      // Isso garante que o middleware veja o onboarding como completo
-      window.location.href = "/learn";
+      router.push(
+        `/onboarding/pick-a-goal/careers/choose-course?categorySlug=${selectedCareer}`
+      );
     } catch (error) {
-      console.error("Erro ao completar onboarding:", error);
-      const errorMessage =
+      console.error("Erro ao salvar carreira:", error);
+      setError(
         error instanceof Error
           ? error.message
-          : "Erro ao completar onboarding. Tente novamente.";
-      setError(errorMessage);
-    } finally {
+          : "Erro ao salvar carreira. Tente novamente."
+      );
       setIsLoading(false);
     }
   };
@@ -105,22 +63,19 @@ export default function CareersPage() {
           <Image src={codeLogo} alt="" quality={100} />
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-white text-sm font-medium">1</span>
+          <span className="text-white text-sm font-medium">2</span>
           <Progress value={66} className="flex-1" />
           <span className="text-white/60 text-sm">3</span>
         </div>
       </div>
 
-      {/* Conteúdo Principal */}
       <div className="flex-1 flex flex-col">
         <div className="mb-12">
-          <h1 className="text-[24px] lg:text-[28px] font-semibold text-white mb-3">
+          <h1 className="text-3xl lg:text-[28px] font-semibold text-white mb-3">
             Qual sua meta com a programação?
           </h1>
           <p className="text-white/70 text-base">
-            Conhecer seu objetivo nos ajuda a guiar melhor sua jornada de
-            aprendizado(Não se preocupe, você pode alterar novamente seus
-            objetivos)
+            Por qual área você quer se especializar?
           </p>
         </div>
 
@@ -130,44 +85,26 @@ export default function CareersPage() {
           </div>
         )}
 
-        {/* Opções de Metas */}
         <div className="flex-1 space-y-3 mb-8 z-50">
-          {CAREERS.map((goal) => {
-            const Icon = goal.icon;
-            const isSelected = selectedCareer === goal.id;
-            return (
-              <button
-                key={goal.id}
-                onClick={() => setSelectedCareer(goal.id)}
-                disabled={isLoading}
-                className={`
-                      w-full p-2 rounded-full px-4 border transition-all text-left
-                      flex items-center gap-4
-                      ${
-                        isSelected
-                          ? "border-[#00C8FF] bg-[#00C8FF]-500/10 shadow-[0_0_12px_#00C8FF]"
-                          : "border-[#25252A] bg-[#1A1A1E] hover:border-[#3A3A3F]"
-                      }
-                      ${
-                        isLoading
-                          ? "opacity-50 cursor-not-allowed"
-                          : "cursor-pointer"
-                      }
-                    `}
-              >
-                <div className="p-2">
-                  <Icon
-                    className={isSelected ? "text-[#00C8FF]" : "text-white"}
-                    size={20}
-                  />
-                </div>
-                <span className="text-white text-sm flex-1">{goal.label}</span>
-              </button>
-            );
-          })}
+          {categories.map((category) => (
+            <button
+              key={category.id}
+              onClick={() => setSelectedCareer(category.slug)}
+              disabled={isLoading}
+              className={`w-full p-3 rounded-full px-4 border flex justify-start items-center text-left ${
+                selectedCareer === category.slug
+                  ? "border-[#00C8FF] shadow-[0_0_12px_#00C8FF]"
+                  : "border-[#25252A] bg-[#1A1A1E] hover:border-[#3A3A3F]"
+              }`}
+            >
+              <p className="text-white text-sm">
+                <span className="mr-2">{category.icon}</span> Quero ser um{" "}
+                {category.name}
+              </p>
+            </button>
+          ))}
         </div>
 
-        {/* Botões de Navegação */}
         <div className="flex items-center justify-between pt-4 z-50">
           <button
             onClick={() => router.back()}
@@ -182,7 +119,7 @@ export default function CareersPage() {
             disabled={!selectedCareer || isLoading}
             className="min-w-[200px] max-w-[200px] z-50"
           >
-            {isLoading ? "Salvando..." : "Finalizar"}
+            {isLoading ? "Carregando..." : "Continuar"}
           </PrimaryButton>
         </div>
       </div>
