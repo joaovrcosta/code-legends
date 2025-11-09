@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import icon from "../../../../../public/react-course-icon.svg";
 import { Progress } from "@/components/ui/progress";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   ArrowClockwise,
@@ -37,8 +37,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { CourseDetail } from "@/types/course-types";
 
-export function ReactJSCourseBanner() {
+export function CourseBanner({ course }: { course: CourseDetail }) {
   const pathName = usePathname();
 
   const [showSticky, setShowSticky] = useState(false);
@@ -79,7 +80,7 @@ export function ReactJSCourseBanner() {
       >
         <div className="flex items-center justify-between lg:px-4 px-0">
           <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xl">
-            ReactJS
+            {course.title}
           </span>
           <div className="flex items-center gap-3">
             <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
@@ -117,7 +118,12 @@ export function ReactJSCourseBanner() {
             </div>
           </Link>
           <div className="lg:block lg:mr-6 mr-0 flex items-center justify-center">
-            <Image src={icon} alt="ReactJS" width={120} height={120} />
+            <Image
+              src={course.icon}
+              alt={course.title}
+              width={120}
+              height={120}
+            />
           </div>
           <div className="flex flex-col items-center lg:items-start">
             <div className="flex flex-col">
@@ -128,11 +134,10 @@ export function ReactJSCourseBanner() {
                 <Image src={codeLegendsLogo} alt="Code Legends" />
               </div> */}
               <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent lg:text-4xl text-xl lg:text-left text-center">
-                ReactJS
+                {course.title}
               </span>
               <p className="lg:text-base text-sm mt-2 text-center lg:text-left max-w-[620px] text-[#a5a5a6]">
-                Neste curso de React, você criará aplicativos interativos
-                poderosos com uma das bibliotecas JavaScript mais populares.
+                {course.description}
               </p>
             </div>
 
