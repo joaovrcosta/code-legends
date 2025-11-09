@@ -1,7 +1,11 @@
+"use client";
+
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import reactIcon from "../../../public/react-course-icon.svg";
-import { Play } from "lucide-react";
+import { Play, Check } from "lucide-react";
+import { startCourse } from "@/actions/course/start";
+import { useState } from "react";
 
 interface CatalogCardProps {
   name: string;
@@ -13,6 +17,7 @@ interface CatalogCardProps {
   isFavorite?: boolean;
   status?: "in-progress" | "completed" | "not-started" | "career" | "continue";
   progress?: number;
+  courseId?: string;
 }
 
 export function PersonalCatalog({
@@ -23,8 +28,25 @@ export function PersonalCatalog({
   className,
   isCurrent,
   progress,
+  courseId,
 }: CatalogCardProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const imageSrc = image || reactIcon;
+
+  const handleStartCourse = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!courseId || isCurrent) return;
+
+    setIsLoading(true);
+    try {
+      await startCourse(courseId);
+      // Recarrega a página para atualizar o estado
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro ao iniciar curso:", error);
+      setIsLoading(false);
+    }
+  };
 
   const colorClass =
     {
@@ -66,8 +88,17 @@ export function PersonalCatalog({
         <div className="flex items-center justify-end w-full">
           {url && (
             <Link href="/learn">
-              <div className="border-2 border-[#35BED5] p-3 flex items-center justify-center hover:bg-[#35BED5] rounded-full cursor-pointer hover:text-[#35BED5]">
-                <Play size={24} className="text-white" />
+              <div
+                className={`border-2 border-[#35BED5] p-3 flex items-center justify-center hover:bg-[#35BED5] rounded-full cursor-pointer hover:text-[#35BED5] ${
+                  isLoading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                onClick={handleStartCourse}
+              >
+                {isCurrent ? (
+                  <Check size={24} className="text-white" />
+                ) : (
+                  <Play size={24} className="text-white" />
+                )}
               </div>
             </Link>
           )}

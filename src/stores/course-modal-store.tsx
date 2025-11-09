@@ -1,68 +1,101 @@
 // store/courseModalStore.ts
 import { create } from "zustand";
-import { Task } from "../../db";
+import type { Lesson, LessonStatus } from "@/types/roadmap";
 
 interface CourseModalStore {
   isOpen: boolean;
-  tasks: Task[];
+  lessons: Lesson[];
   currentIndex: number;
-  openModalWithTasks: (tasks: Task[], startIndex?: number) => void;
+  openModalWithLessons: (lessons: Lesson[], startIndex?: number) => void;
   closeModal: () => void;
-  goToNextTask: () => void;
-  goToPreviousTask: () => void;
-  openModalWithTask: (task: Task) => void;
-  currentTask: Task | null;
+  goToNextLesson: () => void;
+  goToPreviousLesson: () => void;
+  openModalWithLesson: (lesson: Lesson) => void;
+  currentLesson: Lesson | null;
+  updateCurrentLessonStatus: (status: LessonStatus) => void;
+  lessonCompletedTimestamp: number | null;
 }
 
 export const useCourseModalStore = create<CourseModalStore>((set, get) => ({
   isOpen: false,
-  tasks: [],
+  lessons: [],
   currentIndex: 0,
-  currentTask: null,
+  currentLesson: null,
+  lessonCompletedTimestamp: null,
 
-  openModalWithTasks: (tasks, startIndex = 0) =>
+  openModalWithLessons: (lessons, startIndex = 0) =>
     set({
       isOpen: true,
-      tasks,
+      lessons,
       currentIndex: startIndex,
-      currentTask: tasks[startIndex],
+      currentLesson: lessons[startIndex],
     }),
 
   closeModal: () =>
     set({
       isOpen: false,
-      tasks: [],
+      lessons: [],
       currentIndex: 0,
-      currentTask: null,
+      currentLesson: null,
     }),
 
-  goToNextTask: () => {
-    const { currentIndex, tasks } = get();
+  goToNextLesson: () => {
+    const { currentIndex, lessons } = get();
     const nextIndex = currentIndex + 1;
-    if (nextIndex < tasks.length) {
+    if (nextIndex < lessons.length) {
       set({
         currentIndex: nextIndex,
-        currentTask: tasks[nextIndex],
+        currentLesson: lessons[nextIndex],
       });
     }
   },
 
-  goToPreviousTask: () => {
-    const { currentIndex, tasks } = get();
+  goToPreviousLesson: () => {
+    const { currentIndex, lessons } = get();
     const prevIndex = currentIndex - 1;
     if (prevIndex >= 0) {
       set({
         currentIndex: prevIndex,
-        currentTask: tasks[prevIndex],
+        currentLesson: lessons[prevIndex],
       });
     }
   },
 
-  openModalWithTask: (task: Task) =>
+  openModalWithLesson: (lesson: Lesson) =>
     set({
       isOpen: true,
-      tasks: [task],
+      lessons: [lesson],
       currentIndex: 0,
-      currentTask: task,
+      currentLesson: lesson,
     }),
+
+  updateCurrentLessonStatus: (status: LessonStatus) => {
+    const { currentLesson, lessons, currentIndex } = get();
+    if (currentLesson) {
+      const updatedLesson = { ...currentLesson, status };
+      const updatedLessons = [...lessons];
+      updatedLessons[currentIndex] = updatedLesson;
+      const updates: Partial<CourseModalStore> = {
+        currentLesson: updatedLesson,
+        lessons: updatedLessons,
+      };
+
+      // Se a lição foi marcada como concluída, atualiza o timestamp
+      if (status === "completed" && currentLesson.status !== "completed") {
+        updates.lessonCompletedTimestamp = Date.now();
+
+        // Desbloqueia a próxima lição se estiver locked
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < updatedLessons.length) {
+          const nextLesson = updatedLessons[nextIndex];
+          if (nextLesson.status === "locked") {
+            updatedLessons[nextIndex] = { ...nextLesson, status: "unlocked" };
+            updates.lessons = updatedLessons;
+          }
+        }
+      }
+
+      set(updates);
+    }
+  },
 }));

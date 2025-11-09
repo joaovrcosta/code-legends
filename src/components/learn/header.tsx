@@ -10,16 +10,26 @@ import { usePathname } from "next/navigation";
 import { CourseDropdownMenu } from "./course-menu";
 import { UserDropdown } from "../user-dropdown";
 import { StrikeSection } from "../strike-section";
+import { useEffect, useState } from "react";
 
 export default function LearnHeader() {
   const { toggleSidebar, isOpen } = useSidebarStore();
   const pathName = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  // Evita problemas de hidratação
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Durante a hidratação, renderiza sem a condição do pathname
+  const showSidebarButton = mounted ? !pathName.startsWith("/account") : true; // Default durante SSR
 
   return (
     <div className="relative fixed top-0 left-0 w-full z-50 bg-[#121214] shadow-lg border-b-[1px] border-[#25252a] lg:py-0 py-2 ">
       <ul className="flex justify-between items-center lg:pt-4 pt-0 lg:pb-4 lpb-0 w-full mx-auto px-4">
         <li className="flex items-center lg:space-x-3">
-          {!pathName.startsWith("/account") && (
+          {showSidebarButton && (
             <button
               onClick={toggleSidebar}
               className="text-white p-1 border border-[#25252a] rounded-lg lg:block hidden hover:bg-[#25252a] transition-all duration-150 ease-in-out"

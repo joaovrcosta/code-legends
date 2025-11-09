@@ -5,9 +5,9 @@ import { getAuthToken } from "../auth/session";
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
 
 /**
- * Inscreve o usuário em um curso
+ * Inicia um curso
  */
-export async function enrollInCourse(courseId: string) {
+export async function startCourse(courseId: string) {
   try {
     const token = await getAuthToken();
 
@@ -15,7 +15,7 @@ export async function enrollInCourse(courseId: string) {
       throw new Error("Token de autenticação não encontrado");
     }
 
-    const response = await fetch(`${API_BASE_URL}/courses/${courseId}/enroll`, {
+    const response = await fetch(`${API_BASE_URL}/courses/${courseId}/start`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,15 +26,13 @@ export async function enrollInCourse(courseId: string) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || "Erro ao inscrever no curso");
+      throw new Error(errorData.message || "Erro ao iniciar curso");
     }
 
     const data = await response.json();
     return { success: true, data };
   } catch (error) {
-    console.error("Erro ao inscrever no curso:", error);
-    throw error instanceof Error
-      ? error
-      : new Error("Erro ao inscrever no curso");
+    console.error("Erro ao iniciar curso:", error);
+    throw error instanceof Error ? error : new Error("Erro ao iniciar curso");
   }
 }
