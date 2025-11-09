@@ -11,6 +11,10 @@ interface TokenWithRefresh {
   refreshToken?: string;
   accessToken?: string;
   accessTokenExpires?: number;
+  onboardingCompleted?: boolean;
+  onboardingGoal?: string | null;
+  onboardingCareer?: string | null;
+  lastOnboardingCheck?: number;
   error?: string;
   [key: string]: unknown;
 }
@@ -34,10 +38,37 @@ async function refreshAccessToken(token: TokenWithRefresh) {
     }
 
     const refreshedTokens = await response.json();
+    const newAccessToken = refreshedTokens.token;
 
+    // Buscar dados atualizados do usuário com o novo token
+    try {
+      const userResponse = await fetch(`${API_BASE_URL}/me`, {
+        headers: {
+          Authorization: `Bearer ${newAccessToken}`,
+        },
+        cache: "no-store",
+      });
+
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+        return {
+          ...token,
+          accessToken: newAccessToken,
+          accessTokenExpires: Date.now() + 10 * 60 * 1000, // 10 minutos
+          onboardingCompleted: userData.user.onboardingCompleted ?? false,
+          onboardingGoal: userData.user.onboardingGoal ?? null,
+          onboardingCareer: userData.user.onboardingCareer ?? null,
+          error: undefined,
+        };
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados atualizados do usuário:", error);
+    }
+
+    // Se não conseguir buscar dados atualizados, retornar token renovado sem atualizar onboarding
     return {
       ...token,
-      accessToken: refreshedTokens.token,
+      accessToken: newAccessToken,
       accessTokenExpires: Date.now() + 10 * 60 * 1000, // 10 minutos
       error: undefined,
     };
@@ -112,7 +143,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           const userData = await userResponse.json();
 
-          // Retornar usuário com tokens e tempo de expiração
+          // Retornar usuário com tokens, tempo de expiração e dados de onboarding
+          // O backend retorna onboardingCompleted, onboardingGoal e onboardingCareer na resposta do login
           return {
             id: userData.user.id,
             name: userData.user.name,
@@ -121,6 +153,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             accessToken: token,
             refreshToken: refreshToken,
             accessTokenExpires: Date.now() + 10 * 60 * 1000, // 10 minutos
+            onboardingCompleted: data.onboardingCompleted ?? false,
+            onboardingGoal: data.onboardingGoal ?? null,
+            onboardingCareer: data.onboardingCareer ?? null,
           };
         } catch (error) {
           console.error("Erro ao autenticar:", error);
@@ -133,7 +168,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, user }: { token: TokenWithRefresh; user?: unknown }) {
+    async jwt({ token, user, trigger }: { token: TokenWithRefresh; user?: unknown; trigger?: string }) {
       // Login inicial - armazenar todos os dados
       if (user) {
         const userData = user as {
@@ -144,6 +179,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           accessToken: string;
           refreshToken?: string;
           accessTokenExpires: number;
+          onboardingCompleted?: boolean;
+          onboardingGoal?: string | null;
+          onboardingCareer?: string | null;
         };
         return {
           id: userData.id,
@@ -153,7 +191,72 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           accessToken: userData.accessToken,
           refreshToken: userData.refreshToken,
           accessTokenExpires: userData.accessTokenExpires,
+          onboardingCompleted: userData.onboardingCompleted ?? false,
+          onboardingGoal: userData.onboardingGoal ?? null,
+          onboardingCareer: userData.onboardingCareer ?? null,
         };
+      }
+
+      // Se o trigger for "update", buscar dados atualizados do usuário
+      if (trigger === "update" && token.accessToken) {
+        try {
+          const userResponse = await fetch(`${API_BASE_URL}/me`, {
+            headers: {
+              Authorization: `Bearer ${token.accessToken}`,
+            },
+            cache: "no-store",
+          });
+
+          if (userResponse.ok) {
+            const userData = await userResponse.json();
+            return {
+              ...token,
+              onboardingCompleted: userData.user.onboardingCompleted ?? false,
+              onboardingGoal: userData.user.onboardingGoal ?? null,
+              onboardingCareer: userData.user.onboardingCareer ?? null,
+            };
+          }
+        } catch (error) {
+          console.error("Erro ao buscar dados atualizados do usuário:", error);
+        }
+      }
+
+      // Token ainda válido - sempre verificar dados de onboarding
+      // Se onboarding não está completo, SEMPRE verificar (sem cache) para detectar mudanças rapidamente
+      // Se onboarding está completo, verificar a cada 10 segundos (para não fazer muitas requisições)
+      if (token.accessTokenExpires && Date.now() < token.accessTokenExpires && token.accessToken) {
+        const isOnboardingCompleted = token.onboardingCompleted ?? false;
+        
+        // Se onboarding não está completo, sempre verificar (sem cache)
+        // Se onboarding está completo, verificar apenas a cada 10 segundos
+        const shouldUpdateOnboarding = 
+          !isOnboardingCompleted || // Sempre verificar se não está completo
+          !token.lastOnboardingCheck || 
+          Date.now() - token.lastOnboardingCheck > 10000; // 10s se completo
+
+        if (shouldUpdateOnboarding) {
+          try {
+            const userResponse = await fetch(`${API_BASE_URL}/me`, {
+              headers: {
+                Authorization: `Bearer ${token.accessToken}`,
+              },
+              cache: "no-store",
+            });
+
+            if (userResponse.ok) {
+              const userData = await userResponse.json();
+              return {
+                ...token,
+                onboardingCompleted: userData.user.onboardingCompleted ?? false,
+                onboardingGoal: userData.user.onboardingGoal ?? null,
+                onboardingCareer: userData.user.onboardingCareer ?? null,
+                lastOnboardingCheck: Date.now(),
+              };
+            }
+          } catch (error) {
+            console.error("Erro ao verificar dados de onboarding:", error);
+          }
+        }
       }
 
       // Token ainda válido - retornar sem alterações
@@ -179,6 +282,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         user: { id?: string; name?: string; email?: string; image?: string };
         accessToken?: string;
         error?: string;
+        onboardingCompleted?: boolean;
+        onboardingGoal?: string | null;
+        onboardingCareer?: string | null;
       };
       token: TokenWithRefresh;
     }) {
@@ -189,6 +295,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.image = token.picture as string | undefined;
         session.accessToken = token.accessToken;
         session.error = token.error as string | undefined;
+        session.onboardingCompleted = token.onboardingCompleted ?? false;
+        session.onboardingGoal = token.onboardingGoal ?? null;
+        session.onboardingCareer = token.onboardingCareer ?? null;
       }
       return session;
     },
