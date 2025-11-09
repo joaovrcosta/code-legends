@@ -91,7 +91,7 @@ export default function CareersPage() {
               key={category.id}
               onClick={() => setSelectedCareer(category.slug)}
               disabled={isLoading}
-              className={`w-full p-3 rounded-full px-4 border flex justify-start items-center text-left ${
+              className={`w-full p-3 rounded-full px-4 border flex justify-start items-center text-left h-[54px] ${
                 selectedCareer === category.slug
                   ? "border-[#00C8FF] shadow-[0_0_12px_#00C8FF]"
                   : "border-[#25252A] bg-[#1A1A1E] hover:border-[#3A3A3F]"

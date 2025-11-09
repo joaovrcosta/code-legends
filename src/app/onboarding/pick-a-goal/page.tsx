@@ -117,7 +117,7 @@ export default function PickAGoalPage() {
                 disabled={isLoading}
                 className={`
                       w-full p-2 px-4 rounded-full border transition-all text-left
-                      flex items-center gap-4
+                      flex items-center gap-4 
                       ${
                         isSelected
                           ? "border-[#00C8FF] bg-[#00C8FF]-500/10 shadow-[0_0_12px_#00C8FF]"

@@ -163,7 +163,7 @@ export default function ChooseCoursePage() {
             disabled={!selectedCourse || isLoading}
             className="min-w-[200px] max-w-[200px] z-50"
           >
-            {isLoading ? "Salvando..." : "Finalizar"}
+            {isLoading ? "Criando sua trilha..." : "Finalizar"}
           </PrimaryButton>
         </div>
       </div>
