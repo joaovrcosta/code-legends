@@ -23,8 +23,6 @@ export default function LearnPage() {
   const hasScrolledRef = useRef<boolean>(false);
   const lastCompletedTimestampRef = useRef<number | null>(null);
 
-  console.log(roadmap);
-
   const {
     activeCourse,
     isLoading: isLoadingActiveCourse,

@@ -12,13 +12,11 @@ export default function OnboardingPage() {
 
       <div className="max-w-3xl w-full space-y-8 p-4 z-50">
         <div className="space-y-4 text-center">
-          <span className="text-white text-xs uppercase font-bold">
+          <span className="text-white text-xs uppercase font-thin">
             Sua jornada para o sucesso começa aqui
           </span>
 
-          <h3 className="text-white text-2xl font-bold">
-            Vamos dar os primeiros passos juntos?
-          </h3>
+          <h3 className="text-white text-2xl font-bold">Bem vindo Lenda!</h3>
           <p className="text-white text-md">
             Em poucos passos, você vai descobrir todas as possibilidades que
             preparamos para impulsionar seu desenvolvimento. Bora começar?
