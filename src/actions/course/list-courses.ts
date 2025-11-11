@@ -3,8 +3,6 @@
 import { getAuthToken } from "../auth/session";
 import type { CoursesListResponse } from "@/types/user-course.ts";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 /**
  * Lista todos os cursos disponíveis na plataforma
  */
@@ -21,7 +19,7 @@ export async function listCourses(): Promise<CoursesListResponse> {
       headers.Authorization = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${API_BASE_URL}/courses`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/courses`, {
       method: "GET",
       headers,
       cache: "no-store",

@@ -1,8 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 interface TokenWithRefresh {
   id?: string;
   name?: string;
@@ -21,15 +19,18 @@ interface TokenWithRefresh {
 
 async function refreshAccessToken(token: TokenWithRefresh) {
   try {
-    const response = await fetch(`${API_BASE_URL}/token/refresh`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        refreshToken: token.refreshToken,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/token/refresh`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          refreshToken: token.refreshToken,
+        }),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.text();
@@ -42,12 +43,15 @@ async function refreshAccessToken(token: TokenWithRefresh) {
 
     // Buscar dados atualizados do usuário com o novo token
     try {
-      const userResponse = await fetch(`${API_BASE_URL}/me`, {
-        headers: {
-          Authorization: `Bearer ${newAccessToken}`,
-        },
-        cache: "no-store",
-      });
+      const userResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${newAccessToken}`,
+          },
+          cache: "no-store",
+        }
+      );
 
       if (userResponse.ok) {
         const userData = await userResponse.json();
@@ -97,17 +101,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         try {
           // Autenticar na API externa
-          const response = await fetch(`${API_BASE_URL}/users/auth`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: credentials.email,
-              password: credentials.password,
-            }),
-            credentials: "include",
-          });
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/users/auth`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: credentials.email,
+                password: credentials.password,
+              }),
+              credentials: "include",
+            }
+          );
 
           if (!response.ok) {
             return null;
@@ -131,11 +138,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }
 
           // Buscar dados do usuário usando o token
-          const userResponse = await fetch(`${API_BASE_URL}/me`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const userResponse = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333"}/me`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
           if (!userResponse.ok) {
             return null;
@@ -168,7 +178,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, user, trigger }: { token: TokenWithRefresh; user?: unknown; trigger?: string }) {
+    async jwt({
+      token,
+      user,
+      trigger,
+    }: {
+      token: TokenWithRefresh;
+      user?: unknown;
+      trigger?: string;
+    }) {
       // Login inicial - armazenar todos os dados
       if (user) {
         const userData = user as {
@@ -200,12 +218,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // Se o trigger for "update", buscar dados atualizados do usuário
       if (trigger === "update" && token.accessToken) {
         try {
-          const userResponse = await fetch(`${API_BASE_URL}/me`, {
-            headers: {
-              Authorization: `Bearer ${token.accessToken}`,
-            },
-            cache: "no-store",
-          });
+          const userResponse = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333"}/me`,
+            {
+              headers: {
+                Authorization: `Bearer ${token.accessToken}`,
+              },
+              cache: "no-store",
+            }
+          );
 
           if (userResponse.ok) {
             const userData = await userResponse.json();
@@ -224,24 +245,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // Token ainda válido - sempre verificar dados de onboarding
       // Se onboarding não está completo, SEMPRE verificar (sem cache) para detectar mudanças rapidamente
       // Se onboarding está completo, verificar a cada 10 segundos (para não fazer muitas requisições)
-      if (token.accessTokenExpires && Date.now() < token.accessTokenExpires && token.accessToken) {
+      if (
+        token.accessTokenExpires &&
+        Date.now() < token.accessTokenExpires &&
+        token.accessToken
+      ) {
         const isOnboardingCompleted = token.onboardingCompleted ?? false;
-        
+
         // Se onboarding não está completo, sempre verificar (sem cache)
         // Se onboarding está completo, verificar apenas a cada 10 segundos
-        const shouldUpdateOnboarding = 
+        const shouldUpdateOnboarding =
           !isOnboardingCompleted || // Sempre verificar se não está completo
-          !token.lastOnboardingCheck || 
+          !token.lastOnboardingCheck ||
           Date.now() - token.lastOnboardingCheck > 10000; // 10s se completo
 
         if (shouldUpdateOnboarding) {
           try {
-            const userResponse = await fetch(`${API_BASE_URL}/me`, {
-              headers: {
-                Authorization: `Bearer ${token.accessToken}`,
-              },
-              cache: "no-store",
-            });
+            const userResponse = await fetch(
+              `${
+                process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333"
+              }/me`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token.accessToken}`,
+                },
+                cache: "no-store",
+              }
+            );
 
             if (userResponse.ok) {
               const userData = await userResponse.json();

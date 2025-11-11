@@ -1,7 +1,5 @@
 import type { CoursesListResponse } from "@/types/user-course.ts";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 /**
  * Busca cursos por termo de pesquisa
  */
@@ -14,7 +12,9 @@ export async function searchCourses(
 
   try {
     const response = await fetch(
-      `${API_BASE_URL}/courses/search?q=${encodeURIComponent(query)}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/courses/search?q=${encodeURIComponent(
+        query
+      )}`,
       {
         next: { revalidate: 60 }, // cache de 1min
       }

@@ -3,8 +3,6 @@
 import { getAuthToken } from "../auth/session";
 import type { RoadmapResponse } from "@/types/roadmap";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 /**
  * Busca o roadmap de um curso
  */
@@ -20,7 +18,7 @@ export async function getCourseRoadmap(
     }
 
     const response = await fetch(
-      `${API_BASE_URL}/courses/${courseId}/roadmap`,
+      `${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}/roadmap`,
       {
         method: "GET",
         headers: {

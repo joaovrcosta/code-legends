@@ -2,8 +2,6 @@
 
 import { getAuthToken } from "../auth/session";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 export interface UpdateOnboardingData {
   goal?: string;
   career?: string;
@@ -33,15 +31,18 @@ export async function updateOnboarding(
       payload.onboardingCareer = data.career;
     }
 
-    const response = await fetch(`${API_BASE_URL}/users/onboarding`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/onboarding`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+        cache: "no-store",
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));

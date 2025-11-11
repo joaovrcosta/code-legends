@@ -234,6 +234,8 @@ export default function LearnPage() {
     );
   }
 
+  console.log("🔍 NEXT_PUBLIC_API_URL:", process.env.NEXT_PUBLIC_API_URL);
+
   return (
     <div className="flex items-center justify-center w-full">
       <div className="w-full space-y-4">

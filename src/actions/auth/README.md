@@ -7,7 +7,7 @@ Este módulo gerencia a autenticação do sistema através de uma API externa.
 Configure a URL da API no arquivo `.env.local`:
 
 ```env
-API_BASE_URL=http://localhost:3333
+NEXT_PUBLIC_API_URL=http://localhost:3333
 ```
 
 ## Endpoints da API

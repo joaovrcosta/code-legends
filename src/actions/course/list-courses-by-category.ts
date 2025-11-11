@@ -1,7 +1,5 @@
 import type { CoursesListResponse } from "@/types/user-course.ts";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 /**
  * Lista cursos filtrados por slug da categoria
  */
@@ -10,7 +8,7 @@ export async function listCoursesByCategory(
 ): Promise<CoursesListResponse> {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/courses?categorySlug=${categorySlug}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/courses?categorySlug=${categorySlug}`,
       {
         next: { revalidate: 60 }, // cache de 1min
       }

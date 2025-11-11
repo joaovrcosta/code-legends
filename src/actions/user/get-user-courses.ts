@@ -2,8 +2,6 @@
 
 import { getAuthToken } from "../auth/session";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 export async function getUserCourses() {
   try {
     const token = await getAuthToken();
@@ -13,14 +11,17 @@ export async function getUserCourses() {
       return [];
     }
 
-    const response = await fetch(`${API_BASE_URL}/favorites`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/favorites`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store",
+      }
+    );
 
     if (!response.ok) {
       console.error("Erro na resposta da API:", response.statusText);

@@ -3,8 +3,6 @@
 import { getAuthToken } from "../auth/session";
 import type { CertificateResponse } from "@/types/certificate";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 export async function getUserCertificates(): Promise<CertificateResponse> {
   try {
     // Obter o token de autenticação do NextAuth
@@ -16,14 +14,17 @@ export async function getUserCertificates(): Promise<CertificateResponse> {
     }
 
     // Buscar certificados do usuário via API
-    const response = await fetch(`${API_BASE_URL}/certificates`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/certificates`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store",
+      }
+    );
 
     if (!response.ok) {
       console.error("Erro na resposta da API:", response.statusText);

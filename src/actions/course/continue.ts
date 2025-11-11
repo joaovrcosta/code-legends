@@ -2,8 +2,6 @@
 
 import { getAuthToken } from "../auth/session";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 /**
  * Marca a lição atual como concluída e avança para a próxima
  */
@@ -19,7 +17,7 @@ export async function continueCourse(
     }
 
     const response = await fetch(
-      `${API_BASE_URL}/lessons/${lessonId}/complete`,
+      `${process.env.NEXT_PUBLIC_API_URL}/lessons/${lessonId}/complete`,
       {
         method: "POST",
         headers: {

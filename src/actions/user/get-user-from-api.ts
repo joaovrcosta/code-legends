@@ -3,8 +3,6 @@
 import { getAuthToken } from "../auth/session";
 import type { User, UserMeResponse } from "@/types/user";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 /**
  * Busca os dados completos do usuário autenticado diretamente da API através da rota /me
  * Esta função será útil quando a rota /users/me estiver implementada na API
@@ -21,7 +19,7 @@ export async function getUserFromAPI(): Promise<User | null> {
   }
 
   try {
-    const url = `${API_BASE_URL}/users/me`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/users/me`;
     console.log("🔍 Buscando dados do usuário em:", url);
 
     const response = await fetch(url, {

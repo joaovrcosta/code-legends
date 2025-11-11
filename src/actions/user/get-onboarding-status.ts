@@ -2,8 +2,6 @@
 
 import { getAuthToken } from "../auth/session";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 export interface OnboardingStatus {
   isCompleted: boolean;
   goal?: string | null;
@@ -18,14 +16,17 @@ export async function getOnboardingStatus(): Promise<OnboardingStatus> {
       return { isCompleted: false };
     }
 
-    const response = await fetch(`${API_BASE_URL}/users/onboarding/status`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/onboarding/status`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store",
+      }
+    );
 
     if (!response.ok) {
       if (response.status === 404) {

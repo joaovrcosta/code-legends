@@ -3,8 +3,6 @@
 import { getAuthToken } from "../auth/session";
 import type { UserEnrolledListResponse } from "@/types/user-course.ts";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 /**
  * Busca a lista de cursos nos quais o usuário está inscrito (enrolled)
  */
@@ -17,14 +15,17 @@ export async function getUserEnrolledList(): Promise<UserEnrolledListResponse> {
       return { userCourses: [] };
     }
 
-    const response = await fetch(`${API_BASE_URL}/courses/enrolled`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/courses/enrolled`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store",
+      }
+    );
 
     if (!response.ok) {
       if (response.status === 404) {

@@ -6,8 +6,6 @@ import type {
   ActiveCourse,
 } from "@/types/user-course.ts";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 /**
  * Busca o curso ativo do usuário logado
  */
@@ -20,14 +18,17 @@ export async function getActiveCourse(): Promise<ActiveCourse | null> {
       return null;
     }
 
-    const response = await fetch(`${API_BASE_URL}/account/active-course`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/account/active-course`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store",
+      }
+    );
 
     if (!response.ok) {
       if (response.status === 404) {

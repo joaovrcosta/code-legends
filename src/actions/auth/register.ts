@@ -1,7 +1,5 @@
 "use server";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 export async function registerUser(formData: FormData) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
@@ -24,7 +22,7 @@ export async function registerUser(formData: FormData) {
 
   try {
     // Criar novo usuário na API externa
-    const response = await fetch(`${API_BASE_URL}/users`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333"}/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

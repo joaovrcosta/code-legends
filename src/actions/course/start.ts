@@ -2,8 +2,6 @@
 
 import { getAuthToken } from "../auth/session";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3333";
-
 /**
  * Inicia um curso
  */
@@ -15,14 +13,17 @@ export async function startCourse(courseId: string) {
       throw new Error("Token de autenticação não encontrado");
     }
 
-    const response = await fetch(`${API_BASE_URL}/courses/${courseId}/start`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/courses/${courseId}/start`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store",
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
