@@ -1,6 +1,4 @@
-import { ArrowLeft } from "lucide-react";
-import Image, { StaticImageData } from "next/image";
-import Link from "next/link";
+import { StaticImageData } from "next/image";
 
 interface CourseBannerProps {
   title: string;

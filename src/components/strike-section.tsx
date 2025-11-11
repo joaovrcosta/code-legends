@@ -1,13 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
+
+
 import { Flame } from "@phosphor-icons/react/dist/ssr";
 import {
   DropdownMenu,

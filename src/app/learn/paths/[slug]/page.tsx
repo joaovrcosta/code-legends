@@ -5,7 +5,6 @@ import { CourseOverview } from "@/components/course/courses/react-js/overview";
 import { CourseProjects } from "@/components/course/courses/react-js/projects";
 import { Tabs } from "@/components/ui/tabs";
 import { notFound } from "next/navigation";
-import type { CourseDetail } from "@/types/course-types";
 
 export const dynamic = "force-dynamic";
 

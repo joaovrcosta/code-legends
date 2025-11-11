@@ -9,13 +9,11 @@ import codeLogo from "../../../../public/code-legends-logo.svg";
 
 import {
   ArrowLeft,
-  ArrowRight,
   Play,
   GraduationCap,
   Link as LinkIcon,
   Rocket,
   Settings,
-  ChevronsRight,
 } from "lucide-react";
 import Image from "next/image";
 

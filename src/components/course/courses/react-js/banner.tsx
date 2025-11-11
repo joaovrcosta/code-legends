@@ -12,23 +12,17 @@ import {
   ArrowClockwise,
   Certificate,
   CheckCircle,
-  Files,
-  Play,
-  PlayCircleIcon,
   PlayIcon,
-  PlusCircleIcon,
   PlusIcon,
   PuzzlePiece,
   ThumbsUpIcon,
   ThumbsDown,
-  TrendUp,
   Trophy,
   VideoCameraIcon,
   Check,
 } from "@phosphor-icons/react/dist/ssr";
 import {
   ArrowLeft,
-  ChartNoAxesColumnIncreasing,
   ChartNoAxesColumnIncreasingIcon,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

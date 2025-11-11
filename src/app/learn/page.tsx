@@ -1,15 +1,15 @@
 "use client";
 
-import { ArrowLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import DividerWithText from "@/components/divider-with-text";
-import { FastForward, Lock } from "@phosphor-icons/react/dist/ssr";
+import { Lock } from "@phosphor-icons/react/dist/ssr";
 import { getCourseRoadmap } from "@/actions/course";
 import { useActiveCourseStore } from "@/stores/active-course-store";
 import { useCourseModalStore } from "@/stores/course-modal-store";
-import type { RoadmapResponse, Lesson } from "@/types/roadmap";
+import type { RoadmapResponse } from "@/types/roadmap";
 import { LessonPopover } from "@/components/learn/lesson-popover";
 
 export default function LearnPage() {

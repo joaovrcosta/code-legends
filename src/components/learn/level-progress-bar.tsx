@@ -9,7 +9,6 @@ import { getCourseRoadmap } from "@/actions/course";
 import type { RoadmapResponse } from "@/types/roadmap";
 import level1complete from "../../../public/level-1.png";
 import level2incomplete from "../../../public/level-2-incomplete.png";
-import { GraduationCap } from "lucide-react";
 import { CertificateIcon } from "@phosphor-icons/react/dist/ssr";
 
 export function LevelProgressBar() {

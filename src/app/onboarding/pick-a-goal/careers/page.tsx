@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { updateOnboarding, completeOnboarding } from "@/actions/user";
+import { updateOnboarding } from "@/actions/user";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
