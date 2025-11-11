@@ -48,7 +48,6 @@ export async function continueCourse(
       );
     }
 
-    const data = await response.json();
     return { success: true };
   } catch (error) {
     console.error("Erro ao continuar curso:", error);

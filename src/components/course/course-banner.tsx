@@ -1,10 +1,3 @@
-import { StaticImageData } from "next/image";
-
-interface CourseBannerProps {
-  title: string;
-  description: string;
-  image: StaticImageData;
-}
 
 // export function CourseBanner({ title, description, image }: CourseBannerProps) {
 //   return (

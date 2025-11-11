@@ -10,9 +10,7 @@ export default function LearnLayout({
 }) {
   return (
     <div className="h-screen w-full flex flex-col">
-      <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
-        <LearnHeader />
-      </div>
+      <LearnHeader />
 
       <div className="flex flex-1 lg:pt-[79px] pt-[64px]">
         <div className="lg:block hidden max-w-64">

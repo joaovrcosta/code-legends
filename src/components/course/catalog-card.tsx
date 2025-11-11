@@ -134,50 +134,15 @@ export function CatalogCard({
   name,
   image,
   url,
-  color,
   status,
   className,
   isCurrent,
-  isFavorite,
-  tags,
   courseId,
   onEnrollSuccess,
   isEnrolled,
   level,
 }: CatalogCardProps) {
   const imageSrc = image || reactIcon;
-
-  // Função para determinar a cor baseada nas tags
-  const getColorByTags = (tags?: string[]): string => {
-    if (!tags || tags.length === 0) return color;
-
-    const upperTags = tags.map((tag) => tag.toUpperCase());
-
-    if (upperTags.includes("FRONT-END")) return "blue";
-    if (upperTags.includes("BACK-END")) return "lime";
-    if (upperTags.includes("EMPREENDEDORISMO")) return "red";
-    if (upperTags.includes("DESIGN")) return "purple";
-    if (upperTags.includes("SOFT SKILLS")) return "white";
-
-    return color;
-  };
-
-  const finalColor = getColorByTags(tags);
-
-  const colorClass =
-    {
-      white: "text-[#c4c4cc]",
-      blue: "bg-blue-gradient-500 bg-clip-text text-transparent",
-      "dark-blue": "text-blue-600",
-      green: "text-green-400",
-      orange: "bg-orange-gradient-500 bg-clip-text text-transparent",
-      red: "bg-red-gradient-500 bg-clip-text text-transparent",
-      yellow: "text-yellow-400",
-      pink: "text-pink-400",
-      gray: "text-gray-400",
-      lime: "bg-lime-gradient-500 bg-clip-text text-transparent",
-      purple: "bg-purple-gradient-500 bg-clip-text text-transparent",
-    }[finalColor] || "text-gray-400";
 
   const { label, className: statusClass } = getStatusInfo(status);
   return (

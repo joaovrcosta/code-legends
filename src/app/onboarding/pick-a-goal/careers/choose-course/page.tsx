@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { completeOnboarding } from "@/actions/user";
 import { PrimaryButton } from "@/components/ui/primary-button";
@@ -11,7 +11,7 @@ import { ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 import { listCoursesByCategory } from "@/actions/course/list-courses-by-category";
 import { CourseWithCount } from "@/types/user-course.ts";
 
-export default function ChooseCoursePage() {
+function ChooseCourseContent() {
   const [courses, setCourses] = useState<CourseWithCount[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -182,5 +182,17 @@ export default function ChooseCoursePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ChooseCoursePage() {
+  return (
+    <Suspense fallback={
+      <div className="flex-1 flex flex-col p-8 lg:p-20 items-center justify-center">
+        <p className="text-white text-lg">Carregando...</p>
+      </div>
+    }>
+      <ChooseCourseContent />
+    </Suspense>
   );
 }

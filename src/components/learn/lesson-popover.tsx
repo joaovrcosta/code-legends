@@ -21,9 +21,7 @@ export const LessonPopover = ({
   setShowContinue,
   completed,
   locked,
-  currentCourseSlug,
   allLessons,
-  isFirstInModule,
 }: {
   lesson: Lesson;
   openPopover: number | null;

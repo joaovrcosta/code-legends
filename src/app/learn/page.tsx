@@ -71,22 +71,22 @@ export default function LearnPage() {
   }, [allLessons]);
 
   // Função para fazer scroll até a lição atual
-  const scrollToCurrentLesson = useCallback(() => {
-    if (!firstIncompleteLesson || !roadmap) return;
+  // const scrollToCurrentLesson = useCallback(() => {
+  //   if (!firstIncompleteLesson || !roadmap) return;
 
-    // Aguarda um pequeno delay para garantir que o DOM foi atualizado
-    const timeoutId = setTimeout(() => {
-      const lessonElement = taskRefs.current[firstIncompleteLesson.id];
-      if (lessonElement) {
-        lessonElement.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }
-    }, 500);
+  //   // Aguarda um pequeno delay para garantir que o DOM foi atualizado
+  //   const timeoutId = setTimeout(() => {
+  //     const lessonElement = taskRefs.current[firstIncompleteLesson.id];
+  //     if (lessonElement) {
+  //       lessonElement.scrollIntoView({
+  //         behavior: "smooth",
+  //         block: "center",
+  //       });
+  //     }
+  //   }, 500);
 
-    return () => clearTimeout(timeoutId);
-  }, [firstIncompleteLesson, roadmap]);
+  //   return () => clearTimeout(timeoutId);
+  // }, [firstIncompleteLesson, roadmap]);
 
   // Fecha o popover quando o modal abre e reativa "Começar" quando o modal fecha
   useEffect(() => {
@@ -138,7 +138,7 @@ export default function LearnPage() {
     if (activeCourse) {
       fetchRoadmap();
     }
-  }, [activeCourse?.id, fetchRoadmap]);
+  }, [activeCourse?.id, fetchRoadmap, activeCourse]);
 
   // Atualiza o roadmap quando uma lição é marcada como concluída no modal
   useEffect(() => {
@@ -286,7 +286,6 @@ export default function LearnPage() {
                             const isLeft = lessonIndex % 2 === 0;
                             const completed = isLessonCompleted(lesson.status);
                             const locked = isLessonLocked(lesson.status);
-                            const isCurrent = lesson.isCurrent;
                             // Verifica se é a primeira lição do módulo (primeira do primeiro grupo do módulo)
                             const isFirstInModule =
                               groupIndex === 0 && lessonIndex === 0;

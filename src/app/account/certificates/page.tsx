@@ -4,6 +4,8 @@ import { getUserCertificates } from "@/actions/user/get-user-certificates";
 import { Medal } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function AccountCertificatesPage() {
   const certificates = await getUserCertificates();
 

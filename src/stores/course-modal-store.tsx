@@ -1,6 +1,7 @@
 // store/courseModalStore.ts
 import { create } from "zustand";
-import type { Lesson, LessonStatus } from "@/types/roadmap";
+import type { Lesson, LessonStatus, LessonType } from "@/types/roadmap";
+import type { Task } from "../../db";
 
 interface CourseModalStore {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface CourseModalStore {
   goToNextLesson: () => void;
   goToPreviousLesson: () => void;
   openModalWithLesson: (lesson: Lesson) => void;
+  openModalWithTask: (task: Task) => void;
   currentLesson: Lesson | null;
   updateCurrentLessonStatus: (status: LessonStatus) => void;
   lessonCompletedTimestamp: number | null;
@@ -68,6 +70,34 @@ export const useCourseModalStore = create<CourseModalStore>((set, get) => ({
       currentIndex: 0,
       currentLesson: lesson,
     }),
+
+  openModalWithTask: (task: Task) => {
+    // Converte Task para Lesson
+    const lesson: Lesson = {
+      id: task.id,
+      title: task.title,
+      slug: `task-${task.id}`, // Gera um slug baseado no ID
+      description: task.category || "",
+      type: (task.type as LessonType) || "video",
+      video_url: task.videoUrl || "",
+      video_duration: "",
+      order: task.id,
+      status: task.locked
+        ? "locked"
+        : task.completed
+        ? "completed"
+        : "unlocked",
+      isCurrent: false,
+      canReview: false,
+    };
+
+    set({
+      isOpen: true,
+      lessons: [lesson],
+      currentIndex: 0,
+      currentLesson: lesson,
+    });
+  },
 
   updateCurrentLessonStatus: (status: LessonStatus) => {
     const { currentLesson, lessons, currentIndex } = get();

@@ -46,19 +46,16 @@ interface LearningCardProps {
 
 export function LearningCard({
   title,
-  type,
   progress,
   description,
   icon,
   lessons = [],
   modules = [],
   courseId,
-  isPinned = false,
   isLoadingModules = false,
   onExpand,
 }: LearningCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const isCourse = type === "course";
   const hasModules = modules.length > 0;
 
   const handleExpand = () => {

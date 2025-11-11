@@ -1,6 +1,4 @@
 import { getCourse } from "@/actions/getCourse";
-import { getTaskBySlug } from "@/actions/getTaskBySlug";
-import { Content } from "@/components/classroom/mobile-content";
 import ClassroomSidebar from "@/components/classroom/sidebar";
 import { prisma } from "@/lib/prisma";
 
@@ -10,7 +8,6 @@ interface DashboardProps {
 }
 
 export default async function TaskLayout({ children, params }: DashboardProps) {
-  const taskData = await getTaskBySlug((await params).slug);
   const courseData = await getCourse((await params).course);
 
   const course = await prisma.course.findUnique({
@@ -42,7 +39,7 @@ export default async function TaskLayout({ children, params }: DashboardProps) {
         <ClassroomSidebar course={courseData} />
         <div className="flex-1 h-[calc(100vh-80px)] overflow-y-auto">
           <main className="w-full">{children}</main>
-          <Content course={course} taskData={taskData} />
+          {/* <Content course={course} taskData={taskData} /> */}
         </div>
       </div>
     </div>

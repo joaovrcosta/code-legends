@@ -24,7 +24,6 @@ export function PersonalCatalog({
   name,
   image,
   url,
-  color,
   className,
   isCurrent,
   progress,
@@ -47,21 +46,6 @@ export function PersonalCatalog({
       setIsLoading(false);
     }
   };
-
-  const colorClass =
-    {
-      white: "text-[#c4c4cc]",
-      blue: "bg-blue-gradient-500 bg-clip-text text-transparent",
-      "dark-blue": "text-blue-600",
-      green: "text-green-400",
-      orange: "bg-orange-gradient-500 bg-clip-text text-transparent",
-      red: "bg-red-gradient-500 bg-clip-text text-transparent",
-      yellow: "text-yellow-400",
-      pink: "text-pink-400",
-      gray: "text-gray-400",
-      lime: "bg-lime-gradient-500 bg-clip-text text-transparent",
-      purple: "bg-purple-gradient-500 bg-clip-text text-transparent",
-    }[color] || "text-gray-400";
 
   return (
     <div

@@ -4,7 +4,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { getUserEnrolledList } from "@/actions/progress/get-user-enrolled-list";
 import { useEnrolledCoursesStore } from "@/stores/enrolled-courses-store";
@@ -21,10 +21,7 @@ import {
   VideoCameraIcon,
   Check,
 } from "@phosphor-icons/react/dist/ssr";
-import {
-  ArrowLeft,
-  ChartNoAxesColumnIncreasingIcon,
-} from "lucide-react";
+import { ArrowLeft, ChartNoAxesColumnIncreasingIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -37,7 +34,6 @@ import {
 import { CourseDetail } from "@/types/course-types";
 
 export function CourseBanner({ course }: { course: CourseDetail }) {
-  const pathName = usePathname();
   const router = useRouter();
   const refreshEnrolledCourses = useEnrolledCoursesStore(
     (state) => state.refreshEnrolledCourses
