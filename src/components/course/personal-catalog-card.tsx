@@ -77,7 +77,9 @@ export function PersonalCatalog({
       <div className="p-4 flex items-center">
         <Image src={imageSrc} alt={name} width={80} height={80} />
         <div className="px-4">
-          <p className="font-light text-[12px] text-[#C2C2C2]">CURSO – 12h</p>
+          <p className="font-light text-[12px] text-[#C2C2C2] truncate">
+            CURSO – 12h
+          </p>
           <div className="flex items-center space-x-1">
             <span className="font-bold text-white text-lg line-clamp-2">
               {name}
@@ -89,22 +91,22 @@ export function PersonalCatalog({
           {url && (
             <Link href="/learn">
               <div
-                className={`border-2 p-3 flex items-center justify-center rounded-full cursor-pointer transition-colors group ${
+                className={`border-none p-1 flex items-center justify-center rounded-full cursor-pointer transition-colors group ${
                   isLoading ? "opacity-50 cursor-not-allowed" : ""
                 } ${
                   isCurrent
-                    ? "border-[#fff] bg-[#25252A] hover:bg-green-500"
+                    ? "bg-green-600 text-white hover:bg-green-500"
                     : "border-[#25252A] bg-[#25252A] hover:border-[#35BED5] hover:bg-[#35BED5]"
                 }`}
                 onClick={handleStartCourse}
               >
                 {isCurrent ? (
                   <Check
-                    size={24}
-                    className="text-green-500 group-hover:text-white transition-colors"
+                    size={32}
+                    className="text-white group-hover:text-white transition-colors"
                   />
                 ) : (
-                  <Play size={24} className="text-white" />
+                  <Play size={32} className="text-white" />
                 )}
               </div>
             </Link>

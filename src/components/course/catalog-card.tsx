@@ -3,10 +3,6 @@
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import reactIcon from "../../../public/react-course-icon.svg";
-import htmlcssIcon from "../../../public/html-course-icon.svg";
-import nextjsIcon from "../../../public/nextjs-course-icon.svg";
-import tailwindIcon from "../../../public/tailwind-course-icon.svg";
-import patternIcon from "../../../public/patterns-course-icon.svg";
 import {
   ArrowUpRight,
   ChartNoAxesColumnIncreasing,
@@ -16,90 +12,6 @@ import { Check, Plus, Star } from "@phosphor-icons/react/dist/ssr";
 import { enrollInCourse } from "@/actions/course";
 import { useState } from "react";
 import { useEnrolledCoursesStore } from "@/stores/enrolled-courses-store";
-
-export const courses: CatalogCardProps[] = [
-  {
-    name: "ReactJS",
-    image: reactIcon,
-    url: "/learn/paths/react-js",
-    color: "blue",
-    status: "not-started",
-  },
-  {
-    name: "NextJS",
-    image: nextjsIcon,
-    url: "/learn/paths/next-js",
-    color: "white",
-    status: "not-started",
-  },
-  {
-    name: "Tailwind CSS",
-    image: tailwindIcon,
-    url: "/learn/paths/next-js",
-    color: "blue",
-    status: "completed",
-  },
-  {
-    name: "Patterns",
-    image: patternIcon,
-    url: "/learn/paths/patterns",
-    color: "lime",
-    status: "not-started",
-  },
-  {
-    name: "HTML & CSS",
-    image: htmlcssIcon,
-    url: "/learn/paths/html-css",
-    color: "orange",
-    status: "not-started",
-  },
-  {
-    name: "UI/UX",
-    image: "",
-    url: "/learn/paths/performance",
-    color: "purple",
-    status: "not-started",
-  },
-  {
-    name: "Inglês",
-    image: "",
-    url: "/learn/paths/english",
-    color: "red",
-    status: "not-started",
-  },
-  {
-    name: "Design System",
-    image: "",
-    url: "/learn/paths/design-system",
-    color: "purple",
-    status: "not-started",
-  },
-  {
-    name: "Clean Code",
-    image: "",
-    url: "/learn/paths/clean-code",
-    color: "blue",
-    status: "not-started",
-  },
-];
-
-export function Catalog() {
-  return (
-    <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 lg:grid-cols-2 gap-6">
-      {courses.map((course, index) => (
-        <CatalogCard
-          key={index}
-          name={course.name}
-          image={course.image}
-          url={course.url}
-          color={course.color || "gray"}
-          status={course.status}
-          isCurrent={course.isCurrent}
-        />
-      ))}
-    </div>
-  );
-}
 
 // Componente para o botão de enroll
 function EnrollButton({
@@ -215,6 +127,7 @@ interface CatalogCardProps {
   courseId?: string;
   isEnrolled?: boolean;
   onEnrollSuccess?: () => void;
+  level?: "beginner" | "intermediate" | "advanced";
 }
 
 export function CatalogCard({
@@ -230,6 +143,7 @@ export function CatalogCard({
   courseId,
   onEnrollSuccess,
   isEnrolled,
+  level,
 }: CatalogCardProps) {
   const imageSrc = image || reactIcon;
 
@@ -265,8 +179,7 @@ export function CatalogCard({
       purple: "bg-purple-gradient-500 bg-clip-text text-transparent",
     }[finalColor] || "text-gray-400";
 
-  const { label, className: statusClass, icon } = getStatusInfo(status);
-  const iconElement = icon(isFavorite);
+  const { label, className: statusClass } = getStatusInfo(status);
   return (
     <div
       className={`relative shadow-2xl w-full rounded-[16px] transition-all duration-300 hover:backdrop-blur-lg cursor-pointer hover:border-[#3f3f48]
@@ -286,7 +199,6 @@ export function CatalogCard({
           >
             <p className="text-sm">{label}</p>
           </div>
-          {iconElement}
         </div>
       )}
 
@@ -300,7 +212,7 @@ export function CatalogCard({
         />
         <div className="px-4 pt-4">
           <div className="flex items-center space-x-1">
-            <span className={`font-bold bg-clip-text text-lg ${colorClass}`}>
+            <span className={`font-semibold bg-clip-text text-lg text-white`}>
               {name}
             </span>
             <ArrowUpRight />
@@ -311,17 +223,17 @@ export function CatalogCard({
       <div className="flex items-center justify-between pr-4 pl-4 pb-4">
         <div className="flex items-center gap-2  text-green-500 text-xs">
           <ChartNoAxesColumnIncreasing size={16} />
-          <p className="">Para Iniciantes</p>
+          <p className="">
+            Para{" "}
+            {level === "beginner"
+              ? "Iniciantes"
+              : level === "intermediate"
+              ? "Intermediários"
+              : "Avançados"}
+          </p>
         </div>
 
         <div className="flex gap-2">
-          {/* <div className="flex items-center gap-2 text-muted-foreground text-xs">
-            <Avatar className="h-[24px] w-[24px]">
-              <AvatarImage src="https://avatars.githubusercontent.com/u/70654718?s=400&u=415dc8fde593b5dcbdef181e6186a8d80daf72fc&v=4" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <p>João</p>
-          </div> */}
           <div className="flex items-center justify-center w-8 h-8 hover:bg-[#25252A] rounded-full cursor-pointer hover:text-[#35BED5]">
             <Link href={url}>
               <ScrollText size={20} className="text-gray-600" />
