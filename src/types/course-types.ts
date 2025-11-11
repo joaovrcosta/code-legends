@@ -40,3 +40,43 @@ export interface Course {
 export interface SidebarContentProps {
   course: Course;
 }
+
+export type CourseDetailInstructor = {
+  id: string;
+  name: string;
+  avatar: string;
+  slug: string | null;
+};
+
+export type CourseDetailCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  color: string;
+  icon: string;
+};
+
+export type CourseDetail = {
+  id: string;
+  title: string;
+  slug: string;
+  active: boolean;
+  thumbnail: string;
+  createdAt: string;
+  updatedAt: string;
+  releaseAt: string;
+  isFree: boolean;
+  subscriptions: number;
+  level: "beginner" | "intermediate" | "advanced";
+  icon: string;
+  tags: string[];
+  description: string;
+  instructorId: string;
+  categoryId: string | null;
+  instructor: CourseDetailInstructor;
+  category: CourseDetailCategory | null;
+};
+
+export type CourseDetailResponse = {
+  course: CourseDetail;
+};

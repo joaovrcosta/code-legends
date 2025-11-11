@@ -3,13 +3,15 @@
 // import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import icon from "../../../../../public/react-course-icon.svg";
 import { Progress } from "@/components/ui/progress";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { getUserEnrolledList } from "@/actions/progress/get-user-enrolled-list";
+import { useEnrolledCoursesStore } from "@/stores/enrolled-courses-store";
 import {
   ArrowClockwise,
   Certificate,
+  CheckCircle,
   Files,
   Play,
   PlayCircleIcon,
@@ -22,6 +24,7 @@ import {
   TrendUp,
   Trophy,
   VideoCameraIcon,
+  Check,
 } from "@phosphor-icons/react/dist/ssr";
 import {
   ArrowLeft,
@@ -37,11 +40,46 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { CourseDetail } from "@/types/course-types";
 
-export function ReactJSCourseBanner() {
+export function CourseBanner({ course }: { course: CourseDetail }) {
   const pathName = usePathname();
+  const router = useRouter();
+  const refreshEnrolledCourses = useEnrolledCoursesStore(
+    (state) => state.refreshEnrolledCourses
+  );
 
   const [showSticky, setShowSticky] = useState(false);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEnrolling, setIsEnrolling] = useState(false);
+  const [isCheckingEnrollment, setIsCheckingEnrollment] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  // Garante que o componente está montado no cliente
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Verifica se o usuário está inscrito no curso
+  useEffect(() => {
+    if (!mounted) return;
+    async function checkEnrollment() {
+      try {
+        const { userCourses } = await getUserEnrolledList();
+        const enrolled = userCourses.some(
+          (enrolledCourse) => enrolledCourse.courseId === course.id
+        );
+        setIsEnrolled(enrolled);
+      } catch (error) {
+        console.error("Erro ao verificar inscrição:", error);
+        setIsEnrolled(false);
+      } finally {
+        setIsCheckingEnrollment(false);
+      }
+    }
+    checkEnrollment();
+  }, [course.id, mounted]);
 
   useEffect(() => {
     const scrollContainer = document.querySelector(
@@ -79,17 +117,82 @@ export function ReactJSCourseBanner() {
       >
         <div className="flex items-center justify-between lg:px-4 px-0">
           <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-xl">
-            ReactJS
+            {course.title}
           </span>
           <div className="flex items-center gap-3">
-            <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
-              <PlusIcon />
+            <button
+              onClick={async () => {
+                if (isEnrolled || isEnrolling) return;
+                try {
+                  setIsEnrolling(true);
+                  const { enrollInCourse } = await import(
+                    "@/actions/course/enroll"
+                  );
+                  await enrollInCourse(course.id);
+                  setIsEnrolled(true);
+                  await refreshEnrolledCourses();
+                } catch (error) {
+                  console.error("Erro ao inscrever no curso:", error);
+                  alert(
+                    error instanceof Error
+                      ? error.message
+                      : "Erro ao inscrever no curso"
+                  );
+                } finally {
+                  setIsEnrolling(false);
+                }
+              }}
+              disabled={isEnrolled || isEnrolling}
+              className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141] disabled:opacity-50 disabled:cursor-not-allowed"
+              suppressHydrationWarning
+            >
+              {mounted && isEnrolled ? (
+                <CheckCircle weight="fill" />
+              ) : (
+                <PlusIcon />
+              )}
             </button>
             <button className="h-[42px] w-[42px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
               <ThumbsUpIcon />
             </button>
-            <Button className="bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold px-6 py-2 h-[42px]">
-              <PlayIcon weight="fill" /> Continuar
+            <Button
+              onClick={async () => {
+                try {
+                  setIsLoading(true);
+
+                  // Se não estiver inscrito, faz enroll primeiro
+                  if (!isEnrolled) {
+                    const { enrollInCourse } = await import(
+                      "@/actions/course/enroll"
+                    );
+                    await enrollInCourse(course.id);
+                  }
+
+                  // Inicia o curso (define como ativo)
+                  const { startCourse } = await import(
+                    "@/actions/course/start"
+                  );
+                  await startCourse(course.id);
+
+                  // Redirecionar para /learn
+                  router.push("/learn");
+                } catch (error) {
+                  console.error("Erro ao iniciar curso:", error);
+                  setIsLoading(false);
+                }
+              }}
+              disabled={isLoading || isCheckingEnrollment}
+              className="bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold px-6 py-2 h-[42px] disabled:opacity-50"
+              suppressHydrationWarning
+            >
+              <PlayIcon weight="fill" />{" "}
+              {mounted && isLoading
+                ? "Carregando..."
+                : mounted && isCheckingEnrollment
+                ? "Verificando..."
+                : mounted && isEnrolled
+                ? "Iniciar"
+                : "Inscrever"}
             </Button>
           </div>
         </div>
@@ -117,7 +220,12 @@ export function ReactJSCourseBanner() {
             </div>
           </Link>
           <div className="lg:block lg:mr-6 mr-0 flex items-center justify-center">
-            <Image src={icon} alt="ReactJS" width={120} height={120} />
+            <Image
+              src={course.icon}
+              alt={course.title}
+              width={120}
+              height={120}
+            />
           </div>
           <div className="flex flex-col items-center lg:items-start">
             <div className="flex flex-col">
@@ -128,11 +236,10 @@ export function ReactJSCourseBanner() {
                 <Image src={codeLegendsLogo} alt="Code Legends" />
               </div> */}
               <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent lg:text-4xl text-xl lg:text-left text-center">
-                ReactJS
+                {course.title}
               </span>
               <p className="lg:text-base text-sm mt-2 text-center lg:text-left max-w-[620px] text-[#a5a5a6]">
-                Neste curso de React, você criará aplicativos interativos
-                poderosos com uma das bibliotecas JavaScript mais populares.
+                {course.description}
               </p>
             </div>
 
@@ -156,12 +263,73 @@ export function ReactJSCourseBanner() {
             </div>
 
             <div className="flex items-start lg:justify-start justify-between gap-4 w-full">
-              <Button className="max-w-[220px] w-full h-[50px] text-lg bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold">
-                <PlayIcon weight="fill" /> Continuar
+              <Button
+                onClick={async () => {
+                  try {
+                    setIsLoading(true);
+
+                    // Se não estiver inscrito, faz enroll primeiro
+                    if (!isEnrolled) {
+                      const { enrollInCourse } = await import(
+                        "@/actions/course/enroll"
+                      );
+                      await enrollInCourse(course.id);
+                    }
+
+                    // Inicia o curso (define como ativo)
+                    const { startCourse } = await import(
+                      "@/actions/course/start"
+                    );
+                    await startCourse(course.id);
+
+                    // Redirecionar para /learn
+                    router.push("/learn");
+                  } catch (error) {
+                    console.error("Erro ao iniciar curso:", error);
+                    setIsLoading(false);
+                  }
+                }}
+                disabled={isLoading || isCheckingEnrollment}
+                className="max-w-[220px] w-full h-[50px] text-lg bg-blue-gradient-500 transition-all rounded-[12px] duration-300 hover:shadow-[0_0_12px_#00C8FF] font-semibold disabled:opacity-50"
+                suppressHydrationWarning
+              >
+                <PlayIcon weight="fill" />{" "}
+                {mounted && isLoading
+                  ? "Carregando..."
+                  : mounted && isCheckingEnrollment
+                  ? "Verificando..."
+                  : mounted && isEnrolled
+                  ? "Iniciar"
+                  : "Inscrever-se"}
               </Button>
               <div className="flex gap-4">
-                <button className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141]">
-                  <PlusIcon className="" />
+                <button
+                  onClick={async () => {
+                    if (isEnrolled || isEnrolling) return;
+                    try {
+                      setIsEnrolling(true);
+                      const { enrollInCourse } = await import(
+                        "@/actions/course/enroll"
+                      );
+                      await enrollInCourse(course.id);
+                      setIsEnrolled(true);
+                      await refreshEnrolledCourses();
+                    } catch (error) {
+                      console.error("Erro ao inscrever no curso:", error);
+                      alert(
+                        error instanceof Error
+                          ? error.message
+                          : "Erro ao inscrever no curso"
+                      );
+                    } finally {
+                      setIsEnrolling(false);
+                    }
+                  }}
+                  disabled={isEnrolled || isEnrolling}
+                  className="h-[50px] w-[50px] flex items-center justify-center border-[2px] rounded-full border-[#515155] hover:bg-[#424141] disabled:opacity-50 disabled:cursor-not-allowed"
+                  suppressHydrationWarning
+                >
+                  {mounted && isEnrolled ? <Check /> : <PlusIcon />}
                 </button>
                 {/* Dropdown shadcn para reações */}
                 <DropdownMenu>

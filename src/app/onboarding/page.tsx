@@ -2,6 +2,7 @@ import { PrimaryButton } from "@/components/ui/primary-button";
 import Image from "next/image";
 import Link from "next/link";
 import onboardingImage from "../../../public/onboarding-img-1.png";
+import codeLogo from "../../../public/code-legends-logo.svg";
 
 export default function OnboardingPage() {
   return (
@@ -12,12 +13,12 @@ export default function OnboardingPage() {
 
       <div className="max-w-3xl w-full space-y-8 p-4 z-50">
         <div className="space-y-4 text-center">
-          <span className="text-white text-xs uppercase font-thin">
-            Sua jornada para o sucesso começa aqui
-          </span>
+          <div className="w-full flex justify-center items-center mb-10">
+            <Image src={codeLogo} alt="Code Legends" width={149} height={16} />
+          </div>
 
           <h3 className="text-white text-2xl font-bold">Bem vindo Lenda!</h3>
-          <p className="text-white text-md">
+          <p className="text-muted-foreground text-md">
             Em poucos passos, você vai descobrir todas as possibilidades que
             preparamos para impulsionar seu desenvolvimento. Bora começar?
           </p>
