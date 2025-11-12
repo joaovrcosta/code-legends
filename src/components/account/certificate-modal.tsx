@@ -14,7 +14,7 @@ import { getCurrentUser } from "@/actions/user/get-current-user";
 import type { User } from "@/types/user";
 import type { CompletedCourse } from "@/types/user-course.ts";
 import jsPDF from "jspdf";
-import Image from "next/image";
+import NextImage from "next/image";
 import codeLegendsLogo from "../../../public/code-legends-logo.svg";
 
 interface CertificateModalProps {
@@ -64,12 +64,39 @@ export function CertificateModal({
     alert("Link copiado para a área de transferência!");
   };
 
-  const handleDownloadCertificate = () => {
+  const handleDownloadCertificate = async () => {
     if (isDownloading || !user) return;
 
     setIsDownloading(true);
 
     try {
+      // Carregar a imagem da logo e converter para base64 usando canvas
+      const logoUrl = "/code-legends-logo.svg";
+
+      // Criar um canvas para renderizar o SVG
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = 212;
+      canvas.height = 16;
+
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+
+      const logoBase64 = await new Promise<string>((resolve, reject) => {
+        img.onload = () => {
+          if (ctx) {
+            ctx.fillStyle = "#121214"; // Fundo escuro
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL("image/png"));
+          } else {
+            reject(new Error("Não foi possível criar contexto do canvas"));
+          }
+        };
+        img.onerror = reject;
+        img.src = logoUrl;
+      });
+
       const doc = new jsPDF({
         orientation: "landscape",
         unit: "mm",
@@ -83,11 +110,12 @@ export function CertificateModal({
       doc.setFillColor(18, 18, 20);
       doc.rect(0, 0, width, height, "F");
 
-      // Logo Code Legends (simulado com texto por enquanto)
-      doc.setFontSize(16);
-      doc.setTextColor(196, 196, 204); // #c4c4cc
-      doc.setFont("helvetica", "normal");
-      doc.text("CODE LEGENDS", width / 2, 30, { align: "center" });
+      // Logo Code Legends - adicionar imagem
+      const logoWidth = 40; // largura em mm
+      const logoHeight = 3; // altura em mm (proporção mantida)
+      const logoX = (width - logoWidth) / 2; // centralizado
+      const logoY = 20; // posição Y
+      doc.addImage(logoBase64, "PNG", logoX, logoY, logoWidth, logoHeight);
 
       // Title com gradient (simulado com cor azul)
       doc.setFontSize(36);
@@ -211,11 +239,11 @@ export function CertificateModal({
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
           {/* Preview do Certificado */}
-          <div className="bg-[#121214] rounded-[24px] shadow-xl p-8 shadow-lg border border-[#25252a] relative overflow-hidden">
+          <div className="bg-[#121214] rounded-[24px] shadow-xl p-8 border border-[#25252a] relative overflow-hidden">
             <div className="text-center space-y-6 relative z-10">
               {/* Logo Code Legends */}
               <div className="flex justify-center mb-4">
-                <Image
+                <NextImage
                   src={codeLegendsLogo}
                   alt="Code Legends"
                   width={150}
