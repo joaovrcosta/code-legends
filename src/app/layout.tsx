@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Poppins, Inter } from "next/font/google";
+import { Providers } from "@/components/providers/session-provider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={`${poppins.variable} ${inter.variable}`}>
-      <body className="font-poppins antialiased">{children}</body>
+      <body className="font-poppins antialiased">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

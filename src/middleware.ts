@@ -14,18 +14,31 @@ export default auth(
   ) => {
     const { pathname } = req.nextUrl;
     const session = await auth();
-    const isLoggedIn = !!session?.user;
-
-    // Acessar dados de onboarding do token através da session
-    const onboardingCompleted =
-      (session as { onboardingCompleted?: boolean })?.onboardingCompleted ??
-      false;
 
     // Rotas públicas
     const publicRoutes = ["/login", "/signup"];
     const isPublicRoute = publicRoutes.some(
       (route) => pathname === route || pathname.startsWith(route + "/")
     );
+
+    // Verificar se há erro de refresh token na sessão
+    const sessionError = (session as { error?: string })?.error;
+    if (sessionError === "RefreshAccessTokenError") {
+      // Se houver erro de refresh token e não estiver em rota pública, redirecionar para login
+      // Se já estiver em rota pública, permitir acesso (evita loop de redirecionamento)
+      if (!isPublicRoute) {
+        return NextResponse.redirect(new URL("/login", req.url));
+      }
+      // Se já está em rota pública, permitir acesso sem redirecionar
+      return NextResponse.next();
+    }
+
+    const isLoggedIn = !!session?.user;
+
+    // Acessar dados de onboarding do token através da session
+    const onboardingCompleted =
+      (session as { onboardingCompleted?: boolean })?.onboardingCompleted ??
+      false;
 
     // Rotas de onboarding
     const onboardingRoutes = ["/onboarding", "/learn/onboarding"];

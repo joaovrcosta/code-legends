@@ -53,6 +53,14 @@ async function refreshAccessToken(token: TokenWithRefresh) {
         }
       );
 
+      // Se a API retornar 401 ou 404, o usuário foi excluído
+      if (userResponse.status === 401 || userResponse.status === 404) {
+        console.error(
+          "❌ Usuário não encontrado após refresh - forçando logout"
+        );
+        throw new Error(`Usuário não encontrado: ${userResponse.status}`);
+      }
+
       if (userResponse.ok) {
         const userData = await userResponse.json();
         return {
@@ -67,6 +75,10 @@ async function refreshAccessToken(token: TokenWithRefresh) {
       }
     } catch (error) {
       console.error("Erro ao buscar dados atualizados do usuário:", error);
+      // Se o erro for de usuário não encontrado, propagar o erro para invalidar o token
+      if (error instanceof Error && error.message.includes("não encontrado")) {
+        throw error;
+      }
     }
 
     // Se não conseguir buscar dados atualizados, retornar token renovado sem atualizar onboarding
@@ -228,6 +240,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
           );
 
+          // Se a API retornar 401 ou 404, o usuário foi excluído ou o token é inválido
+          if (userResponse.status === 401 || userResponse.status === 404) {
+            console.error(
+              "❌ Usuário não encontrado ou token inválido - forçando logout"
+            );
+            return {
+              ...token,
+              error: "RefreshAccessTokenError",
+            };
+          }
+
           if (userResponse.ok) {
             const userData = await userResponse.json();
             return {
@@ -272,6 +295,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 cache: "no-store",
               }
             );
+
+            // Se a API retornar 401 ou 404, o usuário foi excluído ou o token é inválido
+            if (userResponse.status === 401 || userResponse.status === 404) {
+              console.error(
+                "❌ Usuário não encontrado ou token inválido - forçando logout"
+              );
+              return {
+                ...token,
+                error: "RefreshAccessTokenError",
+              };
+            }
 
             if (userResponse.ok) {
               const userData = await userResponse.json();
@@ -318,6 +352,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       };
       token: TokenWithRefresh;
     }) {
+      // Se houver erro de refresh token, retornar sessão vazia mas com estrutura consistente
+      // Isso evita problemas de hidratação
+      if (token?.error === "RefreshAccessTokenError") {
+        return {
+          ...session,
+          user: {
+            id: undefined,
+            name: undefined,
+            email: undefined,
+            image: undefined,
+          },
+          accessToken: undefined,
+          error: "RefreshAccessTokenError",
+        };
+      }
+
       if (token) {
         session.user.id = token.id as string;
         session.user.name = token.name as string;

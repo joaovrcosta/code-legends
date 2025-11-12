@@ -17,6 +17,16 @@ export default function ClientHeader() {
   const [scrolled, setScrolled] = useState(false);
   const { data: session } = useSession();
 
+  // Verificar se há erro de refresh token na sessão
+  useEffect(() => {
+    const sessionError = (session as { error?: string })?.error;
+    if (sessionError === "RefreshAccessTokenError") {
+      // Fazer logout quando houver erro de refresh token
+      console.log("🔒 Erro de refresh token detectado, fazendo logout...");
+      signOut({ redirect: true, callbackUrl: "/login" });
+    }
+  }, [session]);
+
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 30);
