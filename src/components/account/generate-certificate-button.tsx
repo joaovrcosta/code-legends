@@ -5,6 +5,7 @@ import { generateCertificate } from "@/actions/course/generate-certificate";
 import { Button } from "../ui/button";
 import { CertificateModal } from "./certificate-modal";
 import type { CompletedCourse } from "@/types/user-course.ts";
+import { CertificateIcon } from "@phosphor-icons/react/dist/ssr";
 
 interface GenerateCertificateButtonProps {
   courseId: string;
@@ -29,9 +30,7 @@ export function GenerateCertificateButton({
     } catch (error) {
       console.error("Erro ao gerar certificado:", error);
       alert(
-        error instanceof Error
-          ? error.message
-          : "Erro ao gerar certificado"
+        error instanceof Error ? error.message : "Erro ao gerar certificado"
       );
     } finally {
       setIsGenerating(false);
@@ -45,9 +44,10 @@ export function GenerateCertificateButton({
         disabled={isGenerating}
         variant="outline"
         size="sm"
-        className="text-[#00c8ff] border-[#00c8ff] hover:bg-[#00c8ff] hover:text-white"
+        className="w-full bg-gray-gradient-first hover:opacity-90 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 hover:shadow-[0_0_12px_#1a1a1a] h-[42px] border-[#272727]"
       >
-        {isGenerating ? "Gerando..." : "Gerar Certificado"}
+        <CertificateIcon size={18} className="mr-2" />
+        {isGenerating ? "Gerando..." : "Ver certificado"}
       </Button>
       <CertificateModal
         open={isOpen}
@@ -57,4 +57,3 @@ export function GenerateCertificateButton({
     </>
   );
 }
-

@@ -9,7 +9,7 @@ import {
   DialogClose,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { X, Copy, Download, Share2 } from "lucide-react";
+import { X, Copy, Download } from "lucide-react";
 import { generateCertificate } from "@/actions/course/generate-certificate";
 import { getCurrentUser } from "@/actions/user/get-current-user";
 import type { User } from "@/types/user";
@@ -52,9 +52,7 @@ export function CertificateModal({
     } catch (error) {
       console.error("Erro ao gerar certificado:", error);
       alert(
-        error instanceof Error
-          ? error.message
-          : "Erro ao gerar certificado"
+        error instanceof Error ? error.message : "Erro ao gerar certificado"
       );
     } finally {
       setIsGenerating(false);
@@ -98,9 +96,7 @@ export function CertificateModal({
       doc.setTextColor(100, 100, 100);
       doc.setFont("helvetica", "normal");
       doc.text(
-        language === "pt"
-          ? "Certificamos que"
-          : "This certifies that",
+        language === "pt" ? "Certificamos que" : "This certifies that",
         width / 2,
         70,
         { align: "center" }
@@ -171,9 +167,13 @@ export function CertificateModal({
     const url = encodeURIComponent(shareLink);
 
     const shareUrls: Record<string, string> = {
-      whatsapp: `https://wa.me/?text=${encodeURIComponent(text + " " + shareLink)}`,
+      whatsapp: `https://wa.me/?text=${encodeURIComponent(
+        text + " " + shareLink
+      )}`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
-      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+        text
+      )}&url=${url}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
     };
 
@@ -230,9 +230,7 @@ export function CertificateModal({
                   }
                 )}
               </div>
-              <div className="text-xs text-gray-400 mt-4">
-                ID: {course.id}
-              </div>
+              <div className="text-xs text-gray-400 mt-4">ID: {course.id}</div>
             </div>
           </div>
 
@@ -250,9 +248,7 @@ export function CertificateModal({
                     name="language"
                     value="pt"
                     checked={language === "pt"}
-                    onChange={(e) =>
-                      setLanguage(e.target.value as "pt" | "en")
-                    }
+                    onChange={(e) => setLanguage(e.target.value as "pt" | "en")}
                     className="w-4 h-4 text-[#00c8ff]"
                   />
                   <span className="text-muted-foreground">Português</span>
@@ -263,9 +259,7 @@ export function CertificateModal({
                     name="language"
                     value="en"
                     checked={language === "en"}
-                    onChange={(e) =>
-                      setLanguage(e.target.value as "pt" | "en")
-                    }
+                    onChange={(e) => setLanguage(e.target.value as "pt" | "en")}
                     className="w-4 h-4 text-[#00c8ff]"
                   />
                   <span className="text-muted-foreground">Inglês</span>
@@ -296,51 +290,6 @@ export function CertificateModal({
               </div>
             </div>
 
-            {/* Compartilhar nas redes sociais */}
-            <div>
-              <label className="text-sm font-medium text-white mb-2 block">
-                Compartilhe também nas redes sociais:
-              </label>
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => handleShare("whatsapp")}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 border-[#333333] hover:bg-[#25D366] hover:border-[#25D366]"
-                >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  WhatsApp
-                </Button>
-                <Button
-                  onClick={() => handleShare("linkedin")}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 border-[#333333] hover:bg-[#0077B5] hover:border-[#0077B5]"
-                >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  LinkedIn
-                </Button>
-                <Button
-                  onClick={() => handleShare("twitter")}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 border-[#333333] hover:bg-[#1DA1F2] hover:border-[#1DA1F2]"
-                >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  X
-                </Button>
-                <Button
-                  onClick={() => handleShare("facebook")}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 border-[#333333] hover:bg-[#1877F2] hover:border-[#1877F2]"
-                >
-                  <Share2 className="h-4 w-4 mr-2" />
-                  Facebook
-                </Button>
-              </div>
-            </div>
-
             {/* Botão de Download */}
             <Button
               onClick={handleDownloadCertificate}
@@ -357,4 +306,3 @@ export function CertificateModal({
     </Dialog>
   );
 }
-

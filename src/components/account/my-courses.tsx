@@ -12,11 +12,11 @@ export async function MyCourses() {
 
   return (
     <Card className="bg-[#121214] border-[#25252a] lg:p-10 py-4 px-2">
-      <CardHeader>
+      <CardHeader className="px-4">
         <div className="flex items-center space-x-2">
           <Album className="w-6 h-6 text-[#00c8ff]" />
           <h1 className="text-lg font-semibold bg-blue-gradient-500 bg-clip-text text-transparent">
-            Últimos Cursos
+            Meus certificados
           </h1>
           <Link href="/account/purchases">
             <span className="text-sm text-muted-foreground">Gerenciar</span>
@@ -39,8 +39,8 @@ export async function MyCourses() {
                   <Image
                     src={course.icon}
                     alt={course.title}
-                    width={80}
-                    height={80}
+                    width={52}
+                    height={52}
                   />
                   <div>
                     <h3 className="text-white font-medium">{course.title}</h3>
@@ -50,13 +50,7 @@ export async function MyCourses() {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
-                  <Link
-                    href={`/classroom/${course.id}`}
-                    className="text-[#00c8ff] text-sm hover:underline"
-                  >
-                    Revisar
-                  </Link>
+                <div className="flex items-center space-x-4">
                   <GenerateCertificateButton
                     courseId={course.id}
                     course={course}

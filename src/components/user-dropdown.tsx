@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
@@ -10,16 +12,30 @@ import {
 } from "./ui/dropdown-menu";
 import { Headset, LogOut, User, Zap } from "lucide-react";
 import { logout } from "@/actions/auth";
+import { useSession } from "next-auth/react";
 
 export function UserDropdown() {
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  // Obtém as iniciais do nome para o fallback
+  const getInitials = (name?: string | null) => {
+    if (!name) return "U";
+    const names = name.split(" ");
+    if (names.length >= 2) {
+      return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase();
+    }
+    return name[0].toUpperCase();
+  };
+
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="hover:bg-[#25252A] p-1 rounded-full cursor-pointer">
             <Avatar className="h-[38px] w-[38px]">
-              <AvatarImage src="https://avatars.githubusercontent.com/u/70654718?v=4" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarImage src={user?.image || undefined} />
+              <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
             </Avatar>
           </div>
         </DropdownMenuTrigger>
