@@ -110,6 +110,7 @@ export type ActiveCourseResponse = {
 
 export type CompletedCourse = {
   id: string;
+  certificateId: string;
   title: string;
   icon: string;
   progress: number;

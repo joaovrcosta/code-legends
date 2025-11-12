@@ -37,7 +37,7 @@ export function CertificateModal({
     if (open) {
       getCurrentUser().then(setUser);
       // Gera o link de compartilhamento
-      const link = `${window.location.origin}/certificates/${course.id}`;
+      const link = `${window.location.origin}/certificates/${course.certificateId}`;
       setShareLink(link);
     }
   }, [open, course.id]);
