@@ -228,6 +228,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       // Se o trigger for "update", buscar dados atualizados do usuário
+      // Usar cache: "no-store" para garantir dados sempre atualizados quando há atualização manual
       if (trigger === "update" && token.accessToken) {
         try {
           const userResponse = await fetch(
@@ -236,7 +237,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               headers: {
                 Authorization: `Bearer ${token.accessToken}`,
               },
-              next: { revalidate: 30 }, // Cache de 10 segundos para reduzir requisições
+              cache: "no-store", // Sem cache quando há atualização manual (ex: completar onboarding)
             }
           );
 
@@ -258,6 +259,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               onboardingCompleted: userData.user.onboardingCompleted ?? false,
               onboardingGoal: userData.user.onboardingGoal ?? null,
               onboardingCareer: userData.user.onboardingCareer ?? null,
+              lastOnboardingCheck: 0, // Resetar para forçar verificação imediata na próxima requisição
             };
           }
         } catch (error) {

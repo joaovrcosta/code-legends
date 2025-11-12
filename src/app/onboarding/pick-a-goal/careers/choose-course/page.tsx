@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { completeOnboarding } from "@/actions/user";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { Progress } from "@/components/ui/progress";
@@ -18,6 +19,7 @@ function ChooseCourseContent() {
   const [error, setError] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { update } = useSession();
   const categorySlug = searchParams.get("categorySlug");
 
   useEffect(() => {
@@ -57,6 +59,29 @@ function ChooseCourseContent() {
       }
       await completeOnboarding();
 
+      // Verificar diretamente na API se o onboarding foi completado
+      // Isso garante que temos confirmação antes de redirecionar
+      const { getOnboardingStatus } = await import(
+        "@/actions/user/get-onboarding-status"
+      );
+      let onboardingCompleted = false;
+      let verificationAttempts = 0;
+      const maxVerificationAttempts = 5;
+
+      while (!onboardingCompleted && verificationAttempts < maxVerificationAttempts) {
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        const status = await getOnboardingStatus();
+        onboardingCompleted = status.isCompleted;
+        verificationAttempts++;
+      }
+
+      // Forçar atualização imediata da sessão para refletir o onboarding completo
+      // Isso garante que o middleware detecte a mudança imediatamente
+      await update();
+
+      // Aguardar um pouco mais para garantir que a sessão seja propagada no servidor
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
       // Aguardar que o curso ativo esteja disponível na API
       const { getActiveCourse } = await import(
         "@/actions/user/get-active-course"
@@ -71,8 +96,9 @@ function ChooseCourseContent() {
         attempts++;
       }
 
-      // Redirecionar para /learn quando o curso estiver pronto
-      router.push("/learn");
+      // Usar window.location.href para fazer hard redirect e forçar o middleware
+      // a buscar a sessão atualizada do servidor
+      window.location.href = "/learn";
     } catch (error) {
       console.error("Erro ao completar onboarding:", error);
       setError(

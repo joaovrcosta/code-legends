@@ -1,14 +1,14 @@
 import { Album } from "lucide-react";
 import { Card, CardHeader, CardContent } from "../ui/card";
 import Link from "next/link";
-import { getUserCourses } from "@/actions/user/get-user-courses";
-import { UserCoursesResponse } from "@/types/user-course.ts";
+import { getCompletedCourses } from "@/actions/course/completed";
 import Image from "next/image";
+import { GenerateCertificateButton } from "./generate-certificate-button";
 
 export async function MyCourses() {
-  const userCourses: UserCoursesResponse = await getUserCourses();
+  const completedCourses = await getCompletedCourses();
 
-  const favoriteCourses = userCourses.favoriteCourses;
+  const completedCoursesList = completedCourses.courses || [];
 
   return (
     <Card className="bg-[#121214] border-[#25252a] lg:p-10 py-4 px-2">
@@ -28,34 +28,39 @@ export async function MyCourses() {
       </CardHeader>
 
       <CardContent className="px-0 mt-4">
-        {favoriteCourses.length > 0 ? (
+        {completedCoursesList.length > 0 ? (
           <div className="space-y-3">
-            {favoriteCourses.map((fav) => (
+            {completedCoursesList.map((course) => (
               <div
-                key={fav.id}
+                key={course.id}
                 className="flex items-center justify-between p-3 bg-transparent border border-[#333333] rounded-lg"
               >
                 <div className="flex items-center space-x-3">
                   <Image
-                    src={fav.course.icon}
-                    alt={fav.course.title}
+                    src={course.icon}
+                    alt={course.title}
                     width={80}
                     height={80}
                   />
                   <div>
-                    <h3 className="text-white font-medium">
-                      {fav.course.title}
-                    </h3>
+                    <h3 className="text-white font-medium">{course.title}</h3>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Concluído
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-2">
                   <Link
-                    href={`/classroom/${fav.course.slug}`}
+                    href={`/classroom/${course.id}`}
                     className="text-[#00c8ff] text-sm hover:underline"
                   >
-                    Continuar
+                    Revisar
                   </Link>
+                  <GenerateCertificateButton
+                    courseId={course.id}
+                    course={course}
+                  />
                 </div>
               </div>
             ))}
@@ -63,7 +68,7 @@ export async function MyCourses() {
         ) : (
           <div className="text-center py-8">
             <p className="text-muted-foreground text-sm">
-              Você ainda não está inscrito em nenhum curso.
+              Você ainda não completou nenhum curso.
             </p>
             <Link
               href="/learn/catalog"

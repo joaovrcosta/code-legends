@@ -36,7 +36,7 @@ export default auth(
     const isLoggedIn = !!session?.user;
 
     // Acessar dados de onboarding do token através da session
-    const onboardingCompleted =
+    let onboardingCompleted =
       (session as { onboardingCompleted?: boolean })?.onboardingCompleted ??
       false;
 
@@ -45,6 +45,38 @@ export default auth(
     const isOnboardingRoute = onboardingRoutes.some((route) =>
       pathname.startsWith(route)
     );
+
+    // Se o usuário está tentando acessar /learn e a sessão mostra onboarding incompleto,
+    // verificar diretamente na API para garantir dados atualizados
+    // Isso resolve o problema de cache quando o onboarding é completado
+    if (
+      isLoggedIn &&
+      pathname === "/learn" &&
+      !onboardingCompleted
+    ) {
+      const accessToken = (session as { accessToken?: string })?.accessToken;
+      if (accessToken) {
+        try {
+          const userResponse = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333"}/me`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+              cache: "no-store", // Sem cache para garantir dados atualizados
+            }
+          );
+
+          if (userResponse.ok) {
+            const userData = await userResponse.json();
+            onboardingCompleted = userData.user?.onboardingCompleted ?? false;
+          }
+        } catch (error) {
+          console.error("Erro ao verificar onboarding no middleware:", error);
+          // Em caso de erro, usar o valor da sessão
+        }
+      }
+    }
 
     // Se estiver logado e tentar acessar login/signup
     if (isLoggedIn && (pathname === "/login" || pathname === "/signup")) {

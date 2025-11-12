@@ -107,3 +107,15 @@ export type ActiveCourse = {
 export type ActiveCourseResponse = {
   course: ActiveCourse;
 };
+
+export type CompletedCourse = {
+  id: string;
+  title: string;
+  icon: string;
+  progress: number;
+  completedAt: string;
+};
+
+export type CompletedCoursesResponse = {
+  courses: CompletedCourse[];
+};
