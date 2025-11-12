@@ -14,6 +14,8 @@ import { getCurrentUser } from "@/actions/user/get-current-user";
 import type { User } from "@/types/user";
 import type { CompletedCourse } from "@/types/user-course.ts";
 import jsPDF from "jspdf";
+import Image from "next/image";
+import codeLegendsLogo from "../../../public/code-legends-logo.svg";
 
 interface CertificateModalProps {
   open: boolean;
@@ -77,47 +79,53 @@ export function CertificateModal({
       const width = doc.internal.pageSize.getWidth();
       const height = doc.internal.pageSize.getHeight();
 
-      // Background gradient effect
-      doc.setFillColor(250, 250, 250);
+      // Background escuro (#121214)
+      doc.setFillColor(18, 18, 20);
       doc.rect(0, 0, width, height, "F");
 
-      // Title
-      doc.setFontSize(32);
-      doc.setTextColor(34, 197, 94); // Verde
+      // Logo Code Legends (simulado com texto por enquanto)
+      doc.setFontSize(16);
+      doc.setTextColor(196, 196, 204); // #c4c4cc
+      doc.setFont("helvetica", "normal");
+      doc.text("CODE LEGENDS", width / 2, 30, { align: "center" });
+
+      // Title com gradient (simulado com cor azul)
+      doc.setFontSize(36);
+      doc.setTextColor(0, 200, 255); // #00C8FF
       doc.setFont("helvetica", "bold");
-      doc.text("CERTIFICADO DE CONCLUSÃO", width / 2, 50, {
+      doc.text("CERTIFICADO DE CONCLUSÃO", width / 2, 55, {
         align: "center",
       });
 
       // Subtitle
-      doc.setFontSize(18);
-      doc.setTextColor(100, 100, 100);
+      doc.setFontSize(14);
+      doc.setTextColor(196, 196, 204); // #c4c4cc
       doc.setFont("helvetica", "normal");
       doc.text(
         language === "pt" ? "Certificamos que" : "This certifies that",
         width / 2,
-        70,
+        75,
         { align: "center" }
       );
 
       // Student name
-      doc.setFontSize(24);
-      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(22);
+      doc.setTextColor(255, 255, 255); // Branco
       doc.setFont("helvetica", "bold");
-      doc.text(user.name || "Estudante", width / 2, 90, {
+      doc.text(user.name || "Estudante", width / 2, 95, {
         align: "center",
         maxWidth: width - 40,
       });
 
       // Course completion text
-      doc.setFontSize(16);
-      doc.setTextColor(100, 100, 100);
+      doc.setFontSize(14);
+      doc.setTextColor(196, 196, 204); // #c4c4cc
       doc.setFont("helvetica", "normal");
       const completionText =
         language === "pt"
           ? `concluiu com sucesso o curso de ${course.title}`
           : `has successfully completed the course ${course.title}`;
-      doc.text(completionText, width / 2, 110, {
+      doc.text(completionText, width / 2, 115, {
         align: "center",
         maxWidth: width - 40,
       });
@@ -137,13 +145,14 @@ export function CertificateModal({
               year: "numeric",
             })}`;
 
-      doc.setFontSize(14);
-      doc.text(dateText, width / 2, 130, { align: "center" });
+      doc.setFontSize(12);
+      doc.setTextColor(196, 196, 204); // #c4c4cc
+      doc.text(dateText, width / 2, 135, { align: "center" });
 
       // Certificate ID
       doc.setFontSize(10);
-      doc.setTextColor(150, 150, 150);
-      doc.text(`ID: ${course.id}`, width / 2, height - 30, {
+      doc.setTextColor(102, 102, 102); // #666666
+      doc.text(`ID: ${course.id}`, width / 2, height - 20, {
         align: "center",
       });
 
@@ -202,33 +211,63 @@ export function CertificateModal({
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
           {/* Preview do Certificado */}
-          <div className="bg-white rounded-lg p-8 shadow-lg">
-            <div className="text-center space-y-4">
-              <div className="text-2xl font-bold text-green-600">
-                CERTIFICADO DE CONCLUSÃO
+          <div className="bg-[#121214] rounded-[24px] shadow-xl p-8 shadow-lg border border-[#25252a] relative overflow-hidden">
+            <div className="text-center space-y-6 relative z-10">
+              {/* Logo Code Legends */}
+              <div className="flex justify-center mb-4">
+                <Image
+                  src={codeLegendsLogo}
+                  alt="Code Legends"
+                  width={150}
+                  height={20}
+                  className="h-auto"
+                />
               </div>
-              <div className="text-gray-600">
-                {language === "pt" ? "Certificamos que" : "This certifies that"}
+
+              {/* Título com Gradient */}
+              <div className="space-y-2">
+                <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-2xl">
+                  CERTIFICADO DE CONCLUSÃO
+                </span>
               </div>
-              <div className="text-xl font-bold text-black">
-                {user?.name || "Estudante"}
+
+              {/* Conteúdo do Certificado */}
+              <div className="space-y-4 mt-8">
+                <div className="text-[#c4c4cc] text-sm">
+                  {language === "pt"
+                    ? "Certificamos que"
+                    : "This certifies that"}
+                </div>
+
+                <div className="rounded-lg px-4 py-3">
+                  <div className="text-white font-semibold text-2xl">
+                    {user?.name || "Estudante"}
+                  </div>
+                </div>
+
+                <div className=" rounded-lg px-4 py-3">
+                  <div className="text-[#c4c4cc] text-sm">
+                    {language === "pt"
+                      ? `concluiu com sucesso o curso de ${course.title}`
+                      : `has successfully completed the course ${course.title}`}
+                  </div>
+                </div>
+
+                <div className="bg-[#1a1a1a] rounded-lg px-4 py-3 border border-[#333333]">
+                  <div className="text-[#c4c4cc] text-sm">
+                    {new Date(course.completedAt).toLocaleDateString(
+                      language === "pt" ? "pt-BR" : "en-US",
+                      {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      }
+                    )}
+                  </div>
+                </div>
               </div>
-              <div className="text-gray-600">
-                {language === "pt"
-                  ? `concluiu com sucesso o curso de ${course.title}`
-                  : `has successfully completed the course ${course.title}`}
-              </div>
-              <div className="text-sm text-gray-500 mt-4">
-                {new Date(course.completedAt).toLocaleDateString(
-                  language === "pt" ? "pt-BR" : "en-US",
-                  {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
-                  }
-                )}
-              </div>
-              <div className="text-xs text-gray-400 mt-4">ID: {course.id}</div>
+
+              <div className="text-xs text-[#666666] mt-6">ID: {course.id}</div>
             </div>
           </div>
 
@@ -292,7 +331,7 @@ export function CertificateModal({
             <Button
               onClick={handleDownloadCertificate}
               disabled={isDownloading || !user}
-              className="w-full bg-[#00c8ff] hover:bg-[#00b8e6] text-white"
+              className="w-full bg-blue-gradient-first hover:bg-blue-gradient-second text-white"
               size="lg"
             >
               <Download className="h-5 w-5 mr-2" />
