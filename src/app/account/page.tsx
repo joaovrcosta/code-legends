@@ -4,14 +4,12 @@ import { Card, CardHeader } from "@/components/ui/card";
 import { Crown, KeyRound } from "lucide-react";
 import Link from "next/link";
 import { getCurrentUser } from "@/actions/user/get-current-user";
-import { getUserCertificates } from "@/actions/user/get-user-certificates";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
   const user = await getCurrentUser();
-  const certificates = await getUserCertificates();
 
   if (!user) {
     redirect("/login");

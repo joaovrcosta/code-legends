@@ -10,7 +10,6 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { X, Copy, Download } from "lucide-react";
-import { generateCertificate } from "@/actions/course/generate-certificate";
 import { getCurrentUser } from "@/actions/user/get-current-user";
 import type { User } from "@/types/user";
 import type { CompletedCourse } from "@/types/user-course.ts";
@@ -29,7 +28,6 @@ export function CertificateModal({
 }: CertificateModalProps) {
   const [language, setLanguage] = useState<"pt" | "en">("pt");
   const [shareLink, setShareLink] = useState<string>("");
-  const [isGenerating, setIsGenerating] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
@@ -42,22 +40,22 @@ export function CertificateModal({
     }
   }, [open, course.id]);
 
-  const handleGenerateCertificate = async () => {
-    if (isGenerating) return;
+  // const handleGenerateCertificate = async () => {
+  //   if (isGenerating) return;
 
-    try {
-      setIsGenerating(true);
-      await generateCertificate(course.id);
-      // Após gerar, atualiza o link se necessário
-    } catch (error) {
-      console.error("Erro ao gerar certificado:", error);
-      alert(
-        error instanceof Error ? error.message : "Erro ao gerar certificado"
-      );
-    } finally {
-      setIsGenerating(false);
-    }
-  };
+  //   try {
+  //     setIsGenerating(true);
+  //     await generateCertificate(course.id);
+  //     // Após gerar, atualiza o link se necessário
+  //   } catch (error) {
+  //     console.error("Erro ao gerar certificado:", error);
+  //     alert(
+  //       error instanceof Error ? error.message : "Erro ao gerar certificado"
+  //     );
+  //   } finally {
+  //     setIsGenerating(false);
+  //   }
+  // };
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(shareLink);
@@ -159,28 +157,28 @@ export function CertificateModal({
     }
   };
 
-  const handleShare = (platform: string) => {
-    const text =
-      language === "pt"
-        ? `Acabei de concluir o curso ${course.title}!`
-        : `I just completed the course ${course.title}!`;
-    const url = encodeURIComponent(shareLink);
+  // const handleShare = (platform: string) => {
+  //   const text =
+  //     language === "pt"
+  //       ? `Acabei de concluir o curso ${course.title}!`
+  //       : `I just completed the course ${course.title}!`;
+  //   const url = encodeURIComponent(shareLink);
 
-    const shareUrls: Record<string, string> = {
-      whatsapp: `https://wa.me/?text=${encodeURIComponent(
-        text + " " + shareLink
-      )}`,
-      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
-      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-        text
-      )}&url=${url}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-    };
+  //   const shareUrls: Record<string, string> = {
+  //     whatsapp: `https://wa.me/?text=${encodeURIComponent(
+  //       text + " " + shareLink
+  //     )}`,
+  //     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+  //     twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+  //       text
+  //     )}&url=${url}`,
+  //     facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+  //   };
 
-    if (shareUrls[platform]) {
-      window.open(shareUrls[platform], "_blank");
-    }
-  };
+  //   if (shareUrls[platform]) {
+  //     window.open(shareUrls[platform], "_blank");
+  //   }
+  // };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
