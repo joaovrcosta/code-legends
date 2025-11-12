@@ -49,7 +49,7 @@ async function refreshAccessToken(token: TokenWithRefresh) {
           headers: {
             Authorization: `Bearer ${newAccessToken}`,
           },
-          cache: "no-store",
+          next: { revalidate: 30 }, // Cache de 10 segundos para reduzir requisições
         }
       );
 
@@ -236,7 +236,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               headers: {
                 Authorization: `Bearer ${token.accessToken}`,
               },
-              cache: "no-store",
+              next: { revalidate: 30 }, // Cache de 10 segundos para reduzir requisições
             }
           );
 
@@ -265,9 +265,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       }
 
-      // Token ainda válido - sempre verificar dados de onboarding
-      // Se onboarding não está completo, SEMPRE verificar (sem cache) para detectar mudanças rapidamente
-      // Se onboarding está completo, verificar a cada 10 segundos (para não fazer muitas requisições)
+      // Token ainda válido - verificar dados de onboarding com intervalos otimizados
+      // Para reduzir carga na API, verificamos com intervalos diferentes:
+      // - Onboarding incompleto: a cada 10 segundos (para detectar mudanças rapidamente)
+      // - Onboarding completo: a cada 60 segundos (para reduzir requisições)
       if (
         token.accessTokenExpires &&
         Date.now() < token.accessTokenExpires &&
@@ -275,12 +276,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       ) {
         const isOnboardingCompleted = token.onboardingCompleted ?? false;
 
-        // Se onboarding não está completo, sempre verificar (sem cache)
-        // Se onboarding está completo, verificar apenas a cada 10 segundos
+        // Definir intervalos de verificação baseados no status de onboarding
+        const checkInterval = isOnboardingCompleted ? 60000 : 10000; // 60s completo, 10s incompleto
+
+        // Verificar apenas se passou o intervalo desde a última verificação
         const shouldUpdateOnboarding =
-          !isOnboardingCompleted || // Sempre verificar se não está completo
           !token.lastOnboardingCheck ||
-          Date.now() - token.lastOnboardingCheck > 10000; // 10s se completo
+          Date.now() - token.lastOnboardingCheck > checkInterval;
 
         if (shouldUpdateOnboarding) {
           try {
@@ -292,7 +294,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 headers: {
                   Authorization: `Bearer ${token.accessToken}`,
                 },
-                cache: "no-store",
+                next: { revalidate: 30 }, // Cache de 10 segundos para reduzir requisições
               }
             );
 
