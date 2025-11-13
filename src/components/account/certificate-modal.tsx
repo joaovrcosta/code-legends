@@ -40,7 +40,7 @@ export function CertificateModal({
       const link = `${window.location.origin}/certificates/${course.certificateId}`;
       setShareLink(link);
     }
-  }, [open, course.id]);
+  }, [open, course.id, course.certificateId]);
 
   // const handleGenerateCertificate = async () => {
   //   if (isGenerating) return;

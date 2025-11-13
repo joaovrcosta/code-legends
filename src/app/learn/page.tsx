@@ -70,6 +70,63 @@ export default function LearnPage() {
     );
   }, [allLessons]);
 
+  // Calcula o módulo e aula atual (memoizado para performance)
+  const currentModuleAndLesson = useMemo(() => {
+    if (!roadmap) {
+      return { moduleNumber: 1, lessonNumber: 1 };
+    }
+
+    let currentModuleIndex = -1;
+    let currentLessonIndex = -1;
+
+    for (let i = 0; i < roadmap.modules.length; i++) {
+      const moduleItem = roadmap.modules[i];
+      let lessonCount = 0;
+      for (const group of moduleItem.groups) {
+        for (const lesson of group.lessons) {
+          lessonCount++;
+          if (lesson.isCurrent) {
+            currentModuleIndex = i;
+            currentLessonIndex = lessonCount;
+            break;
+          }
+        }
+        if (currentModuleIndex !== -1) break;
+      }
+      if (currentModuleIndex !== -1) break;
+    }
+
+    // Se não encontrou lição atual, usa o primeiro módulo não completado ou o primeiro
+    if (currentModuleIndex === -1) {
+      const firstIncompleteModule =
+        roadmap.modules.find((m) => !m.isCompleted) || roadmap.modules[0];
+      currentModuleIndex = roadmap.modules.findIndex(
+        (m) => m.id === firstIncompleteModule?.id
+      );
+      currentLessonIndex = 1;
+    }
+
+    return {
+      moduleNumber: currentModuleIndex + 1,
+      lessonNumber: currentLessonIndex > 0 ? currentLessonIndex : 1,
+    };
+  }, [roadmap]);
+
+  // Encontra o título da lição atual (memoizado)
+  const currentLessonTitle = useMemo(() => {
+    if (!roadmap) return "Selecione uma aula";
+
+    for (const moduleItem of roadmap.modules) {
+      for (const group of moduleItem.groups) {
+        const currentLesson = group.lessons.find((l) => l.isCurrent);
+        if (currentLesson) {
+          return currentLesson.title;
+        }
+      }
+    }
+    return "Selecione uma aula";
+  }, [roadmap]);
+
   // Função para fazer scroll até a lição atual
   // const scrollToCurrentLesson = useCallback(() => {
   //   if (!firstIncompleteLesson || !roadmap) return;
@@ -234,8 +291,6 @@ export default function LearnPage() {
     );
   }
 
-  console.log("🔍 NEXT_PUBLIC_API_URL:", process.env.NEXT_PUBLIC_API_URL);
-
   return (
     <div className="flex items-center justify-center w-full">
       <div className="w-full space-y-4">
@@ -249,8 +304,8 @@ export default function LearnPage() {
                 <Link href="/learn/catalog">
                   <div className="flex items-center gap-2 cursor-pointer mb-2 text-xs text-[#7e7e89]">
                     <ArrowLeft size={16} className="text-[#7e7e89]" />
-                    {roadmap.modules[0]?.title || "Curso"} -{" "}
-                    {roadmap.modules[0]?.groups[0]?.title || "Início"}
+                    Módulo {currentModuleAndLesson.moduleNumber}, Aula{" "}
+                    {currentModuleAndLesson.lessonNumber}
                   </div>
                 </Link>
                 <div className="flex items-center gap-3">
@@ -258,11 +313,7 @@ export default function LearnPage() {
                     <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
                       {roadmap.course.title}
                     </span>
-                    <p className="text-xl">
-                      {roadmap.modules[0]?.groups[0]?.lessons.find(
-                        (l) => l.isCurrent
-                      )?.title || "Selecione uma aula"}
-                    </p>
+                    <p className="text-xl ">{currentLessonTitle}</p>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardHeader } from "@/components/ui/card";
 import {
   Accordion,
@@ -22,9 +22,30 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { getCompletedCourses } from "@/actions/course/completed";
+import { useActiveCourseStore } from "@/stores/active-course-store";
 
 export function CourseOverview() {
   const [showMore, setShowMore] = useState(false);
+  const [isCourseCompleted, setIsCourseCompleted] = useState(false);
+  const { activeCourse } = useActiveCourseStore();
+
+  useEffect(() => {
+    async function checkCourseCompletion() {
+      if (!activeCourse?.id) return;
+      try {
+        const completedCourses = await getCompletedCourses();
+        const isCompleted = completedCourses.courses.some(
+          (course) => course.id === activeCourse.id
+        );
+        setIsCourseCompleted(isCompleted);
+      } catch (error) {
+        console.error("Erro ao verificar conclusão do curso:", error);
+      }
+    }
+    checkCourseCompletion();
+  }, [activeCourse?.id]);
 
   const learningTopics = [
     "JavaScript e ES6+ fundamentals",
@@ -320,7 +341,16 @@ export function CourseOverview() {
 
             <div>
               <p className="text-xs text-[#C4C4CC] mb-2">Certificado</p>
-              <p className="text-sm font-semibold text-white">Disponível</p>
+              {isCourseCompleted ? (
+                <Link
+                  href="/account/certificates"
+                  className="text-sm font-semibold text-[#00c8ff] hover:underline cursor-pointer transition-colors"
+                >
+                  Disponível
+                </Link>
+              ) : (
+                <p className="text-sm font-semibold text-white">Disponível</p>
+              )}
             </div>
 
             <div>

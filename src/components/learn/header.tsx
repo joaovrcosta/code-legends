@@ -32,7 +32,9 @@ export default function LearnHeader() {
   }, []);
 
   // Durante a hidratação, renderiza sem a condição do pathname
-  const showSidebarButton = mounted ? !pathName.startsWith("/account") : true; // Default durante SSR
+  // Garante que o HTML do servidor seja igual ao do cliente na primeira renderização
+  // No servidor, sempre mostra o botão (true), no cliente após montar usa o pathname
+  const showSidebarButton = !mounted || (pathName && !pathName.startsWith("/account"));
 
   // Função de busca com debounce
   const performSearch = useCallback(async (query: string) => {

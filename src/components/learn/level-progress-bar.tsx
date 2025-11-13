@@ -10,6 +10,7 @@ import type { RoadmapResponse } from "@/types/roadmap";
 import level1complete from "../../../public/level-1.png";
 import level2incomplete from "../../../public/level-2-incomplete.png";
 import { CertificateIcon } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 
 export function LevelProgressBar() {
   const { activeCourse } = useActiveCourseStore();
@@ -104,14 +105,34 @@ export function LevelProgressBar() {
           </>
         ) : (
           <>
-            <div className="w-[40px] h-[40px] flex items-center justify-center">
-              <CertificateIcon
-                size={24}
-                className="text-muted-foreground"
-                weight="fill"
-              />
-            </div>
-            <span className="text-xs text-nowrap">Certificado</span>
+            {roadmap?.course.isCompleted ? (
+              <Link
+                href="/account/certificates"
+                className="flex items-center justify-center flex-col cursor-pointer hover:opacity-80 transition-opacity"
+              >
+                <div className="w-[40px] h-[40px] flex items-center justify-center">
+                  <CertificateIcon
+                    size={24}
+                    className="text-[#00c8ff]"
+                    weight="fill"
+                  />
+                </div>
+                <span className="text-xs text-nowrap text-[#00c8ff]">
+                  Certificado
+                </span>
+              </Link>
+            ) : (
+              <>
+                <div className="w-[40px] h-[40px] flex items-center justify-center">
+                  <CertificateIcon
+                    size={24}
+                    className="text-muted-foreground"
+                    weight="fill"
+                  />
+                </div>
+                <span className="text-xs text-nowrap">Certificado</span>
+              </>
+            )}
           </>
         )}
       </div>

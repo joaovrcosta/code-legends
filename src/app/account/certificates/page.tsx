@@ -1,13 +1,20 @@
 import { CertificateCard } from "@/components/account/certificate-card";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getUserCertificates } from "@/actions/user/get-user-certificates";
+import { getCompletedCourses } from "@/actions/course/completed";
 import { Medal } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { GenerateCertificateButton } from "@/components/account/generate-certificate-button";
 
 export const dynamic = "force-dynamic";
 
 export default async function AccountCertificatesPage() {
   const certificates = await getUserCertificates();
+  const completedCourses = await getCompletedCourses();
+  const completedCoursesList = completedCourses.courses || [];
+
+  console.log(certificates);
 
   return (
     <div className="space-y-4 mt-9">
@@ -33,6 +40,41 @@ export default async function AccountCertificatesPage() {
                 completedAt={certificate.completedAt}
               />
             ))
+          ) : completedCoursesList.length > 0 ? (
+            <div className="w-full">
+              <div className="space-y-3 mt-6">
+                {completedCoursesList.map((course) => (
+                  <div
+                    key={course.id}
+                    className="flex items-center justify-between p-3 bg-transparent border border-[#333333] rounded-lg"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Image
+                        src={course.icon}
+                        alt={course.title}
+                        width={52}
+                        height={52}
+                      />
+                      <div>
+                        <h3 className="text-white font-medium">
+                          {course.title}
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Concluído
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-4">
+                      <GenerateCertificateButton
+                        courseId={course.id}
+                        course={course}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           ) : (
             <div className="text-center py-12">
               <Medal className="w-16 h-16 text-muted-foreground mx-auto mb-4" />

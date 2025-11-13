@@ -53,7 +53,7 @@ export default async function CoursePage({
   return (
     <div>
       <CourseBanner course={course} />
-      <section className="flex items-center justify-between mt-4 mb-4 lg:px-12 px-4">
+      <section className="flex items-center justify-between mt-4 mb-4 lg:px-12 px-6">
         <Tabs tabs={myLearningTabs} defaultTab="in-progress" />
       </section>
     </div>

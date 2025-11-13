@@ -188,7 +188,7 @@ export function CourseBanner({ course }: { course: CourseDetail }) {
         </div>
       </div>
 
-      <section className="relative bg-gray-gradient lg:gap-20 gap-8 border-b border-[#25252A] lg:py-12 lg:px-12 px-4 pb-8 pt-4 flex flex-col lg:flex-row items-center">
+      <section className="relative bg-gray-gradient lg:gap-20 gap-8 border-b border-[#25252A] lg:py-12 lg:px-12 px-6 pb-8 pt-4 flex flex-col lg:flex-row items-center">
         {/* Blur gradient overlay - Netflix style */}
         <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none" />
         <div className="flex-col flex-1 relative z-10 w-full">
