@@ -8,6 +8,7 @@ import { ListEnd, Menu, Search } from "lucide-react";
 import useSidebarStore from "@/stores/sidebarStore";
 import { usePathname } from "next/navigation";
 import { CourseDropdownMenu } from "./course-menu";
+import type { EnrolledCourse, ActiveCourse } from "@/types/user-course.ts";
 import { UserDropdown } from "../user-dropdown";
 import { StrikeSection } from "../strike-section";
 import { useEffect, useState, useCallback } from "react";
@@ -17,7 +18,15 @@ import { searchCourses } from "@/actions/course/search-courses";
 import { CourseWithCount } from "@/types/user-course.ts";
 import { Loader2 } from "lucide-react";
 
-export default function LearnHeader() {
+interface LearnHeaderProps {
+  initialUserCourses: EnrolledCourse[];
+  initialActiveCourse: ActiveCourse | null;
+}
+
+export default function LearnHeader({
+  initialUserCourses,
+  initialActiveCourse,
+}: LearnHeaderProps) {
   const { toggleSidebar, isOpen } = useSidebarStore();
   const pathName = usePathname();
   const [mounted, setMounted] = useState(false);
@@ -144,7 +153,10 @@ export default function LearnHeader() {
 
         <li className="flex space-x-2 items-center ">
           <div className="flex items-center space-x-4">
-            <CourseDropdownMenu />
+            <CourseDropdownMenu
+              initialUserCourses={initialUserCourses}
+              initialActiveCourse={initialActiveCourse}
+            />
             <StrikeSection />
 
             {/* <div className="flex items-center space-x-2">

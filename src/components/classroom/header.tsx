@@ -10,8 +10,17 @@ import codeLegendsLogoMobile from "../../../public/code-legends-logo-mobile.svg"
 import { UserDropdown } from "../user-dropdown";
 import { StrikeSection } from "../strike-section";
 import { CourseDropdownMenu } from "../learn/course-menu";
+import type { EnrolledCourse, ActiveCourse } from "@/types/user-course.ts";
 
-export default function ClassroomHeader() {
+interface ClassroomHeaderProps {
+  initialUserCourses: EnrolledCourse[];
+  initialActiveCourse: ActiveCourse | null;
+}
+
+export default function ClassroomHeader({
+  initialUserCourses,
+  initialActiveCourse,
+}: ClassroomHeaderProps) {
   const { toggleSidebar } = useClassroomSidebarStore();
 
   return (
@@ -64,7 +73,10 @@ export default function ClassroomHeader() {
 
           <li className="flex lg:space-x-2 space-x-1 items-center ">
             <div className="flex items-center lg:space-x-4 space-x-4">
-              <CourseDropdownMenu />
+              <CourseDropdownMenu
+                initialUserCourses={initialUserCourses}
+                initialActiveCourse={initialActiveCourse}
+              />
               <StrikeSection />
               <UserDropdown />
             </div>

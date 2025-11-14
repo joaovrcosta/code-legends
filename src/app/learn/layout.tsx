@@ -2,15 +2,26 @@ import { AulaModal } from "@/components/learn/class-modal";
 import { FooterFixed } from "@/components/learn/footer-fixed";
 import LearnHeader from "@/components/learn/header";
 import Sidebar from "@/components/learn/sidebar";
+import { getUserEnrolledList } from "@/actions";
+import { getActiveCourse } from "@/actions/user/get-active-course";
 
-export default function LearnLayout({
+export default async function LearnLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Busca os dados no servidor
+  const [enrolledCoursesData, activeCourse] = await Promise.all([
+    getUserEnrolledList(),
+    getActiveCourse(),
+  ]);
+
   return (
     <div className="h-screen w-full flex flex-col">
-      <LearnHeader />
+      <LearnHeader
+        initialUserCourses={enrolledCoursesData.userCourses || []}
+        initialActiveCourse={activeCourse}
+      />
 
       <div className="flex flex-1 lg:pt-[79px] pt-[64px]">
         <div className="lg:block hidden max-w-64">

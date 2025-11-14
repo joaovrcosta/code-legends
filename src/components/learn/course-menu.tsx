@@ -12,34 +12,36 @@ import {
 import { Plus, Check } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { getUserEnrolledList } from "@/actions";
 import { startCourse } from "@/actions/course/start";
-import type { EnrolledCourse } from "@/types/user-course.ts";
+import type { EnrolledCourse, ActiveCourse } from "@/types/user-course.ts";
 import { useActiveCourseStore } from "@/stores/active-course-store";
+import { useRouter } from "next/navigation";
 
-export function CourseDropdownMenu() {
+interface CourseDropdownMenuProps {
+  initialUserCourses: EnrolledCourse[];
+  initialActiveCourse: ActiveCourse | null;
+}
+
+export function CourseDropdownMenu({
+  initialUserCourses,
+  initialActiveCourse,
+}: CourseDropdownMenuProps) {
   const [open, setOpen] = useState(false);
-  const [userCourses, setUserCourses] = useState<EnrolledCourse[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [userCourses] = useState<EnrolledCourse[]>(initialUserCourses);
   const [changingCourse, setChangingCourse] = useState<string | null>(null);
-  const { activeCourse, fetchActiveCourse } = useActiveCourseStore();
+  const { activeCourse, fetchActiveCourse, setActiveCourse } =
+    useActiveCourseStore();
+  const router = useRouter();
 
+  // Sincroniza o activeCourse inicial com o store
   useEffect(() => {
-    async function fetchEnrolledCourses() {
-      try {
-        const { userCourses: courses } = await getUserEnrolledList();
-        setUserCourses(courses || []);
-      } catch (error) {
-        console.error("Erro ao buscar cursos inscritos:", error);
-        setUserCourses([]);
-      } finally {
-        setIsLoading(false);
-      }
+    if (initialActiveCourse && !activeCourse) {
+      setActiveCourse(initialActiveCourse);
     }
+  }, [initialActiveCourse, activeCourse, setActiveCourse]);
 
-    fetchEnrolledCourses();
-    fetchActiveCourse();
-  }, [fetchActiveCourse]);
+  // Usa o activeCourse do store se disponível, senão usa o inicial
+  const currentActiveCourse = activeCourse || initialActiveCourse;
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -49,10 +51,10 @@ export function CourseDropdownMenu() {
             open ? "border-[#00C8FF]" : "border-[#25252A]"
           }`}
         >
-          {activeCourse?.icon ? (
+          {currentActiveCourse?.icon ? (
             <Image
-              src={activeCourse.icon}
-              alt={activeCourse.title || "Curso"}
+              src={currentActiveCourse.icon}
+              alt={currentActiveCourse.title || "Curso"}
               height={32}
               width={32}
               className="object-contain lg:h-[32px] lg:w-[32px] h-[40px] w-[40px]"
@@ -61,7 +63,7 @@ export function CourseDropdownMenu() {
             <div className="w-5 h-5 bg-[#25252A] rounded" />
           )}
           <p className="lg:block hidden">
-            {activeCourse?.title || "Meus Cursos"}
+            {currentActiveCourse?.title || "Meus Cursos"}
           </p>
         </div>
       </DropdownMenuTrigger>
@@ -80,11 +82,7 @@ export function CourseDropdownMenu() {
 
         <DropdownMenuSeparator className="border border-[#25252A]" />
 
-        {isLoading ? (
-          <div className="px-4 py-2 text-sm text-muted-foreground">
-            Carregando cursos...
-          </div>
-        ) : userCourses.length === 0 ? (
+        {userCourses.length === 0 ? (
           <div className="px-4 py-2 text-sm text-muted-foreground">
             Nenhum curso inscrito
           </div>
@@ -92,15 +90,16 @@ export function CourseDropdownMenu() {
           <>
             {[...userCourses]
               .sort((a, b) => {
-                const aIsActive = activeCourse?.id === a.courseId;
-                const bIsActive = activeCourse?.id === b.courseId;
+                const aIsActive = currentActiveCourse?.id === a.courseId;
+                const bIsActive = currentActiveCourse?.id === b.courseId;
                 // Curso ativo vem primeiro
                 if (aIsActive && !bIsActive) return -1;
                 if (!aIsActive && bIsActive) return 1;
                 return 0;
               })
               .map((enrolledCourse) => {
-                const isActive = activeCourse?.id === enrolledCourse.courseId;
+                const isActive =
+                  currentActiveCourse?.id === enrolledCourse.courseId;
                 const isChanging = changingCourse === enrolledCourse.courseId;
 
                 const handleCourseClick = async () => {
@@ -116,6 +115,8 @@ export function CourseDropdownMenu() {
                     await startCourse(enrolledCourse.courseId);
                     await fetchActiveCourse();
                     setOpen(false);
+                    // Força a atualização da página para carregar o novo roadmap
+                    router.refresh();
                   } catch (error) {
                     console.error("Erro ao mudar de curso:", error);
                     setChangingCourse(null);

@@ -5,10 +5,8 @@ import Link from "next/link";
 import { PrimaryButton } from "@/components/ui/primary-button";
 
 export default async function LearnPage() {
-  // Busca o curso ativo no servidor
   const activeCourse = await getActiveCourse();
 
-  // Se não houver curso ativo, mostra mensagem
   if (!activeCourse) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
@@ -24,10 +22,8 @@ export default async function LearnPage() {
     );
   }
 
-  // Busca o roadmap no servidor (com cache)
   const roadmap = await getCourseRoadmap(activeCourse.id);
 
-  // Se não houver roadmap, mostra mensagem
   if (!roadmap) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
@@ -43,7 +39,6 @@ export default async function LearnPage() {
     );
   }
 
-  // Passa os dados para o componente client
   return (
     <LearnPageContent initialRoadmap={roadmap} activeCourse={activeCourse} />
   );

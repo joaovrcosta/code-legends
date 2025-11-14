@@ -26,7 +26,11 @@ export async function getActiveCourse(): Promise<ActiveCourse | null> {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        cache: "no-store",
+        // Cache com revalidação a cada 30 segundos (curso ativo pode mudar)
+        next: {
+          revalidate: 30,
+          tags: ["active-course"],
+        },
       }
     );
 
