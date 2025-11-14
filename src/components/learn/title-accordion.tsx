@@ -16,9 +16,10 @@ import { useCourseModalStore } from "@/stores/course-modal-store";
 
 interface TitleAccordinProps {
   title: string | undefined;
+  description: string | undefined;
 }
 
-export function TitleAccordion({ title }: TitleAccordinProps) {
+export function TitleAccordion({ title, description }: TitleAccordinProps) {
   const [isMarking, setIsMarking] = useState(false);
   const { fetchActiveCourse } = useActiveCourseStore();
   const { currentLesson, updateCurrentLessonStatus } = useCourseModalStore();
@@ -56,9 +57,6 @@ export function TitleAccordion({ title }: TitleAccordinProps) {
                   <span className="bg-blue-gradient-500 bg-clip-text text-transparent lg:text-[20px] text-[16px] font-bold">
                     {title}
                   </span>
-                  <p className="lg:text-sm text-xs text-muted-foreground font-normal mt-1">
-                    Vamos iniciar o nosso conhecimento com ReactJS
-                  </p>
                 </div>
 
                 <div className="flex items-center gap-1">
@@ -125,6 +123,9 @@ export function TitleAccordion({ title }: TitleAccordinProps) {
             </AccordionTrigger>
 
             <AccordionContent className="lg:px-8 px-6 pb-8 text-white">
+              <p className="lg:text-sm text-xs text-muted-foreground font-normal mb-4">
+                {description}
+              </p>
               <div className="flex items-center gap-3 mt-4">
                 <Avatar className="h-[32px] w-[32px]">
                   <AvatarImage src="https://avatars.githubusercontent.com/u/70654718?s=400&u=415dc8fde593b5dcbdef181e6186a8d80daf72fc&v=4" />

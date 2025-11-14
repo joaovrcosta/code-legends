@@ -70,47 +70,9 @@ export default function LearnPage() {
     );
   }, [allLessons]);
 
-  // Calcula o módulo e aula atual (memoizado para performance)
-  const currentModuleAndLesson = useMemo(() => {
-    if (!roadmap) {
-      return { moduleNumber: 1, lessonNumber: 1 };
-    }
-
-    let currentModuleIndex = -1;
-    let currentLessonIndex = -1;
-
-    for (let i = 0; i < roadmap.modules.length; i++) {
-      const moduleItem = roadmap.modules[i];
-      let lessonCount = 0;
-      for (const group of moduleItem.groups) {
-        for (const lesson of group.lessons) {
-          lessonCount++;
-          if (lesson.isCurrent) {
-            currentModuleIndex = i;
-            currentLessonIndex = lessonCount;
-            break;
-          }
-        }
-        if (currentModuleIndex !== -1) break;
-      }
-      if (currentModuleIndex !== -1) break;
-    }
-
-    // Se não encontrou lição atual, usa o primeiro módulo não completado ou o primeiro
-    if (currentModuleIndex === -1) {
-      const firstIncompleteModule =
-        roadmap.modules.find((m) => !m.isCompleted) || roadmap.modules[0];
-      currentModuleIndex = roadmap.modules.findIndex(
-        (m) => m.id === firstIncompleteModule?.id
-      );
-      currentLessonIndex = 1;
-    }
-
-    return {
-      moduleNumber: currentModuleIndex + 1,
-      lessonNumber: currentLessonIndex > 0 ? currentLessonIndex : 1,
-    };
-  }, [roadmap]);
+  // Usa currentModule e currentClass diretamente do backend
+  const currentModule = roadmap?.course.currentModule ?? 1;
+  const currentClass = roadmap?.course.currentClass ?? 1;
 
   // Encontra o título da lição atual (memoizado)
   const currentLessonTitle = useMemo(() => {
@@ -298,14 +260,13 @@ export default function LearnPage() {
           {/* Cabeçalho */}
 
           <div className="w-full max-w-[713px] lg:sticky md:sticky fixed mt-[48px] lg:mt-0 md:mt-0 top-0 z-10 mb-8 px-4 md:pt-2 pt-4 lg:pt-0">
-            <div className="bg-[#121214] px-4 flex items-center  justify-between h-[24px]"></div>
+            <div className="bg-[#121214] px-4 flex items-center justify-between h-[24px]"></div>
             <section className="bg-gray-gradient border border-[#25252A] px-4 py-4 flex items-center shadow-lg rounded-lg w-full max-w-[713px] justify-between sticky top-0 z-10 bg-[#1a1a1e]">
               <div className="flex flex-col lg:ml-4">
                 <Link href="/learn/catalog">
                   <div className="flex items-center gap-2 cursor-pointer mb-2 text-xs text-[#7e7e89]">
                     <ArrowLeft size={16} className="text-[#7e7e89]" />
-                    Módulo {currentModuleAndLesson.moduleNumber}, Aula{" "}
-                    {currentModuleAndLesson.lessonNumber}
+                    Módulo {currentModule}, Aula {currentClass}
                   </div>
                 </Link>
                 <div className="flex items-center gap-3">

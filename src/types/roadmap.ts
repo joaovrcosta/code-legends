@@ -31,16 +31,25 @@ export type Module = {
   isCompleted: boolean;
 };
 
+export type CourseAuthor = {
+  name: string;
+  id?: number;
+  avatar?: string;
+  role?: string;
+};
+
 export type CourseRoadmap = {
   id: string;
   title: string;
   slug: string;
   progress: number;
   isCompleted: boolean;
+  author?: CourseAuthor;
+  currentModule?: number;
+  currentClass?: number;
 };
 
 export type RoadmapResponse = {
   course: CourseRoadmap;
   modules: Module[];
 };
-

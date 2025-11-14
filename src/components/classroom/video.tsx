@@ -31,7 +31,11 @@ function formatYouTubeUrl(url?: string | null) {
   return null;
 }
 
-export default function VideoComponent({ src, title }: VideoComponentProps) {
+export default function VideoComponent({
+  src,
+  title,
+  description,
+}: VideoComponentProps) {
   const embedSrc =
     formatYouTubeUrl(src) ||
     // fallback para teste, se quiser deixar um vídeo padrão:
@@ -73,7 +77,7 @@ export default function VideoComponent({ src, title }: VideoComponentProps) {
       </div>
 
       {/* Acordeões */}
-      <TitleAccordion title={title} />
+      <TitleAccordion title={title} description={description} />
       <LevelAccordion />
     </div>
   );

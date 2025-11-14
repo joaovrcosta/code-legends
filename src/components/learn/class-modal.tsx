@@ -10,12 +10,16 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { useCourseModalStore } from "@/stores/course-modal-store";
+import { useActiveCourseStore } from "@/stores/active-course-store";
 import VideoComponent from "../classroom/video";
 import { ComponentsArticle } from "../classroom/article/components";
 import { Menu, X } from "lucide-react";
 import { LevelProgressBar } from "./level-progress-bar";
 import { SkipForward } from "@phosphor-icons/react";
 import { SkipBack } from "@phosphor-icons/react/dist/ssr";
+import { useEffect, useState } from "react";
+import { getCourseRoadmap } from "@/actions/course";
+import type { RoadmapResponse } from "@/types/roadmap";
 
 export const AulaModal = () => {
   const {
@@ -27,6 +31,28 @@ export const AulaModal = () => {
     goToNextLesson,
     goToPreviousLesson,
   } = useCourseModalStore();
+
+  const { activeCourse } = useActiveCourseStore();
+  const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
+
+  useEffect(() => {
+    async function fetchRoadmap() {
+      if (!activeCourse?.id) return;
+
+      try {
+        const roadmapData = await getCourseRoadmap(activeCourse.id);
+        setRoadmap(roadmapData);
+      } catch (error) {
+        console.error("Erro ao buscar roadmap:", error);
+      }
+    }
+
+    if (isOpen) {
+      fetchRoadmap();
+    }
+  }, [activeCourse?.id, isOpen]);
+
+  const currentModule = roadmap?.course.currentModule ?? 1;
 
   const hasNextLesson = currentIndex < lessons.length - 1;
   const hasPreviousLesson = currentIndex > 0;
@@ -43,7 +69,7 @@ export const AulaModal = () => {
       >
         {currentLesson && (
           <>
-            <DialogHeader className="py-4 pb-0 bg-transparent rounded-t-[20px] lg:border-b lg:border-[#25252A] border-none lg:mb-4 mb-0">
+            <DialogHeader className="py-4 pb-0 bg-transparent rounded-t-[20px] lg:border-b lg:border-[#25252A] border-none lg:mb-2 mb-0">
               <div className="flex items-center justify-between w-full px-4">
                 <div className="lg:hidden flex">
                   <Menu size={32} className="text-white" />
@@ -53,7 +79,7 @@ export const AulaModal = () => {
                 <DialogTitle className="w-full">
                   <div className="lg:flex flex-col text-center w-full items-center justify-center hidden">
                     <p className="text-sm font-light text-[#787878]">
-                      Chapter {currentIndex + 1}
+                      Módulo {currentModule}
                     </p>
                     <h3 className="text-[20px] font-normal mt-1">
                       {currentLesson.title}
@@ -71,6 +97,7 @@ export const AulaModal = () => {
             <div className="lg:max-h-[720px] h-full overflow-y-auto lg:px-4 px-0">
               {currentLesson?.type === "video" && (
                 <VideoComponent
+                  description={currentLesson.description}
                   title={currentLesson.title}
                   src={currentLesson.video_url}
                 />
