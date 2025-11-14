@@ -49,11 +49,10 @@ export function LearnPageContent({
 
   // Coleta todas as lições de todos os módulos e grupos
   const allLessons = useMemo(() => {
-    return roadmap
-      ? roadmap.modules
-          .flatMap((module) => module.groups)
-          .flatMap((group) => group.lessons)
-      : [];
+    if (!roadmap?.modules) return [];
+    return roadmap.modules
+      .flatMap((module) => module?.groups || [])
+      .flatMap((group) => group?.lessons || []);
   }, [roadmap]);
 
   // Encontra a primeira lição não completada para mostrar o popover "Continuar"
@@ -69,10 +68,12 @@ export function LearnPageContent({
 
   // Encontra o título da lição atual (memoizado)
   const currentLessonTitle = useMemo(() => {
-    if (!roadmap) return "Selecione uma aula";
+    if (!roadmap?.modules) return "Selecione uma aula";
 
     for (const moduleItem of roadmap.modules) {
+      if (!moduleItem?.groups) continue;
       for (const group of moduleItem.groups) {
+        if (!group?.lessons) continue;
         const currentLesson = group.lessons.find((l) => l.isCurrent);
         if (currentLesson) {
           return currentLesson.title;
@@ -168,11 +169,7 @@ export function LearnPageContent({
 
   // Faz scroll até a lição atual quando a página carrega
   useEffect(() => {
-    if (
-      !hasScrolledRef.current &&
-      roadmap &&
-      firstIncompleteLesson
-    ) {
+    if (!hasScrolledRef.current && roadmap && firstIncompleteLesson) {
       // Aguarda um pequeno delay para garantir que o DOM foi renderizado
       const timeoutId = setTimeout(() => {
         const lessonElement = taskRefs.current[firstIncompleteLesson.id];
@@ -197,6 +194,19 @@ export function LearnPageContent({
   const isLessonCompleted = (status: string) => status === "completed";
   const isLessonLocked = (status: string) => status === "locked";
 
+  // Verificação de segurança: não renderiza se o roadmap não estiver disponível
+  if (!roadmap || !roadmap.modules) {
+    return (
+      <div className="flex items-center justify-center w-full h-screen">
+        <div className="text-center">
+          <p className="text-muted-foreground mb-4">
+            Carregando roadmap do curso...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center justify-center w-full">
       <div className="w-full space-y-4">
@@ -216,7 +226,7 @@ export function LearnPageContent({
                 <div className="flex items-center gap-3">
                   <div>
                     <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
-                      {roadmap.course.title}
+                      {roadmap?.course?.title || "Curso"}
                     </span>
                     <p className="text-xl ">{currentLessonTitle}</p>
                   </div>
@@ -230,17 +240,18 @@ export function LearnPageContent({
 
           <div className="lg:pb-14 pb-20 w-full lg:mt-0 md:mt-0 mt-40">
             <section className="mt-0 space-y-12 px-4 mb-12">
-              {roadmap.modules.map((module, moduleIndex) => (
+              {roadmap?.modules?.map((module, moduleIndex) => (
                 <div key={module.id}>
-                  {module.groups.map(
+                  {module?.groups?.map(
                     (group, groupIndex) =>
+                      group?.lessons &&
                       group.lessons.length > 0 && (
                         <div
                           key={group.id}
                           className="flex flex-col items-center justify-center"
                         >
                           <DividerWithText text={group.title} />
-                          {group.lessons.map((lesson, lessonIndex) => {
+                          {group.lessons?.map((lesson, lessonIndex) => {
                             const isLeft = lessonIndex % 2 === 0;
                             const completed = isLessonCompleted(lesson.status);
                             const locked = isLessonLocked(lesson.status);
@@ -298,7 +309,8 @@ export function LearnPageContent({
                       )
                   )}
                   {/* Mostra seção bloqueada se o módulo não estiver completo */}
-                  {moduleIndex < roadmap.modules.length - 1 &&
+                  {roadmap?.modules &&
+                    moduleIndex < roadmap.modules.length - 1 &&
                     !module.isCompleted && (
                       <div className="w-full flex items-center justify-center mt-12">
                         <section className="flex items-center justify-center p-8 border border-[#25252A] rounded-[20px] flex-col space-y-3 max-w-[384px] w-full">
@@ -319,8 +331,45 @@ export function LearnPageContent({
             </section>
           </div>
         </div>
+        <div>
+          <div className="w-full max-w-[713px] lg:sticky md:sticky fixed mt-[48px] lg:mt-0 md:mt-0 top-0 z-10 mb-4 px-4 md:pt-2 pt-4 lg:pt-0">
+            <div className="bg-[#121214] px-4 flex items-center justify-between h-[24px]"></div>
+            <section className="bg-gray-gradient border border-[#25252A] px-4 py-4 flex items-center shadow-lg rounded-lg w-full max-w-[713px] justify-between sticky top-0 z-10 bg-[#1a1a1e]">
+              <div className="flex flex-col lg:ml-4">
+                <div className="flex items-center gap-3">
+                  <div>
+                    <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
+                      3 aulas
+                    </span>
+                    <p className="text-xl ">Seção 1 - Introdução</p>
+                  </div>
+                </div>
+              </div>
+              <Link href="/learn/catalog">
+                <ChevronRight size={48} />
+              </Link>
+            </section>
+          </div>
+
+          <div className="w-full max-w-[713px] lg:sticky md:sticky fixed mt-[48px] lg:mt-0 md:mt-0 top-0 z-10 mb-4 px-4 md:pt-2 pt-4 lg:pt-0">
+            <section className="bg-gray-gradient border border-[#25252A] px-4 py-4 flex items-center shadow-lg rounded-lg w-full max-w-[713px] justify-between sticky top-0 z-10 bg-[#1a1a1e]">
+              <div className="flex flex-col lg:ml-4">
+                <div className="flex items-center gap-3">
+                  <div>
+                    <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
+                      3 aulas
+                    </span>
+                    <p className="text-xl ">Seção 2 - Conceitos</p>
+                  </div>
+                </div>
+              </div>
+              <Link href="/learn/catalog">
+                <ChevronRight size={48} />
+              </Link>
+            </section>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
