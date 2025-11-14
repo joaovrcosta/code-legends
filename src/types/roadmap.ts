@@ -53,3 +53,19 @@ export type RoadmapResponse = {
   course: CourseRoadmap;
   modules: Module[];
 };
+
+export type ModuleWithProgress = {
+  id: string;
+  title: string;
+  slug: string;
+  courseId: string;
+  progress: number;
+  isCurrent: boolean;
+  totalLessons: number;
+  completedLessons: number;
+  locked: boolean;
+};
+
+export type ModulesWithProgressResponse = {
+  modules: ModuleWithProgress[];
+};

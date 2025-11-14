@@ -1,14 +1,14 @@
 "use server";
 
 import { getAuthToken } from "../auth/session";
-import type { Module } from "@/types/roadmap";
+import type { ModulesWithProgressResponse } from "@/types/roadmap";
 
 /**
  * Busca os módulos de um curso com informações de progresso
  */
 export async function listModulesProgress(
   courseId: string
-): Promise<Module[] | null> {
+): Promise<ModulesWithProgressResponse | null> {
   try {
     const token = await getAuthToken();
 
@@ -48,7 +48,7 @@ export async function listModulesProgress(
       return null;
     }
 
-    const data: Module[] = await response.json();
+    const data: ModulesWithProgressResponse = await response.json();
     return data;
   } catch (error) {
     console.error("Erro ao buscar módulos com progresso:", error);

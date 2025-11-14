@@ -1,16 +1,13 @@
 "use client";
 
-import { ArrowLeft, ChevronRight } from "lucide-react";
-import Link from "next/link";
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
-import { PrimaryButton } from "@/components/ui/primary-button";
-import DividerWithText from "@/components/divider-with-text";
-import { Lock } from "@phosphor-icons/react/dist/ssr";
-import { getCourseRoadmap } from "@/actions/course";
+import { getCourseRoadmap, listModulesProgress } from "@/actions/course";
 import { useCourseModalStore } from "@/stores/course-modal-store";
-import type { RoadmapResponse } from "@/types/roadmap";
+import type { RoadmapResponse, ModuleWithProgress } from "@/types/roadmap";
 import type { ActiveCourse } from "@/types/user-course.ts";
-import { LessonPopover } from "@/components/learn/lesson-popover";
+import { LearnHeader } from "@/components/learn/learn-header";
+import { ModulesList } from "@/components/learn/modules-list";
+import { LessonsContent } from "@/components/learn/lessons-content";
 
 interface LearnPageContentProps {
   initialRoadmap: RoadmapResponse;
@@ -24,6 +21,9 @@ export function LearnPageContent({
   const [openPopover, setOpenPopover] = useState<number | null>(null);
   const [showContinue, setShowContinue] = useState<boolean>(true);
   const [roadmap, setRoadmap] = useState<RoadmapResponse>(initialRoadmap);
+  const [showModules, setShowModules] = useState<boolean>(false);
+  const [modules, setModules] = useState<ModuleWithProgress[] | null>(null);
+  const [loadingModules, setLoadingModules] = useState<boolean>(false);
   const taskRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const prevOpenPopoverRef = useRef<number | null>(null);
   const prevIsModalOpenRef = useRef<boolean>(false);
@@ -190,9 +190,30 @@ export function LearnPageContent({
     setOpenPopover((prev) => (prev === id ? null : id));
   };
 
-  // Função para determinar se a lição está completa baseada no status
-  const isLessonCompleted = (status: string) => status === "completed";
-  const isLessonLocked = (status: string) => status === "locked";
+  // Função para buscar e exibir os módulos
+  const handleToggleModules = useCallback(async () => {
+    if (showModules) {
+      setShowModules(false);
+      return;
+    }
+
+    if (!modules && activeCourse?.id) {
+      setLoadingModules(true);
+      try {
+        const modulesData = await listModulesProgress(activeCourse.id);
+        if (modulesData?.modules) {
+          setModules(modulesData.modules);
+          setShowModules(true);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar módulos:", error);
+      } finally {
+        setLoadingModules(false);
+      }
+    } else {
+      setShowModules(true);
+    }
+  }, [showModules, modules, activeCourse?.id]);
 
   // Verificação de segurança: não renderiza se o roadmap não estiver disponível
   if (!roadmap || !roadmap.modules) {
@@ -210,165 +231,41 @@ export function LearnPageContent({
   return (
     <div className="flex items-center justify-center w-full">
       <div className="w-full space-y-4">
-        <div className="w-full lg:py-10 py-0 rounded-2xl flex items-center justify-center flex-col">
-          {/* Cabeçalho */}
-
-          <div className="w-full max-w-[713px] lg:sticky md:sticky fixed mt-[48px] lg:mt-0 md:mt-0 top-0 z-10 mb-8 px-4 md:pt-2 pt-4 lg:pt-0">
-            <div className="bg-[#121214] px-4 flex items-center justify-between h-[24px]"></div>
-            <section className="bg-gray-gradient border border-[#25252A] px-4 py-4 flex items-center shadow-lg rounded-lg w-full max-w-[713px] justify-between sticky top-0 z-10 bg-[#1a1a1e]">
-              <div className="flex flex-col lg:ml-4">
-                <Link href="/learn/catalog">
-                  <div className="flex items-center gap-2 cursor-pointer mb-2 text-xs text-[#7e7e89]">
-                    <ArrowLeft size={16} className="text-[#7e7e89]" />
-                    Módulo {currentModule}, Aula {currentClass}
-                  </div>
-                </Link>
-                <div className="flex items-center gap-3">
-                  <div>
-                    <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
-                      {roadmap?.course?.title || "Curso"}
-                    </span>
-                    <p className="text-xl ">{currentLessonTitle}</p>
-                  </div>
-                </div>
-              </div>
-              <Link href="/learn/catalog">
-                <ChevronRight size={48} />
-              </Link>
-            </section>
+        {loadingModules && (
+          <div className="w-full flex items-center justify-center py-8">
+            <p className="text-muted-foreground">Carregando módulos...</p>
           </div>
-
-          <div className="lg:pb-14 pb-20 w-full lg:mt-0 md:mt-0 mt-40">
-            <section className="mt-0 space-y-12 px-4 mb-12">
-              {roadmap?.modules?.map((module, moduleIndex) => (
-                <div key={module.id}>
-                  {module?.groups?.map(
-                    (group, groupIndex) =>
-                      group?.lessons &&
-                      group.lessons.length > 0 && (
-                        <div
-                          key={group.id}
-                          className="flex flex-col items-center justify-center"
-                        >
-                          <DividerWithText text={group.title} />
-                          {group.lessons?.map((lesson, lessonIndex) => {
-                            const isLeft = lessonIndex % 2 === 0;
-                            const completed = isLessonCompleted(lesson.status);
-                            const locked = isLessonLocked(lesson.status);
-                            // Verifica se é a primeira lição do módulo (primeira do primeiro grupo do módulo)
-                            const isFirstInModule =
-                              groupIndex === 0 && lessonIndex === 0;
-
-                            return (
-                              <div
-                                key={lesson.id}
-                                className="max-w-[384px]"
-                                ref={(el) => {
-                                  taskRefs.current[lesson.id] = el;
-                                }}
-                              >
-                                <div className="flex items-center justify-center space-x-4 mb-6 pt-7 max-w-[384px]">
-                                  {isLeft && (
-                                    <div
-                                      className={`h-[42px] lg:w-[256px] w-[212px] rounded-tl-[55px] border-t border-l ${
-                                        completed
-                                          ? "border-[#00C8FF]"
-                                          : "border-[#25252A]"
-                                      }`}
-                                    ></div>
-                                  )}
-                                  <LessonPopover
-                                    lesson={lesson}
-                                    openPopover={openPopover}
-                                    togglePopover={togglePopover}
-                                    showContinue={
-                                      showContinue &&
-                                      firstIncompleteLesson?.id === lesson.id
-                                    }
-                                    setShowContinue={setShowContinue}
-                                    completed={completed}
-                                    locked={locked}
-                                    currentCourseSlug={activeCourse.slug}
-                                    allLessons={allLessons}
-                                    isFirstInModule={isFirstInModule}
-                                  />
-                                  {!isLeft && (
-                                    <div
-                                      className={`h-[42px] lg:w-[256px] w-[212px] rounded-tr-[55px] border-t border-r ${
-                                        completed
-                                          ? "border-[#00C8FF]"
-                                          : "border-[#25252A]"
-                                      }`}
-                                    ></div>
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )
-                  )}
-                  {/* Mostra seção bloqueada se o módulo não estiver completo */}
-                  {roadmap?.modules &&
-                    moduleIndex < roadmap.modules.length - 1 &&
-                    !module.isCompleted && (
-                      <div className="w-full flex items-center justify-center mt-12">
-                        <section className="flex items-center justify-center p-8 border border-[#25252A] rounded-[20px] flex-col space-y-3 max-w-[384px] w-full">
-                          <p className="text-sm text-center text-muted-foreground">
-                            Módulo {roadmap.modules.length}
-                          </p>
-                          <span className="font-bold bg-blue-gradient-500 bg-clip-text text-transparent text-center">
-                            {roadmap.modules[moduleIndex + 1]?.title}
-                          </span>
-                          <PrimaryButton disabled>
-                            Módulo bloqueado <Lock />
-                          </PrimaryButton>
-                        </section>
-                      </div>
-                    )}
-                </div>
-              ))}
-            </section>
+        )}
+        {showModules && modules ? (
+          <ModulesList
+            modules={modules}
+            courseId={activeCourse.id}
+            onToggle={handleToggleModules}
+            onModuleChange={fetchRoadmap}
+          />
+        ) : (
+          <div className="w-full lg:py-10 py-0 rounded-2xl flex items-center justify-center flex-col">
+            <LearnHeader
+              currentModule={currentModule}
+              currentClass={currentClass}
+              courseTitle={roadmap?.course?.title || "Curso"}
+              lessonTitle={currentLessonTitle}
+              onToggleModules={handleToggleModules}
+              loadingModules={loadingModules}
+            />
+            <LessonsContent
+              roadmap={roadmap}
+              activeCourse={activeCourse}
+              openPopover={openPopover}
+              togglePopover={togglePopover}
+              showContinue={showContinue}
+              setShowContinue={setShowContinue}
+              firstIncompleteLesson={firstIncompleteLesson}
+              allLessons={allLessons}
+              taskRefs={taskRefs}
+            />
           </div>
-        </div>
-        <div>
-          <div className="w-full max-w-[713px] lg:sticky md:sticky fixed mt-[48px] lg:mt-0 md:mt-0 top-0 z-10 mb-4 px-4 md:pt-2 pt-4 lg:pt-0">
-            <div className="bg-[#121214] px-4 flex items-center justify-between h-[24px]"></div>
-            <section className="bg-gray-gradient border border-[#25252A] px-4 py-4 flex items-center shadow-lg rounded-lg w-full max-w-[713px] justify-between sticky top-0 z-10 bg-[#1a1a1e]">
-              <div className="flex flex-col lg:ml-4">
-                <div className="flex items-center gap-3">
-                  <div>
-                    <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
-                      3 aulas
-                    </span>
-                    <p className="text-xl ">Seção 1 - Introdução</p>
-                  </div>
-                </div>
-              </div>
-              <Link href="/learn/catalog">
-                <ChevronRight size={48} />
-              </Link>
-            </section>
-          </div>
-
-          <div className="w-full max-w-[713px] lg:sticky md:sticky fixed mt-[48px] lg:mt-0 md:mt-0 top-0 z-10 mb-4 px-4 md:pt-2 pt-4 lg:pt-0">
-            <section className="bg-gray-gradient border border-[#25252A] px-4 py-4 flex items-center shadow-lg rounded-lg w-full max-w-[713px] justify-between sticky top-0 z-10 bg-[#1a1a1e]">
-              <div className="flex flex-col lg:ml-4">
-                <div className="flex items-center gap-3">
-                  <div>
-                    <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
-                      3 aulas
-                    </span>
-                    <p className="text-xl ">Seção 2 - Conceitos</p>
-                  </div>
-                </div>
-              </div>
-              <Link href="/learn/catalog">
-                <ChevronRight size={48} />
-              </Link>
-            </section>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
