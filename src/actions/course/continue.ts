@@ -1,12 +1,15 @@
 "use server";
 
 import { getAuthToken } from "../auth/session";
+import { revalidateTag, revalidatePath } from "next/cache";
+import { getActiveCourse } from "../user/get-active-course";
 
 /**
  * Marca a lição atual como concluída e avança para a próxima
  */
 export async function continueCourse(
-  lessonId: number
+  lessonId: number,
+  courseId?: string
 ): Promise<{ success: boolean }> {
   try {
     const token = await getAuthToken();
@@ -44,6 +47,22 @@ export async function continueCourse(
       throw new Error(
         errorData.message || "Erro ao marcar lição como completa"
       );
+    }
+
+    // Invalida o cache do roadmap após marcar a lição como completa
+    try {
+      // Se courseId não foi fornecido, busca o curso ativo
+      const activeCourseId = courseId || (await getActiveCourse())?.id;
+      
+      if (activeCourseId) {
+        // Invalida o cache do roadmap usando a tag
+        revalidateTag(`roadmap-${activeCourseId}`);
+        // Também revalida a página do learn para forçar atualização
+        revalidatePath("/learn", "page");
+      }
+    } catch (cacheError) {
+      // Não falha a operação se houver erro ao invalidar cache
+      console.warn("Erro ao invalidar cache do roadmap:", cacheError);
     }
 
     return { success: true };

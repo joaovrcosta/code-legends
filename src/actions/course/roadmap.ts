@@ -4,7 +4,8 @@ import { getAuthToken } from "../auth/session";
 import type { RoadmapResponse } from "@/types/roadmap";
 
 /**
- * Busca o roadmap de um curso
+ * Busca o roadmap de um curso com cache (revalida a cada 60 segundos)
+ * O cache é automático do Next.js quando usado em Server Components
  */
 export async function getCourseRoadmap(
   courseId: string
@@ -25,7 +26,12 @@ export async function getCourseRoadmap(
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        cache: "no-store",
+        // Cache com revalidação a cada 60 segundos
+        // O Next.js automaticamente cacheia por usuário/sessão
+        next: {
+          revalidate: 60, // Revalida a cada 60 segundos
+          tags: [`roadmap-${courseId}`],
+        },
       }
     );
 
