@@ -1,12 +1,11 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
-import { getCourseRoadmap, listModulesProgress } from "@/actions/course";
+import { getCourseRoadmap } from "@/actions/course";
 import { useCourseModalStore } from "@/stores/course-modal-store";
-import type { RoadmapResponse, ModuleWithProgress } from "@/types/roadmap";
+import type { RoadmapResponse } from "@/types/roadmap";
 import type { ActiveCourse } from "@/types/user-course.ts";
 import { LearnHeader } from "@/components/learn/learn-header";
-import { ModulesList } from "@/components/learn/modules-list";
 import { LessonsContent } from "@/components/learn/lessons-content";
 
 interface LearnPageContentProps {
@@ -21,9 +20,6 @@ export function LearnPageContent({
   const [openPopover, setOpenPopover] = useState<number | null>(null);
   const [showContinue, setShowContinue] = useState<boolean>(true);
   const [roadmap, setRoadmap] = useState<RoadmapResponse>(initialRoadmap);
-  const [showModules, setShowModules] = useState<boolean>(false);
-  const [modules, setModules] = useState<ModuleWithProgress[] | null>(null);
-  const [loadingModules, setLoadingModules] = useState<boolean>(false);
   const taskRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const prevOpenPopoverRef = useRef<number | null>(null);
   const prevIsModalOpenRef = useRef<boolean>(false);
@@ -190,31 +186,6 @@ export function LearnPageContent({
     setOpenPopover((prev) => (prev === id ? null : id));
   };
 
-  // Função para buscar e exibir os módulos
-  const handleToggleModules = useCallback(async () => {
-    if (showModules) {
-      setShowModules(false);
-      return;
-    }
-
-    if (!modules && activeCourse?.id) {
-      setLoadingModules(true);
-      try {
-        const modulesData = await listModulesProgress(activeCourse.id);
-        if (modulesData?.modules) {
-          setModules(modulesData.modules);
-          setShowModules(true);
-        }
-      } catch (error) {
-        console.error("Erro ao buscar módulos:", error);
-      } finally {
-        setLoadingModules(false);
-      }
-    } else {
-      setShowModules(true);
-    }
-  }, [showModules, modules, activeCourse?.id]);
-
   // Verificação de segurança: não renderiza se o roadmap não estiver disponível
   if (!roadmap || !roadmap.modules) {
     return (
@@ -231,41 +202,27 @@ export function LearnPageContent({
   return (
     <div className="flex items-center justify-center w-full">
       <div className="w-full space-y-4">
-        {loadingModules && (
-          <div className="w-full flex items-center justify-center py-8">
-            <p className="text-muted-foreground">Carregando módulos...</p>
-          </div>
-        )}
-        {showModules && modules ? (
-          <ModulesList
-            modules={modules}
-            courseId={activeCourse.id}
-            onToggle={handleToggleModules}
-            onModuleChange={fetchRoadmap}
+        <div className="w-full lg:py-10 py-0 rounded-2xl flex items-center justify-center flex-col">
+          <LearnHeader
+            currentModule={currentModule}
+            currentClass={currentClass}
+            courseTitle={roadmap?.course?.title || "Curso"}
+            lessonTitle={currentLessonTitle}
+            onToggleModules={() => {}}
+            loadingModules={false}
           />
-        ) : (
-          <div className="w-full lg:py-10 py-0 rounded-2xl flex items-center justify-center flex-col">
-            <LearnHeader
-              currentModule={currentModule}
-              currentClass={currentClass}
-              courseTitle={roadmap?.course?.title || "Curso"}
-              lessonTitle={currentLessonTitle}
-              onToggleModules={handleToggleModules}
-              loadingModules={loadingModules}
-            />
-            <LessonsContent
-              roadmap={roadmap}
-              activeCourse={activeCourse}
-              openPopover={openPopover}
-              togglePopover={togglePopover}
-              showContinue={showContinue}
-              setShowContinue={setShowContinue}
-              firstIncompleteLesson={firstIncompleteLesson}
-              allLessons={allLessons}
-              taskRefs={taskRefs}
-            />
-          </div>
-        )}
+          <LessonsContent
+            roadmap={roadmap}
+            activeCourse={activeCourse}
+            openPopover={openPopover}
+            togglePopover={togglePopover}
+            showContinue={showContinue}
+            setShowContinue={setShowContinue}
+            firstIncompleteLesson={firstIncompleteLesson}
+            allLessons={allLessons}
+            taskRefs={taskRefs}
+          />
+        </div>
       </div>
     </div>
   );

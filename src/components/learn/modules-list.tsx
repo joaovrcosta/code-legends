@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { ModuleWithProgress } from "@/types/roadmap";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { setCurrentModule } from "@/actions/course";
@@ -20,6 +21,7 @@ export function ModulesList({
   onModuleChange,
 }: ModulesListProps) {
   const [loadingModuleId, setLoadingModuleId] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleModuleClick = async (module: ModuleWithProgress) => {
     if (module.locked) return;
@@ -28,10 +30,8 @@ export function ModulesList({
     try {
       const result = await setCurrentModule(courseId, module.id);
       if (result.success) {
-        onToggle();
-        if (onModuleChange) {
-          onModuleChange();
-        }
+        // Redirecionar para /learn com o roadmap carregado para aquela sessão
+        router.push("/learn");
       } else {
         console.error("Erro ao atualizar módulo:", result.error);
       }

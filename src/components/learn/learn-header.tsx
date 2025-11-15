@@ -2,6 +2,7 @@
 
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface LearnHeaderProps {
   currentModule: number;
@@ -20,6 +21,13 @@ export function LearnHeader({
   onToggleModules,
   loadingModules = false,
 }: LearnHeaderProps) {
+  const router = useRouter();
+
+  const handleToggleModules = () => {
+    // Redireciona para a página de módulos
+    router.push("/learn/sections");
+  };
+
   return (
     <div className="w-full max-w-[713px] lg:sticky md:sticky fixed mt-[48px] lg:mt-0 md:mt-0 top-0 z-10 mb-8 px-4 md:pt-2 pt-4 lg:pt-0">
       <div className="bg-[#121214] px-4 flex items-center justify-between h-[24px]"></div>
@@ -41,7 +49,7 @@ export function LearnHeader({
           </div>
         </div>
         <button
-          onClick={onToggleModules}
+          onClick={handleToggleModules}
           className="cursor-pointer hover:opacity-80 transition-opacity"
           disabled={loadingModules}
         >
