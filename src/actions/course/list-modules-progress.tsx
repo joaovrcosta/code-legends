@@ -25,11 +25,7 @@ export async function listModulesProgress(
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        // Cache com revalidação a cada 60 segundos
-        next: {
-          revalidate: 1,
-          tags: [`modules-progress-${courseId}`],
-        },
+        cache: "no-store",
       }
     );
 
