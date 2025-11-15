@@ -14,12 +14,7 @@ interface ModulesListProps {
   onModuleChange?: () => void;
 }
 
-export function ModulesList({
-  modules,
-  courseId,
-  onToggle,
-  onModuleChange,
-}: ModulesListProps) {
+export function ModulesList({ modules, courseId }: ModulesListProps) {
   const [loadingModuleId, setLoadingModuleId] = useState<string | null>(null);
   const [isUnlocking, setIsUnlocking] = useState(false);
   const router = useRouter();

@@ -18,7 +18,6 @@ export function LearnHeader({
   currentClass,
   courseTitle,
   lessonTitle,
-  onToggleModules,
   loadingModules = false,
 }: LearnHeaderProps) {
   const router = useRouter();
@@ -59,4 +58,3 @@ export function LearnHeader({
     </div>
   );
 }
-
