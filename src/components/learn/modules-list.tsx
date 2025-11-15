@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { ModuleWithProgress } from "@/types/roadmap";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { setCurrentModule } from "@/actions/course";
+import { Lock } from "@phosphor-icons/react/dist/ssr";
 
 interface ModulesListProps {
   modules: ModuleWithProgress[];
@@ -69,7 +70,7 @@ export function ModulesList({
                     className="px-4 h-[40px] w-[140px]"
                     disabled
                   >
-                    Bloqueado
+                    Bloqueado <Lock size={20} />
                   </PrimaryButton>
                 ) : module.isCurrent ? (
                   <PrimaryButton

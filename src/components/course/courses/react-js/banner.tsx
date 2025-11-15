@@ -31,6 +31,15 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { PrimaryButton } from "@/components/ui/primary-button";
 import { CourseDetail } from "@/types/course-types";
 
 export function CourseBanner({ course }: { course: CourseDetail }) {
@@ -45,6 +54,8 @@ export function CourseBanner({ course }: { course: CourseDetail }) {
   const [isEnrolling, setIsEnrolling] = useState(false);
   const [isCheckingEnrollment, setIsCheckingEnrollment] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
 
   // Garante que o componente está montado no cliente
   useEffect(() => {
@@ -241,14 +252,84 @@ export function CourseBanner({ course }: { course: CourseDetail }) {
               </div>
               <div className="flex items-center justify-between mt-2">
                 <div></div>
-                <button className="hover:bg-[#25252A] text-[#a5a5a6] rounded-lg p-2 mt-2 flex gap-3 items-center group transition-colors duration-300">
+                <button
+                  onClick={() => setShowResetModal(true)}
+                  disabled={isResetting}
+                  className="hover:bg-[#25252A] text-[#a5a5a6] rounded-lg p-2 mt-2 flex gap-3 items-center group transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   <ArrowClockwise
                     size={24}
                     weight="fill"
-                    className="text-[#a5a5a6] group-hover:text-[#00C8FF] transition-colors duration-300"
+                    className={cn(
+                      "text-[#a5a5a6] group-hover:text-[#00C8FF] transition-colors duration-300",
+                      isResetting && "animate-spin"
+                    )}
                   />
-                  Resetar curso
+                  {isResetting ? "Resetando..." : "Resetar curso"}
                 </button>
+
+                <Dialog open={showResetModal} onOpenChange={setShowResetModal}>
+                  <DialogContent className="max-w-md bg-[#1a1a1e] border-[#25252A]">
+                    <DialogHeader>
+                      <DialogTitle className="text-white text-xl">
+                        Resetar Progresso do Curso
+                      </DialogTitle>
+                      <DialogDescription className="text-[#a5a5a6] pt-2">
+                        Tem certeza que deseja resetar o progresso deste curso?
+                        Esta ação não pode ser desfeita e todos os seus
+                        progressos neste curso serão perdidos.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="flex gap-3 sm:gap-0">
+                      <Button
+                        variant="ghost"
+                        onClick={() => setShowResetModal(false)}
+                        disabled={isResetting}
+                        className="text-[#a5a5a6] hover:text-white hover:bg-[#25252A]"
+                      >
+                        Cancelar
+                      </Button>
+                      <PrimaryButton
+                        onClick={async () => {
+                          try {
+                            setIsResetting(true);
+                            const { resetCourseProgress } = await import(
+                              "@/actions/course/reset-progress"
+                            );
+                            const result = await resetCourseProgress(course.id);
+
+                            if (result.success) {
+                              setShowResetModal(false);
+                              // Recarrega a página para atualizar o progresso
+                              router.refresh();
+                              // Atualiza a lista de cursos inscritos
+                              await refreshEnrolledCourses();
+                            } else {
+                              alert(
+                                result.error ||
+                                  "Erro ao resetar progresso do curso"
+                              );
+                            }
+                          } catch (error) {
+                            console.error("Erro ao resetar progresso:", error);
+                            alert(
+                              error instanceof Error
+                                ? error.message
+                                : "Erro ao resetar progresso do curso"
+                            );
+                          } finally {
+                            setIsResetting(false);
+                          }
+                        }}
+                        disabled={isResetting}
+                        variant="primary"
+                        className="bg-red-600 hover:bg-red-700 mt-8"
+                      >
+                        {isResetting ? "Resetando..." : "Confirmar Reset"}
+                      </PrimaryButton>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
 

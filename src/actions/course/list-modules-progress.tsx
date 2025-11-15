@@ -27,7 +27,7 @@ export async function listModulesProgress(
         },
         // Cache com revalidação a cada 60 segundos
         next: {
-          revalidate: 60,
+          revalidate: 1,
           tags: [`modules-progress-${courseId}`],
         },
       }
