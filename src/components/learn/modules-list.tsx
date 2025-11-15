@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import type { ModuleWithProgress } from "@/types/roadmap";
 import { PrimaryButton } from "@/components/ui/primary-button";
-import { setCurrentModule } from "@/actions/course";
+import { setCurrentModule, unlockNextModule } from "@/actions/course";
 import { Lock } from "@phosphor-icons/react/dist/ssr";
 
 interface ModulesListProps {
@@ -21,7 +21,13 @@ export function ModulesList({
   onModuleChange,
 }: ModulesListProps) {
   const [loadingModuleId, setLoadingModuleId] = useState<string | null>(null);
+  const [isUnlocking, setIsUnlocking] = useState(false);
   const router = useRouter();
+
+  // Encontra o próximo módulo bloqueado que pode ser desbloqueado
+  const nextLockedModule = useMemo(() => {
+    return modules.find((module) => module.locked && module.canUnlock);
+  }, [modules]);
 
   const handleModuleClick = async (module: ModuleWithProgress) => {
     if (module.locked) return;
@@ -39,6 +45,27 @@ export function ModulesList({
       console.error("Erro ao atualizar módulo:", error);
     } finally {
       setLoadingModuleId(null);
+    }
+  };
+
+  const handleUnlockNext = async () => {
+    if (!nextLockedModule) return;
+
+    setIsUnlocking(true);
+    try {
+      const result = await unlockNextModule(courseId);
+      if (result.success) {
+        // Recarrega a página para atualizar os módulos
+        router.refresh();
+      } else {
+        console.error("Erro ao desbloquear módulo:", result.error);
+        alert(result.error || "Erro ao desbloquear módulo");
+      }
+    } catch (error) {
+      console.error("Erro ao desbloquear módulo:", error);
+      alert("Erro ao desbloquear módulo");
+    } finally {
+      setIsUnlocking(false);
     }
   };
 

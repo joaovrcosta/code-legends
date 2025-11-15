@@ -64,8 +64,10 @@ export type ModuleWithProgress = {
   totalLessons: number;
   completedLessons: number;
   locked: boolean;
+  canUnlock: boolean;
 };
 
 export type ModulesWithProgressResponse = {
   modules: ModuleWithProgress[];
+  nextModule?: ModuleWithProgress;
 };

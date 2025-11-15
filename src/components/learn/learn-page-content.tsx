@@ -1,12 +1,20 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
-import { getCourseRoadmap } from "@/actions/course";
+import {
+  getCourseRoadmap,
+  listModulesProgress,
+  unlockNextModule,
+} from "@/actions/course";
 import { useCourseModalStore } from "@/stores/course-modal-store";
 import type { RoadmapResponse } from "@/types/roadmap";
 import type { ActiveCourse } from "@/types/user-course.ts";
+import type { ModuleWithProgress } from "@/types/roadmap";
 import { LearnHeader } from "@/components/learn/learn-header";
 import { LessonsContent } from "@/components/learn/lessons-content";
+import { Lock } from "@phosphor-icons/react/dist/ssr";
+import { PrimaryButton } from "../ui/primary-button";
+import { useRouter } from "next/navigation";
 
 interface LearnPageContentProps {
   initialRoadmap: RoadmapResponse;
@@ -20,11 +28,16 @@ export function LearnPageContent({
   const [openPopover, setOpenPopover] = useState<number | null>(null);
   const [showContinue, setShowContinue] = useState<boolean>(true);
   const [roadmap, setRoadmap] = useState<RoadmapResponse>(initialRoadmap);
+  const [modulesProgress, setModulesProgress] = useState<ModuleWithProgress[]>(
+    []
+  );
+  const [isUnlocking, setIsUnlocking] = useState(false);
   const taskRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
   const prevOpenPopoverRef = useRef<number | null>(null);
   const prevIsModalOpenRef = useRef<boolean>(false);
   const hasScrolledRef = useRef<boolean>(false);
   const lastCompletedTimestampRef = useRef<number | null>(null);
+  const router = useRouter();
 
   const { isOpen: isModalOpen, lessonCompletedTimestamp } =
     useCourseModalStore();
@@ -42,6 +55,21 @@ export function LearnPageContent({
       console.error("Erro ao buscar roadmap:", error);
     }
   }, [activeCourse?.id]);
+
+  // Função para buscar os módulos com progresso
+  const fetchModulesProgress = useCallback(async () => {
+    if (!activeCourse?.slug) return;
+
+    try {
+      const modulesData = await listModulesProgress(activeCourse.slug);
+
+      if (modulesData?.modules) {
+        setModulesProgress(modulesData.modules);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar módulos com progresso:", error);
+    }
+  }, [activeCourse?.slug]);
 
   // Coleta todas as lições de todos os módulos e grupos
   const allLessons = useMemo(() => {
@@ -78,6 +106,28 @@ export function LearnPageContent({
     }
     return "Selecione uma aula";
   }, [roadmap]);
+
+  console.log(modulesProgress);
+
+  const nextLockedModule = useMemo(() => {
+    // Encontra o módulo atual usando isCurrent
+    const currentModuleIndex = modulesProgress.findIndex(
+      (module) => module.isCurrent
+    );
+
+    // Se encontrou o módulo atual e não é o último, retorna o próximo
+    if (
+      currentModuleIndex !== -1 &&
+      currentModuleIndex < modulesProgress.length - 1
+    ) {
+      return modulesProgress[currentModuleIndex + 1];
+    }
+
+    // Se não encontrou módulo atual ou é o último, retorna undefined
+    return undefined;
+  }, [modulesProgress]);
+
+  console.log(nextLockedModule);
 
   // Fecha o popover quando o modal abre e reativa "Começar" quando o modal fecha
   useEffect(() => {
@@ -124,17 +174,28 @@ export function LearnPageContent({
     prevOpenPopoverRef.current = openPopover;
   }, [openPopover, isModalOpen, firstIncompleteLesson]);
 
+  // Busca os módulos com progresso quando o componente carrega
+  useEffect(() => {
+    fetchModulesProgress();
+  }, [fetchModulesProgress]);
+
   // Atualiza o roadmap quando uma lição é marcada como concluída no modal
   useEffect(() => {
     if (lessonCompletedTimestamp && activeCourse?.id) {
       // Aguarda um pequeno delay para garantir que a API foi atualizada
       const timeoutId = setTimeout(async () => {
         await fetchRoadmap();
-      }, 500);
+        await fetchModulesProgress();
+      }, 1);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [lessonCompletedTimestamp, activeCourse?.id, fetchRoadmap]);
+  }, [
+    lessonCompletedTimestamp,
+    activeCourse?.id,
+    fetchRoadmap,
+    fetchModulesProgress,
+  ]);
 
   // Faz scroll quando o roadmap é atualizado após completar uma lição
   useEffect(() => {
@@ -186,6 +247,29 @@ export function LearnPageContent({
     setOpenPopover((prev) => (prev === id ? null : id));
   };
 
+  const handleUnlockNext = async () => {
+    if (!nextLockedModule || !activeCourse?.id) return;
+
+    setIsUnlocking(true);
+    try {
+      const result = await unlockNextModule(activeCourse.id);
+      if (result.success) {
+        // Atualiza os módulos e o roadmap
+        await fetchModulesProgress();
+        await fetchRoadmap();
+        router.refresh();
+      } else {
+        console.error("Erro ao desbloquear módulo:", result.error);
+        alert(result.error || "Erro ao desbloquear módulo");
+      }
+    } catch (error) {
+      console.error("Erro ao desbloquear módulo:", error);
+      alert("Erro ao desbloquear módulo");
+    } finally {
+      setIsUnlocking(false);
+    }
+  };
+
   // Verificação de segurança: não renderiza se o roadmap não estiver disponível
   if (!roadmap || !roadmap.modules) {
     return (
@@ -198,6 +282,8 @@ export function LearnPageContent({
       </div>
     );
   }
+
+  console.log(nextLockedModule);
 
   return (
     <div className="flex items-center justify-center w-full">
@@ -222,6 +308,45 @@ export function LearnPageContent({
             allLessons={allLessons}
             taskRefs={taskRefs}
           />
+          <div className="flex items-center justify-between flex-col border border-[#25252A] lg:rounded-lg rounded-none p-4 w-full max-w-[713px]">
+            <div className="flex items-center justify-between p-2 bg-[#1a1a1e] rounded-lg mb-4">
+              <span className="text-xs font-bold bg-blue-gradient-500 bg-clip-text text-transparent bg-[#1a1a1e]">
+                {nextLockedModule ? "A SEGUIR" : "CERTIFICADO"}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-2 flex-col w-full">
+              {nextLockedModule ? (
+                <>
+                  <div className="flex items-center text-center justify-between gap-2 text-2xl mb-4">
+                    <p>{nextLockedModule.title}</p>
+                    <Lock size={24} weight="fill" />
+                  </div>
+                  {/* <h3 className="text-2xl text-center">
+                    {nextLockedModule.title}
+                  </h3> */}
+                  <button
+                    onClick={handleUnlockNext}
+                    disabled={!nextLockedModule.canUnlock}
+                    className="w-full text-center px-6 h-[44px] rounded-full border border-[#25252A] text-sm flex items-center justify-center text-white ease-linear duration-150 bg-blue-gradient-500"
+                  >
+                    {isUnlocking ? "Desbloqueando..." : "Proximo módulo"}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-2xl text-center">
+                    Parabéns! Você completou o curso!
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Gere seu certificado de conclusão
+                  </p>
+                  <PrimaryButton variant="secondary" onClick={() => {}}>
+                    Gerar certificado
+                  </PrimaryButton>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
