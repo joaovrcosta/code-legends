@@ -120,3 +120,30 @@ export type CompletedCourse = {
 export type CompletedCoursesResponse = {
   courses: CompletedCourse[];
 };
+
+export interface ModuleProgress {
+  id: string;
+  title: string;
+  slug: string;
+  progress: number;
+  totalLessons: number;
+  completedLessons: number;
+  isCompleted: boolean;
+}
+
+export interface CourseProgressData {
+  id: string;
+  title: string;
+  slug: string;
+  progress: number;
+  totalLessons: number;
+  completedLessons: number;
+  totalModules: number;
+  completedModules: number;
+  isCompleted: boolean;
+}
+
+export interface UserCourseProgressResponse {
+  course: CourseProgressData;
+  modules: ModuleProgress[];
+}

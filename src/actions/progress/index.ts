@@ -6,3 +6,4 @@ export {
   type MyLearningCourse,
   type MyLearningResponse,
 } from "./my-learning";
+export { getUserCourseProgress } from "./get-course-progress";

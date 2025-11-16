@@ -41,8 +41,32 @@ import {
 } from "@/components/ui/dialog";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { CourseDetail } from "@/types/course-types";
+import type { UserCourseProgressResponse } from "@/types/user-course.ts";
 
-export function CourseBanner({ course }: { course: CourseDetail }) {
+interface CourseBannerProps {
+  course: CourseDetail;
+  userProgress?: UserCourseProgressResponse | null;
+}
+
+const getLevelLabel = (level: string): string => {
+  const levelMap: Record<string, string> = {
+    beginner: "INICIANTE",
+    intermediate: "INTERMEDIARIO",
+    advanced: "AVANÇADO",
+  };
+  return levelMap[level] || level.toUpperCase();
+};
+
+const getLevelColor = (level: string): string => {
+  const colorMap: Record<string, string> = {
+    beginner: "text-green-500",
+    intermediate: "text-orange-500",
+    advanced: "text-red-500",
+  };
+  return colorMap[level] || "text-orange-500";
+};
+
+export function CourseBanner({ course, userProgress }: CourseBannerProps) {
   const router = useRouter();
   const refreshEnrolledCourses = useEnrolledCoursesStore(
     (state) => state.refreshEnrolledCourses
@@ -246,8 +270,13 @@ export function CourseBanner({ course }: { course: CourseDetail }) {
 
             <div className="flex-col items-center gap-4 justify-center pb-6 mt-6 w-full">
               <div className="flex items-center gap-4">
-                <Progress value={46} className="w-full bg-[#25252A] h-[2px]" />
-                <p className="text-sm text-center">46%</p>
+                <Progress
+                  value={userProgress?.course.progress ?? 0}
+                  className="w-full bg-[#25252A] h-[2px]"
+                />
+                <p className="text-sm text-center">
+                  {Math.round(userProgress?.course.progress ?? 0)}%
+                </p>
                 <Trophy size={32} weight="fill" className="text-[#25252A]" />
               </div>
               <div className="flex items-center justify-between mt-2">
@@ -453,10 +482,10 @@ export function CourseBanner({ course }: { course: CourseDetail }) {
             <li className="flex w-full items-center gap-3 py-4  border-b border-[#25252A]">
               <ChartNoAxesColumnIncreasingIcon
                 size={24}
-                className="text-orange-500"
+                className={getLevelColor(course.level)}
               />
               <p className="whitespace-nowrap text-[#a5a5a6] text-sm font-light">
-                INTERMEDIARIO
+                {getLevelLabel(course.level)}
               </p>
             </li>
           </ul>
@@ -464,10 +493,17 @@ export function CourseBanner({ course }: { course: CourseDetail }) {
             <p className="text-[12px] text-muted-foreground">INSTRUTOR</p>
             <div className="flex items-center gap-3 mt-4">
               <Avatar className="h-[42px] w-[42px]">
-                <AvatarImage src="https://avatars.githubusercontent.com/u/70654718?v=4" />
-                <AvatarFallback>JS</AvatarFallback>
+                <AvatarImage src={course.instructor.avatar} />
+                <AvatarFallback>
+                  {course.instructor.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase()
+                    .slice(0, 2)}
+                </AvatarFallback>
               </Avatar>
-              <p>João Victor</p>
+              <p>{course.instructor.name}</p>
             </div>
           </div>
         </div>

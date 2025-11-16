@@ -107,8 +107,6 @@ export function LearnPageContent({
     return "Selecione uma aula";
   }, [roadmap]);
 
-  console.log(modulesProgress);
-
   const nextLockedModule = useMemo(() => {
     // Encontra o módulo atual usando isCurrent
     const currentModuleIndex = modulesProgress.findIndex(
@@ -126,8 +124,6 @@ export function LearnPageContent({
     // Se não encontrou módulo atual ou é o último, retorna undefined
     return undefined;
   }, [modulesProgress]);
-
-  console.log(nextLockedModule);
 
   // Fecha o popover quando o modal abre e reativa "Começar" quando o modal fecha
   useEffect(() => {
@@ -282,8 +278,6 @@ export function LearnPageContent({
       </div>
     );
   }
-
-  console.log(nextLockedModule);
 
   return (
     <div className="flex items-center justify-center w-full">

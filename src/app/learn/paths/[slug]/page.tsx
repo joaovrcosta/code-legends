@@ -1,4 +1,5 @@
 import { getCourseBySlug } from "@/actions/course/get-course-by-slug";
+import { getUserCourseProgress } from "@/actions/progress/get-course-progress";
 import { CourseBanner } from "@/components/course/courses/react-js/banner";
 import { CourseContent } from "@/components/course/courses/react-js/content";
 import { CourseOverview } from "@/components/course/courses/react-js/overview";
@@ -19,6 +20,8 @@ export default async function CoursePage({
   if (!course) {
     notFound();
   }
+
+  const userProgress = await getUserCourseProgress(course.slug);
 
   const myLearningTabs = [
     {
@@ -52,7 +55,7 @@ export default async function CoursePage({
 
   return (
     <div>
-      <CourseBanner course={course} />
+      <CourseBanner course={course} userProgress={userProgress} />
       <section className="flex items-center justify-between mt-4 mb-4 lg:px-12 px-6">
         <Tabs tabs={myLearningTabs} defaultTab="in-progress" />
       </section>
