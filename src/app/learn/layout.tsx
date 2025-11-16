@@ -28,13 +28,7 @@ export default async function LearnLayout({
           <Sidebar />
         </div>
 
-        <div 
-          className="flex-1 h-[calc(100dvh-100px)] lg:h-[calc(100dvh-80px)] overflow-y-auto overflow-x-hidden pt-0 pb-4"
-          style={{ 
-            WebkitOverflowScrolling: 'touch',
-            overscrollBehavior: 'contain'
-          }}
-        >
+        <div className="flex-1 h-[calc(100dvh-100px)] lg:h-[calc(100dvh-80px)] overflow-y-auto pt-0 pb-4">
           <main className="w-full">{children}</main>
           <FooterFixed />
 
