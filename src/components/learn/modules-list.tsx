@@ -6,7 +6,7 @@ import type { ModuleWithProgress } from "@/types/roadmap";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { setCurrentModule, unlockNextModule } from "@/actions/course";
 import { CheckCircle, Lock } from "@phosphor-icons/react/dist/ssr";
-import { Progress } from "../ui/progress";
+import { ModuleProgressBar } from "./module-progress-bar";
 
 interface ModulesListProps {
   modules: ModuleWithProgress[];
@@ -75,11 +75,11 @@ export function ModulesList({ modules, courseId }: ModulesListProps) {
             className="w-full max-w-[713px] lg:mb-4 mb-0 px-4 md:pt-2 pt-4 lg:pt-0"
           >
             <section
-              className={`border border-[#25252A] px-4 py-4 flex items-center shadow-lg rounded-[16px] w-full max-w-[713px] justify-between sticky top-0 z-10  ${
+              className={`border border-[#25252A] px-6 py-6 pr-8 flex items-center shadow-lg rounded-[16px] w-full max-w-[713px] justify-between sticky top-0 z-10  ${
                 module.isCurrent ? "bg-[#121214]" : "bg-[#121214]"
               }`}
             >
-              <div className="flex flex-col lg:ml-4 w-full">
+              <div className="flex flex-col w-full">
                 <div className="flex items-center justify-between w-full flex-col">
                   <div className="flex items-start justify-between w-full mb-8">
                     <div className="">
@@ -97,7 +97,9 @@ export function ModulesList({ modules, courseId }: ModulesListProps) {
                             weight="fill"
                             className="text-[#58cc02]"
                           />
-                          <p className="text-[#58cc02] text-xs">COMPLETO!</p>
+                          <p className="text-[#58cc02] text-xs font-semibold">
+                            COMPLETO!
+                          </p>
                         </div>
                       )}
                     </div>
@@ -106,14 +108,14 @@ export function ModulesList({ modules, courseId }: ModulesListProps) {
                       {module.locked ? (
                         <PrimaryButton
                           variant="secondary"
-                          className="px-4 h-[40px] w-[140px]"
+                          className="px-4 h-[40px] w-[140px] rounded-[12px]"
                           disabled
                         >
                           Bloqueado <Lock size={20} />
                         </PrimaryButton>
                       ) : module.isCurrent ? (
                         <PrimaryButton
-                          className="px-4 w-[140px] h-[44px]"
+                          className="px-4 w-[140px] h-[44px] rounded-[12px]"
                           onClick={() => handleModuleClick(module)}
                           disabled={isLoading}
                           variant="primary"
@@ -123,7 +125,7 @@ export function ModulesList({ modules, courseId }: ModulesListProps) {
                       ) : (
                         <PrimaryButton
                           variant="secondary"
-                          className="px-4 h-[44px] w-[140px]"
+                          className="px-4 h-[44px] w-[140px] rounded-[12px]"
                           onClick={() => handleModuleClick(module)}
                           disabled={isLoading}
                         >
@@ -133,13 +135,7 @@ export function ModulesList({ modules, courseId }: ModulesListProps) {
                     </div>
                   </div>
                   <div className="w-full">
-                    <Progress
-                      value={module.progress}
-                      className="h-[8px] w-full"
-                    />
-                    <div className="flex items-center justify-between text-xs text-[#C4C4CC]">
-                      <span>{module.progress}%</span>
-                    </div>
+                    <ModuleProgressBar value={module.progress} />
                   </div>
                 </div>
               </div>
