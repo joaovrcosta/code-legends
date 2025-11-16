@@ -112,3 +112,34 @@ body {
   bottom: -100px;
   right: -100px;
 }
+
+/* Melhora o comportamento de scroll no mobile */
+@supports (-webkit-touch-callout: none) {
+  /* iOS specific */
+  html {
+    height: -webkit-fill-available;
+  }
+  
+  body {
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* Otimizações para mobile - permite que a barra de navegação desapareça */
+@media (max-width: 768px) {
+  html {
+    height: 100%;
+    height: -webkit-fill-available;
+  }
+  
+  body {
+    min-height: 100%;
+    min-height: -webkit-fill-available;
+    /* Não usar overflow: hidden aqui para permitir scroll natural */
+  }
+  
+  /* Melhora o scroll suave no mobile */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
