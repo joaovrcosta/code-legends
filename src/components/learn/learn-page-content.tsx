@@ -273,7 +273,7 @@ export function LearnPageContent({
   // Verificação de segurança: não renderiza se o roadmap não estiver disponível
   if (!roadmap || !roadmap.modules) {
     return (
-      <div className="flex items-center justify-center w-full h-screen">
+      <div className="flex items-center justify-center w-full h-[100dvh]">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">
             Carregando roadmap do curso...

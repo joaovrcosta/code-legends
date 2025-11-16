@@ -9,7 +9,7 @@ export default async function LearnPage() {
 
   if (!activeCourse) {
     return (
-      <div className="flex items-center justify-center w-full h-screen">
+      <div className="flex items-center justify-center w-full h-[100dvh]">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">
             Nenhum curso ativo encontrado. Selecione um curso para começar.
@@ -26,7 +26,7 @@ export default async function LearnPage() {
 
   if (!roadmap) {
     return (
-      <div className="flex items-center justify-center w-full h-screen">
+      <div className="flex items-center justify-center w-full h-[100dvh]">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">
             Erro ao carregar o roadmap do curso.

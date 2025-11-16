@@ -17,7 +17,7 @@ export default async function LearnLayout({
   ]);
 
   return (
-    <div className="h-screen w-full flex flex-col">
+    <div className="h-[100dvh] w-full flex flex-col">
       <LearnHeader
         initialUserCourses={enrolledCoursesData.userCourses || []}
         initialActiveCourse={activeCourse}
@@ -28,7 +28,7 @@ export default async function LearnLayout({
           <Sidebar />
         </div>
 
-        <div className="flex-1 h-[calc(100vh-100px)] lg:h-[calc(100vh-80px)] overflow-y-auto pt-0 pb-4">
+        <div className="flex-1 h-[calc(100dvh-100px)] lg:h-[calc(100dvh-80px)] overflow-y-auto pt-0 pb-4">
           <main className="w-full">{children}</main>
           <FooterFixed />
 

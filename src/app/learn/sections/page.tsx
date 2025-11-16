@@ -8,7 +8,7 @@ export default async function SectionsPage() {
 
   if (!activeCourse) {
     return (
-      <div className="flex items-center justify-center w-full h-screen">
+      <div className="flex items-center justify-center w-full h-[100dvh]">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">
             Nenhum curso ativo encontrado.
@@ -24,7 +24,7 @@ export default async function SectionsPage() {
 
   if (!modulesData?.modules) {
     return (
-      <div className="flex items-center justify-center w-full h-screen">
+      <div className="flex items-center justify-center w-full h-[100dvh]">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">
             Nenhum módulo encontrado para este curso.
