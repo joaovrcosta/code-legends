@@ -12,7 +12,7 @@ import type { ActiveCourse } from "@/types/user-course.ts";
 import type { ModuleWithProgress } from "@/types/roadmap";
 import { LearnHeader } from "@/components/learn/learn-header";
 import { LessonsContent } from "@/components/learn/lessons-content";
-import { Lock } from "@phosphor-icons/react/dist/ssr";
+import { CertificateIcon, Lock } from "@phosphor-icons/react/dist/ssr";
 import { PrimaryButton } from "../ui/primary-button";
 import { useRouter } from "next/navigation";
 
@@ -308,7 +308,7 @@ export function LearnPageContent({
             allLessons={allLessons}
             taskRefs={taskRefs}
           />
-          <div className="flex items-center justify-between flex-col border border-[#25252A] lg:rounded-lg rounded-none p-4 w-full max-w-[713px]">
+          <div className="flex items-center justify-between flex-col border border-[#25252A] lg:border-b-[1px] lg:border-r-[1px] lg:border-l-[1px] border-l-0 border-r-0 border-b-0 lg:rounded-lg rounded-none p-8 w-full max-w-[412px]">
             <div className="flex items-center justify-between p-2 bg-[#1a1a1e] rounded-lg mb-4">
               <span className="text-xs font-bold bg-blue-gradient-500 bg-clip-text text-transparent bg-[#1a1a1e]">
                 {nextLockedModule ? "A SEGUIR" : "CERTIFICADO"}
@@ -318,8 +318,8 @@ export function LearnPageContent({
               {nextLockedModule ? (
                 <>
                   <div className="flex items-center text-center justify-between gap-2 text-2xl mb-4">
-                    <p>{nextLockedModule.title}</p>
                     <Lock size={24} weight="fill" />
+                    <p>{nextLockedModule.title}</p>
                   </div>
                   {/* <h3 className="text-2xl text-center">
                     {nextLockedModule.title}
@@ -327,7 +327,7 @@ export function LearnPageContent({
                   <button
                     onClick={handleUnlockNext}
                     disabled={!nextLockedModule.canUnlock}
-                    className="w-full text-center px-6 h-[44px] rounded-full border border-[#25252A] text-sm flex items-center justify-center text-white ease-linear duration-150 bg-blue-gradient-500"
+                    className="w-full text-center px-6 h-[48px] rounded-full border border-[#25252A] text-sm flex items-center justify-center text-white ease-linear duration-150 bg-blue-gradient-500"
                   >
                     {isUnlocking ? "Desbloqueando..." : "Proximo módulo"}
                   </button>
@@ -340,8 +340,13 @@ export function LearnPageContent({
                   <p className="text-muted-foreground">
                     Gere seu certificado de conclusão
                   </p>
-                  <PrimaryButton variant="secondary" onClick={() => {}}>
+                  <PrimaryButton
+                    variant="secondary"
+                    onClick={() => {}}
+                    className="h-[48px]"
+                  >
                     Gerar certificado
+                    <CertificateIcon size={18} className="mr-2" weight="fill" />
                   </PrimaryButton>
                 </>
               )}

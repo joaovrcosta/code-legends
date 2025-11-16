@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import type { ModuleWithProgress } from "@/types/roadmap";
 import { PrimaryButton } from "@/components/ui/primary-button";
 import { setCurrentModule, unlockNextModule } from "@/actions/course";
-import { Lock } from "@phosphor-icons/react/dist/ssr";
+import { CheckCircle, Lock } from "@phosphor-icons/react/dist/ssr";
+import { Progress } from "../ui/progress";
 
 interface ModulesListProps {
   modules: ModuleWithProgress[];
@@ -73,45 +74,74 @@ export function ModulesList({ modules, courseId }: ModulesListProps) {
             key={module.id}
             className="w-full max-w-[713px] lg:mb-4 mb-0 px-4 md:pt-2 pt-4 lg:pt-0"
           >
-            <section className="bg-gray-gradient border border-[#25252A] px-4 py-4 flex items-center shadow-lg rounded-lg w-full max-w-[713px] justify-between sticky top-0 z-10 bg-[#1a1a1e]">
-              <div className="flex flex-col lg:ml-4">
-                <div className="flex items-center gap-3">
-                  <div>
-                    <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-sm">
-                      {module.totalLessons}{" "}
-                      {module.totalLessons === 1 ? "aula" : "aulas"}
-                    </span>
-                    <p className="text-xl ">{module.title}</p>
+            <section
+              className={`border border-[#25252A] px-4 py-4 flex items-center shadow-lg rounded-[16px] w-full max-w-[713px] justify-between sticky top-0 z-10  ${
+                module.isCurrent ? "bg-[#121214]" : "bg-[#121214]"
+              }`}
+            >
+              <div className="flex flex-col lg:ml-4 w-full">
+                <div className="flex items-center justify-between w-full flex-col">
+                  <div className="flex items-start justify-between w-full mb-8">
+                    <div className="">
+                      <p className="text-xl font-semibold">{module.title}</p>
+                      {module.progress !== 100 && (
+                        <span className="text-white text-xs">
+                          {module.totalLessons}{" "}
+                          {module.totalLessons === 1 ? "aula" : "aulas"}
+                        </span>
+                      )}
+                      {module.progress === 100 && (
+                        <div className="flex items-center gap-1 mt-2">
+                          <CheckCircle
+                            size={20}
+                            weight="fill"
+                            className="text-[#58cc02]"
+                          />
+                          <p className="text-[#58cc02] text-xs">COMPLETO!</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      {module.locked ? (
+                        <PrimaryButton
+                          variant="secondary"
+                          className="px-4 h-[40px] w-[140px]"
+                          disabled
+                        >
+                          Bloqueado <Lock size={20} />
+                        </PrimaryButton>
+                      ) : module.isCurrent ? (
+                        <PrimaryButton
+                          className="px-4 w-[140px] h-[44px]"
+                          onClick={() => handleModuleClick(module)}
+                          disabled={isLoading}
+                          variant="primary"
+                        >
+                          {isLoading ? "Carregando..." : "Continuar"}
+                        </PrimaryButton>
+                      ) : (
+                        <PrimaryButton
+                          variant="secondary"
+                          className="px-4 h-[44px] w-[140px]"
+                          onClick={() => handleModuleClick(module)}
+                          disabled={isLoading}
+                        >
+                          {isLoading ? "Carregando..." : "Revisar"}
+                        </PrimaryButton>
+                      )}
+                    </div>
+                  </div>
+                  <div className="w-full">
+                    <Progress
+                      value={module.progress}
+                      className="h-[8px] w-full"
+                    />
+                    <div className="flex items-center justify-between text-xs text-[#C4C4CC]">
+                      <span>{module.progress}%</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-3">
-                {module.locked ? (
-                  <PrimaryButton
-                    variant="secondary"
-                    className="px-4 h-[40px] w-[140px]"
-                    disabled
-                  >
-                    Bloqueado <Lock size={20} />
-                  </PrimaryButton>
-                ) : module.isCurrent ? (
-                  <PrimaryButton
-                    className="px-4 w-[140px] h-[40px]"
-                    onClick={() => handleModuleClick(module)}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Carregando..." : "Continuar"}
-                  </PrimaryButton>
-                ) : (
-                  <PrimaryButton
-                    variant="secondary"
-                    className="px-4 h-[40px] w-[140px]"
-                    onClick={() => handleModuleClick(module)}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Carregando..." : "Revisar"}
-                  </PrimaryButton>
-                )}
               </div>
             </section>
           </div>

@@ -36,7 +36,7 @@ export function LessonsContent({
 
   return (
     <div className="lg:pb-14 pb-0 w-full lg:mt-0 md:mt-0 mt-40">
-      <section className="mt-0 space-y-12 px-4 mb-12">
+      <section className="mt-0 space-y-12 px-4 mb-12 mt-4">
         {roadmap?.modules?.map((module, moduleIndex) => (
           <div key={module.id}>
             {module?.groups?.map(

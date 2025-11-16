@@ -60,6 +60,7 @@ export type ModuleWithProgress = {
   slug: string;
   courseId: string;
   progress: number;
+  active: boolean;
   isCurrent: boolean;
   totalLessons: number;
   completedLessons: number;
