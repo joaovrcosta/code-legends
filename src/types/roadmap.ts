@@ -47,6 +47,8 @@ export type CourseRoadmap = {
   author?: CourseAuthor;
   currentModule?: number;
   currentClass?: number;
+  nextModule?: number;
+  totalModules?: number;
 };
 
 export type RoadmapResponse = {

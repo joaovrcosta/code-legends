@@ -36,7 +36,7 @@ export function ModuleProgressBar({
               <CountUp
                 key={roundedProgress}
                 end={roundedProgress}
-                duration={0.8}
+                duration={1}
                 decimals={0}
                 suffix="%"
                 enableScrollSpy={false}
