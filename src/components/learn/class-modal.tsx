@@ -120,7 +120,7 @@ export const AulaModal = () => {
               <SkipBack weight="fill" size={16} />
               Aula anterior
             </Button>
-            <div className="w-full lg:flex items-center justify-center px-10 hidden">
+            <div className="w-full lg:flex items-center justify-center px-8 hidden">
               <LevelProgressBar />
             </div>
             <Button

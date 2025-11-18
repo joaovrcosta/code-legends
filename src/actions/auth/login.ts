@@ -24,6 +24,10 @@ export async function loginUser(formData: FormData) {
     if ((error as { type?: string })?.type === "CredentialsSignin") {
       throw new Error("Email ou senha incorretos");
     }
+    if ((error as { digest?: string })?.digest?.startsWith("NEXT_REDIRECT")) {
+      // Deixar o redirect acontecer normalmente
+      return;
+    }
     // Se for um redirect (sucesso), deixar passar
     throw error;
   }

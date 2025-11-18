@@ -28,7 +28,7 @@ export function LevelAccordion() {
     >
       <AccordionItem value="item-1" className="p-0">
         <div className="w-full max-w-[1020px] mx-auto rounded-[20px] bg-[#0C0C0F] border border-[#2A2A2A] shadow-2xl relative">
-          <AccordionTrigger className="group w-full lg:px-8 px-6 pt-6 pb-10 flex flex-col justify-between items-center">
+          <AccordionTrigger className="group w-full lg:px-8 px-4 pt-6 pb-10 flex flex-col justify-between items-center">
             <div className="flex justify-between w-full items-center">
               <div className="flex items-center justify-center flex-col w-full">
                 <span className="text-[#787878] lg:text-[20px] text-[16px] font-medium">

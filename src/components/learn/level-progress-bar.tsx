@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { Progress } from "../ui/progress";
 import { useEffect, useState, useMemo } from "react";
 import { useActiveCourseStore } from "@/stores/active-course-store";
 import { useCourseModalStore } from "@/stores/course-modal-store";
@@ -11,6 +10,7 @@ import level1complete from "../../../public/level-1.png";
 import level2incomplete from "../../../public/level-2-incomplete.png";
 import { CertificateIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+import { ModuleProgressBar } from "./module-progress-bar";
 
 export function LevelProgressBar() {
   const { activeCourse } = useActiveCourseStore();
@@ -24,7 +24,7 @@ export function LevelProgressBar() {
       try {
         // Se uma lição foi completada, aguarda um delay para garantir que a API foi atualizada
         if (lessonCompletedTimestamp) {
-          await new Promise((resolve) => setTimeout(resolve, 500));
+          await new Promise((resolve) => setTimeout(resolve, 300));
         }
 
         const roadmapData = await getCourseRoadmap(activeCourse.id);
@@ -90,7 +90,7 @@ export function LevelProgressBar() {
       </div>
 
       {/* Barra de Progresso */}
-      <Progress value={progressValue} className="h-[8px]" />
+      <ModuleProgressBar value={progressValue} showTrophy={false} />
 
       {/* Próximo Nível ou Certificado */}
       <div className="flex items-center justify-center flex-col text-muted-foreground">
