@@ -11,18 +11,17 @@ import { ModuleProgressBar } from "./module-progress-bar";
 
 export function LevelProgressBar() {
   const { activeCourse } = useActiveCourseStore();
-  const { lessonCompletedTimestamp } = useCourseModalStore();
+  const { lessonCompletedTimestamp, moduleUnlockedTimestamp } =
+    useCourseModalStore();
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
-
-  console.log(roadmap?.modules[0].progress);
 
   useEffect(() => {
     async function fetchRoadmap() {
       if (!activeCourse?.id) return;
 
       try {
-        // Se uma lição foi completada, aguarda um delay para garantir que a API foi atualizada
-        if (lessonCompletedTimestamp) {
+        // Se uma lição foi completada ou um módulo foi desbloqueado, aguarda um delay para garantir que a API foi atualizada
+        if (lessonCompletedTimestamp || moduleUnlockedTimestamp) {
           await new Promise((resolve) => setTimeout(resolve, 300));
         }
 
@@ -34,7 +33,7 @@ export function LevelProgressBar() {
     }
 
     fetchRoadmap();
-  }, [activeCourse?.id, lessonCompletedTimestamp]);
+  }, [activeCourse?.id, lessonCompletedTimestamp, moduleUnlockedTimestamp]);
 
   const { currentModule, currentLevel, nextLevel, isLastModule } =
     useMemo(() => {
@@ -73,8 +72,6 @@ export function LevelProgressBar() {
     : roadmap?.modules && roadmap.modules[0]
     ? Math.round(roadmap.modules[0].progress * 100)
     : 0;
-
-  console.log(isLastModule);
 
   return (
     <div className="flex justify-between items-center w-full gap-3">

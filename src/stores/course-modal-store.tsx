@@ -16,6 +16,8 @@ interface CourseModalStore {
   currentLesson: Lesson | null;
   updateCurrentLessonStatus: (status: LessonStatus) => void;
   lessonCompletedTimestamp: number | null;
+  moduleUnlockedTimestamp: number | null;
+  setModuleUnlockedTimestamp: () => void;
 }
 
 export const useCourseModalStore = create<CourseModalStore>((set, get) => ({
@@ -24,6 +26,9 @@ export const useCourseModalStore = create<CourseModalStore>((set, get) => ({
   currentIndex: 0,
   currentLesson: null,
   lessonCompletedTimestamp: null,
+  moduleUnlockedTimestamp: null,
+  setModuleUnlockedTimestamp: () =>
+    set({ moduleUnlockedTimestamp: Date.now() }),
 
   openModalWithLessons: (lessons, startIndex = 0) =>
     set({

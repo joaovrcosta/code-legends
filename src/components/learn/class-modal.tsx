@@ -33,6 +33,8 @@ export const AulaModal = () => {
     goToNextLesson,
     goToPreviousLesson,
     lessonCompletedTimestamp,
+    openModalWithLessons,
+    setModuleUnlockedTimestamp,
   } = useCourseModalStore();
 
   const { activeCourse } = useActiveCourseStore();
@@ -97,13 +99,73 @@ export const AulaModal = () => {
     try {
       const result = await unlockNextModule(activeCourse.id);
       if (result.success) {
+        // Notifica que um módulo foi desbloqueado para atualizar a barra de progresso
+        setModuleUnlockedTimestamp();
+
         // Aguarda um pouco para garantir que o revalidateTag foi processado
         await new Promise((resolve) => setTimeout(resolve, 200));
+
+        // Aguarda mais tempo para que a barra de progresso tenha tempo de atualizar e voltar para zero
+        // A barra de progresso tem um delay de 300ms, então aguardamos um pouco mais para garantir
+        await new Promise((resolve) => setTimeout(resolve, 400));
+
         // Atualiza o roadmap usando versão sem cache
         const roadmapData = await getCourseRoadmapFresh(activeCourse.id);
         if (roadmapData) {
           setRoadmap(roadmapData);
+
+          // Coleta todas as aulas do roadmap atualizado
+          const allLessons = roadmapData.modules
+            .flatMap((module) => module?.groups || [])
+            .flatMap((group) => group?.lessons || []);
+
+          // Encontra a primeira aula do próximo módulo desbloqueado
+          const nextModuleNumber = roadmapData.course.nextModule;
+          let nextLessonIndex = 0;
+
+          if (nextModuleNumber && roadmapData.modules[nextModuleNumber - 1]) {
+            // Encontra o próximo módulo (1-based para 0-based)
+            const nextModule = roadmapData.modules[nextModuleNumber - 1];
+
+            // Procura a primeira aula do próximo módulo que não está bloqueada
+            for (const group of nextModule.groups || []) {
+              const firstUnlockedLesson = group.lessons?.find(
+                (lesson) => lesson.status !== "locked"
+              );
+
+              if (firstUnlockedLesson) {
+                nextLessonIndex = allLessons.findIndex(
+                  (lesson) => lesson.id === firstUnlockedLesson.id
+                );
+                break;
+              }
+            }
+
+            // Se não encontrou nenhuma aula desbloqueada no próximo módulo,
+            // procura a primeira aula desbloqueada em todo o roadmap
+            if (nextLessonIndex === -1) {
+              nextLessonIndex = allLessons.findIndex(
+                (lesson) => lesson.status !== "locked"
+              );
+            }
+          } else {
+            // Se não há próximo módulo definido, procura a primeira aula desbloqueada
+            nextLessonIndex = allLessons.findIndex(
+              (lesson) => lesson.status !== "locked"
+            );
+          }
+
+          // Garante que o índice seja válido
+          if (nextLessonIndex === -1) {
+            nextLessonIndex = 0;
+          }
+
+          // Atualiza o modal com as novas aulas, mantendo-o aberto
+          // Isso acontece após a barra de progresso ter tempo de atualizar
+          openModalWithLessons(allLessons, nextLessonIndex);
         }
+
+        // Atualiza a trilha quando o modal fechar
         router.refresh();
       } else {
         console.error("Erro ao desbloquear módulo:", result.error);
@@ -116,8 +178,6 @@ export const AulaModal = () => {
       setIsUnlocking(false);
     }
   };
-
-  console.log(canUnlockNextModule);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && closeModal()}>
@@ -188,25 +248,16 @@ export const AulaModal = () => {
                 variant="outline"
                 onClick={handleUnlockNext}
                 disabled={isUnlocking}
-                className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-black border-none
+                className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-blue-gradient-500 border-none
       rounded-br-[20px] disabled:opacity-50"
               >
                 {isUnlocking ? (
                   "Desbloqueando..."
                 ) : (
                   <>
-                    Desbloquear novo módulo <LockOpen weight="fill" size={16} />
+                    Desbloquear módulo <LockOpen weight="fill" size={16} />
                   </>
                 )}
-              </Button>
-            ) : isLastModule ? (
-              <Button
-                variant="outline"
-                disabled
-                className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-blue-500 border-none
-      rounded-br-[20px] opacity-60 cursor-not-allowed"
-              >
-                Último módulo
               </Button>
             ) : (
               <Button
