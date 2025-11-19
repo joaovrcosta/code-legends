@@ -39,20 +39,23 @@ export function LearnPageContent({
   const lastCompletedTimestampRef = useRef<number | null>(null);
   const router = useRouter();
 
-  const { isOpen: isModalOpen, lessonCompletedTimestamp } =
+  const { isOpen: isModalOpen, lessonCompletedTimestamp, moduleUnlockedTimestamp } =
     useCourseModalStore();
 
   // Função para buscar o roadmap atualizado
   const fetchRoadmap = useCallback(async () => {
-    if (!activeCourse?.id) return;
+    if (!activeCourse?.id) return null;
 
     try {
       const roadmapData = await getCourseRoadmap(activeCourse.id);
       if (roadmapData) {
         setRoadmap(roadmapData);
+        return roadmapData;
       }
+      return null;
     } catch (error) {
       console.error("Erro ao buscar roadmap:", error);
+      return null;
     }
   }, [activeCourse?.id]);
 
@@ -85,6 +88,23 @@ export function LearnPageContent({
       (lesson) => lesson.status !== "completed" && lesson.status !== "locked"
     );
   }, [allLessons]);
+
+  // Encontra a lição atual (isCurrent) do roadmap
+  const currentLesson = useMemo(() => {
+    if (!roadmap?.modules) return null;
+    
+    for (const moduleItem of roadmap.modules) {
+      if (!moduleItem?.groups) continue;
+      for (const group of moduleItem.groups) {
+        if (!group?.lessons) continue;
+        const current = group.lessons.find((l) => l.isCurrent);
+        if (current) {
+          return current;
+        }
+      }
+    }
+    return null;
+  }, [roadmap]);
 
   // Usa currentModule e currentClass diretamente do backend
   const currentModule = roadmap?.course.currentModule ?? 1;
@@ -149,11 +169,63 @@ export function LearnPageContent({
           }
         }, 500);
       }
+      
+      // Se um módulo foi desbloqueado, atualiza o roadmap e os módulos
+      if (moduleUnlockedTimestamp) {
+        // Aguarda um pouco para garantir que o cache foi atualizado
+        setTimeout(async () => {
+          const updatedRoadmap = await fetchRoadmap();
+          await fetchModulesProgress();
+          router.refresh();
+          
+          // Aguarda um pouco mais para garantir que o roadmap foi atualizado e o DOM renderizado
+          setTimeout(() => {
+            // Busca a lição atual do roadmap atualizado
+            let lessonToScroll: typeof firstIncompleteLesson = null;
+            
+            // Tenta encontrar a lição atual (isCurrent) primeiro no roadmap atualizado
+            if (updatedRoadmap?.modules) {
+              for (const moduleItem of updatedRoadmap.modules) {
+                if (!moduleItem?.groups) continue;
+                for (const group of moduleItem.groups) {
+                  if (!group?.lessons) continue;
+                  const current = group.lessons.find((l) => l.isCurrent);
+                  if (current) {
+                    lessonToScroll = current;
+                    break;
+                  }
+                }
+                if (lessonToScroll) break;
+              }
+            }
+            
+            // Se não encontrou a lição atual, usa a primeira incompleta do roadmap atualizado
+            if (!lessonToScroll && updatedRoadmap?.modules) {
+              const allLessons = updatedRoadmap.modules
+                .flatMap((module) => module?.groups || [])
+                .flatMap((group) => group?.lessons || []);
+              lessonToScroll = allLessons.find(
+                (lesson) => lesson.status !== "completed" && lesson.status !== "locked"
+              );
+            }
+            
+            if (lessonToScroll) {
+              const lessonElement = taskRefs.current[lessonToScroll.id];
+              if (lessonElement) {
+                lessonElement.scrollIntoView({
+                  behavior: "smooth",
+                  block: "center",
+                });
+              }
+            }
+          }, 500);
+        }, 300);
+      }
     }
 
     // Atualiza a referência com o valor atual
     prevIsModalOpenRef.current = isModalOpen;
-  }, [isModalOpen, firstIncompleteLesson]);
+  }, [isModalOpen, firstIncompleteLesson, moduleUnlockedTimestamp, fetchRoadmap, fetchModulesProgress, router, currentLesson]);
 
   // Quando o popover "Assistir" é fechado, mostra o popover "Começar" novamente na lição atual
   useEffect(() => {

@@ -20,7 +20,6 @@ import { SkipBack, LockOpen } from "@phosphor-icons/react/dist/ssr";
 import { useMemo, useState } from "react";
 import { getCourseRoadmapFresh, unlockNextModule } from "@/actions/course";
 import type { RoadmapResponse } from "@/types/roadmap";
-import { useRouter } from "next/navigation";
 import { useRoadmapUpdater } from "@/hooks/use-roadmap-updater";
 
 export const AulaModal = () => {
@@ -40,7 +39,6 @@ export const AulaModal = () => {
   const { activeCourse } = useActiveCourseStore();
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
   const [isUnlocking, setIsUnlocking] = useState(false);
-  const router = useRouter();
 
   // Custom hook gerencia toda a lógica de atualização do roadmap
   useRoadmapUpdater({
@@ -164,9 +162,6 @@ export const AulaModal = () => {
           // Isso acontece após a barra de progresso ter tempo de atualizar
           openModalWithLessons(allLessons, nextLessonIndex);
         }
-
-        // Atualiza a trilha quando o modal fechar
-        router.refresh();
       } else {
         console.error("Erro ao desbloquear módulo:", result.error);
         alert(result.error || "Erro ao desbloquear módulo");
