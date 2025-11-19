@@ -16,10 +16,12 @@ import { ComponentsArticle } from "../classroom/article/components";
 import { Menu, X } from "lucide-react";
 import { LevelProgressBar } from "./level-progress-bar";
 import { SkipForward } from "@phosphor-icons/react";
-import { SkipBack } from "@phosphor-icons/react/dist/ssr";
-import { useEffect, useState } from "react";
-import { getCourseRoadmap } from "@/actions/course";
+import { SkipBack, LockOpen } from "@phosphor-icons/react/dist/ssr";
+import { useMemo, useState } from "react";
+import { getCourseRoadmapFresh, unlockNextModule } from "@/actions/course";
 import type { RoadmapResponse } from "@/types/roadmap";
+import { useRouter } from "next/navigation";
+import { useRoadmapUpdater } from "@/hooks/use-roadmap-updater";
 
 export const AulaModal = () => {
   const {
@@ -30,34 +32,92 @@ export const AulaModal = () => {
     closeModal,
     goToNextLesson,
     goToPreviousLesson,
+    lessonCompletedTimestamp,
   } = useCourseModalStore();
 
   const { activeCourse } = useActiveCourseStore();
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
+  const [isUnlocking, setIsUnlocking] = useState(false);
+  const router = useRouter();
 
-  useEffect(() => {
-    async function fetchRoadmap() {
-      if (!activeCourse?.id) return;
-
-      try {
-        const roadmapData = await getCourseRoadmap(activeCourse.id);
-        setRoadmap(roadmapData);
-      } catch (error) {
-        console.error("Erro ao buscar roadmap:", error);
-      }
-    }
-
-    if (isOpen) {
-      fetchRoadmap();
-    }
-  }, [activeCourse?.id, isOpen]);
-
-  const currentModule = roadmap?.course.currentModule ?? 1;
+  // Custom hook gerencia toda a lógica de atualização do roadmap
+  useRoadmapUpdater({
+    isOpen,
+    courseId: activeCourse?.id,
+    currentLessonId: currentLesson?.id,
+    lessonCompletedTimestamp,
+    onRoadmapUpdate: setRoadmap,
+  });
 
   const hasNextLesson = currentIndex < lessons.length - 1;
   const hasPreviousLesson = currentIndex > 0;
   const nextLesson = hasNextLesson ? lessons[currentIndex + 1] : null;
   const isNextLessonLocked = nextLesson?.status === "locked";
+
+  const { currentModule, currentLevel, nextLevel, isLastModule } =
+    useMemo(() => {
+      if (!roadmap || !roadmap.modules || roadmap.modules.length === 0) {
+        return {
+          currentModule: null,
+          currentLevel: 1,
+          nextLevel: null,
+          isLastModule: false,
+        };
+      }
+
+      // Usa os valores diretamente da API
+      const currentModuleNumber = roadmap.course.currentModule || 1;
+      const nextModuleNumber = roadmap.course.nextModule;
+      const totalModules =
+        roadmap.course.totalModules || roadmap.modules.length;
+
+      // Encontra o módulo atual usando o índice (1-based para 0-based)
+      const currentModuleIndex = currentModuleNumber - 1;
+      const currentModule = roadmap.modules[currentModuleIndex] || null;
+
+      // Verifica se é o último módulo
+      const isLastModule = currentModuleNumber === totalModules;
+
+      return {
+        currentModule,
+        currentLevel: currentModuleNumber,
+        nextLevel: nextModuleNumber || null,
+        isLastModule,
+      };
+    }, [roadmap]);
+
+  // Usa os valores diretamente do back-end
+  const canUnlockNextModule = roadmap?.course.canUnlockNextModule ?? false;
+  const isLastLessonCompleted = roadmap?.course.isLastLessonCompleted ?? false;
+
+  const handleUnlockNext = async () => {
+    if (!activeCourse?.id) return;
+
+    setIsUnlocking(true);
+    try {
+      const result = await unlockNextModule(activeCourse.id);
+      if (result.success) {
+        // Aguarda um pouco para garantir que o revalidateTag foi processado
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        // Atualiza o roadmap usando versão sem cache
+        const roadmapData = await getCourseRoadmapFresh(activeCourse.id);
+        if (roadmapData) {
+          setRoadmap(roadmapData);
+        }
+        router.refresh();
+      } else {
+        console.error("Erro ao desbloquear módulo:", result.error);
+        alert(result.error || "Erro ao desbloquear módulo");
+      }
+    } catch (error) {
+      console.error("Erro ao desbloquear módulo:", error);
+      alert("Erro ao desbloquear módulo");
+    } finally {
+      setIsUnlocking(false);
+    }
+  };
+
+  console.log(canUnlockNextModule);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && closeModal()}>
@@ -79,7 +139,7 @@ export const AulaModal = () => {
                 <DialogTitle className="w-full">
                   <div className="lg:flex flex-col text-center w-full items-center justify-center hidden">
                     <p className="text-sm font-light text-[#787878]">
-                      Módulo {currentModule}
+                      Módulo {currentLevel}
                     </p>
                     <h3 className="text-[20px] font-normal mt-1">
                       {currentLesson.title}
@@ -123,15 +183,42 @@ export const AulaModal = () => {
             <div className="w-full lg:flex items-center justify-center px-8 hidden">
               <LevelProgressBar />
             </div>
-            <Button
-              variant="outline"
-              onClick={goToNextLesson}
-              disabled={!hasNextLesson || isNextLessonLocked}
-              className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-black border-none
+            {canUnlockNextModule ? (
+              <Button
+                variant="outline"
+                onClick={handleUnlockNext}
+                disabled={isUnlocking}
+                className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-black border-none
       rounded-br-[20px] disabled:opacity-50"
-            >
-              Próxima aula <SkipForward weight="fill" size={16} />
-            </Button>
+              >
+                {isUnlocking ? (
+                  "Desbloqueando..."
+                ) : (
+                  <>
+                    Desbloquear novo módulo <LockOpen weight="fill" size={16} />
+                  </>
+                )}
+              </Button>
+            ) : isLastModule ? (
+              <Button
+                variant="outline"
+                disabled
+                className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-blue-500 border-none
+      rounded-br-[20px] opacity-60 cursor-not-allowed"
+              >
+                Último módulo
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                onClick={goToNextLesson}
+                disabled={!hasNextLesson || isNextLessonLocked}
+                className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-black border-none
+      rounded-br-[20px] disabled:opacity-50"
+              >
+                Próxima aula <SkipForward weight="fill" size={16} />
+              </Button>
+            )}
           </div>
         </DialogFooter>
       </DialogContent>
