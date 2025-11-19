@@ -30,7 +30,7 @@ export function ModuleProgressBar({
           {progress > 15 && (
             <span
               className={`text-[12px] font-semibold text-white/90 ${
-                progress === 100 ? "mr-5" : "mr-1"
+                !showTrophy ? "mr-1" : progress === 100 ? "mr-5" : "mr-1"
               }`}
             >
               <CountUp

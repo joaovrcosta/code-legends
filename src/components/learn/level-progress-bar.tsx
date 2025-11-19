@@ -5,7 +5,7 @@ import { useActiveCourseStore } from "@/stores/active-course-store";
 import { useCourseModalStore } from "@/stores/course-modal-store";
 import { getCourseRoadmap } from "@/actions/course";
 import type { RoadmapResponse } from "@/types/roadmap";
-import { CertificateIcon } from "@phosphor-icons/react/dist/ssr";
+import { CertificateIcon, LockOpen } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { ModuleProgressBar } from "./module-progress-bar";
 
@@ -74,11 +74,13 @@ export function LevelProgressBar() {
     ? Math.round(roadmap.modules[0].progress * 100)
     : 0;
 
+  console.log(isLastModule);
+
   return (
     <div className="flex justify-between items-center w-full gap-3">
       {/* Nível Atual */}
       <div className="flex items-center justify-center flex-col text-muted-foreground">
-        <div className="w-[32px] h-[32px] rounded-full border border-[#484850] flex items-center justify-center">
+        <div className="w-[32px] h-[32px] bg-blue-gradient-500 border-[#00C8FF] shadow-[0_0_12px_#00C8FF] rounded-full border flex items-center justify-center">
           <span className="text-white font-semibold text-sm">
             {currentLevel}
           </span>
@@ -98,10 +100,10 @@ export function LevelProgressBar() {
                 href="/account/certificates"
                 className="flex items-center justify-center flex-col cursor-pointer hover:opacity-80 transition-opacity"
               >
-                <div className="w-[32px] h-[32px] flex items-center justify-center">
+                <div className="w-[32px] h-[32px] border border-[#00c8ff] shadow-[0_0_12px_#00c8ff] rounded-full flex items-center justify-center bg-blue-gradient-500">
                   <CertificateIcon
-                    size={24}
-                    className="text-[#00c8ff]"
+                    size={18}
+                    className="text-[#ffffff]"
                     weight="fill"
                   />
                 </div>
@@ -111,9 +113,9 @@ export function LevelProgressBar() {
               </Link>
             ) : (
               <>
-                <div className="w-[32px] h-[32px] flex items-center justify-center">
+                <div className="w-[32px] h-[32px] flex items-center justify-center border border-[#484850] rounded-full">
                   <CertificateIcon
-                    size={24}
+                    size={18}
                     className="text-[#484850]"
                     weight="fill"
                   />
@@ -126,10 +128,20 @@ export function LevelProgressBar() {
           </>
         ) : (
           <>
-            <div className="w-[32px] h-[32px] rounded-full bg-[#19191b] border-2 border-[#484850] flex items-center justify-center">
-              <span className="text-[#484850] font-bold text-sm">
-                {nextLevel}
-              </span>
+            <div
+              className={`w-[32px] h-[32px] rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
+                progressValue === 100
+                  ? "bg-blue-gradient-500 border-[#00C8FF] shadow-[0_0_12px_#00C8FF]"
+                  : "bg-[#19191b] border-[#484850]"
+              }`}
+            >
+              {progressValue === 100 ? (
+                <LockOpen size={18} weight="fill" className="text-white" />
+              ) : (
+                <span className="text-[#484850] font-bold text-sm">
+                  {nextLevel}
+                </span>
+              )}
             </div>
             <span className="text-xs text-nowrap">Level {nextLevel}</span>
           </>
