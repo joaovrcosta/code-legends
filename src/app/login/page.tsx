@@ -23,10 +23,17 @@ export default function LoginPage() {
 
     try {
       const formData = new FormData(e.currentTarget);
-      await loginUser(formData);
+      const result = await loginUser(formData);
+      
+      if (result?.success) {
+        // Redirecionar para /learn e deixar o middleware fazer o redirect
+        // para /onboarding se o usuário não completou o onboarding
+        // Usar window.location.href para forçar reload completo e garantir
+        // que o middleware seja executado com a sessão atualizada
+        window.location.href = "/learn";
+      }
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erro ao fazer login");
-    } finally {
       setIsLoading(false);
     }
   };

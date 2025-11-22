@@ -12,23 +12,21 @@ export async function loginUser(formData: FormData) {
   }
 
   try {
-    // Usar NextAuth para fazer login
+    // Usar NextAuth para fazer login sem redirect automático
+    // O redirect será feito manualmente no cliente, e o middleware
+    // vai interceptar e redirecionar para /onboarding se necessário
     await signIn("credentials", {
       email,
       password,
-      redirect: true,
-      redirectTo: "/learn",
+      redirect: false,
     });
+
+    return { success: true };
   } catch (error) {
     // Se for um erro de credenciais
     if ((error as { type?: string })?.type === "CredentialsSignin") {
       throw new Error("Email ou senha incorretos");
     }
-    if ((error as { digest?: string })?.digest?.startsWith("NEXT_REDIRECT")) {
-      // Deixar o redirect acontecer normalmente
-      return;
-    }
-    // Se for um redirect (sucesso), deixar passar
     throw error;
   }
 }
