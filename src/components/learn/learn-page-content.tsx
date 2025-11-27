@@ -7,6 +7,7 @@ import {
   unlockNextModule,
 } from "@/actions/course";
 import { useCourseModalStore } from "@/stores/course-modal-store";
+import { useActiveCourseStore } from "@/stores/active-course-store";
 import type { RoadmapResponse } from "@/types/roadmap";
 import type { ActiveCourse } from "@/types/user-course.ts";
 import type { ModuleWithProgress } from "@/types/roadmap";
@@ -37,6 +38,7 @@ export function LearnPageContent({
   const prevIsModalOpenRef = useRef<boolean>(false);
   const hasScrolledRef = useRef<boolean>(false);
   const lastCompletedTimestampRef = useRef<number | null>(null);
+  const lastActiveCourseIdRef = useRef<string | null>(null);
   const router = useRouter();
 
   const {
@@ -45,12 +47,16 @@ export function LearnPageContent({
     moduleUnlockedTimestamp,
   } = useCourseModalStore();
 
+  // Usa o activeCourse do store se disponível, senão usa o das props
+  const { activeCourse: storeActiveCourse } = useActiveCourseStore();
+  const currentActiveCourse = storeActiveCourse || activeCourse;
+
   // Função para buscar o roadmap atualizado
   const fetchRoadmap = useCallback(async () => {
-    if (!activeCourse?.id) return null;
+    if (!currentActiveCourse?.id) return null;
 
     try {
-      const roadmapData = await getCourseRoadmap(activeCourse.id);
+      const roadmapData = await getCourseRoadmap(currentActiveCourse.id);
       if (roadmapData) {
         setRoadmap(roadmapData);
         return roadmapData;
@@ -60,14 +66,14 @@ export function LearnPageContent({
       console.error("Erro ao buscar roadmap:", error);
       return null;
     }
-  }, [activeCourse?.id]);
+  }, [currentActiveCourse?.id]);
 
   // Função para buscar os módulos com progresso
   const fetchModulesProgress = useCallback(async () => {
-    if (!activeCourse?.slug) return;
+    if (!currentActiveCourse?.slug) return;
 
     try {
-      const modulesData = await listModulesProgress(activeCourse.slug);
+      const modulesData = await listModulesProgress(currentActiveCourse.slug);
 
       if (modulesData?.modules) {
         setModulesProgress(modulesData.modules);
@@ -75,7 +81,7 @@ export function LearnPageContent({
     } catch (error) {
       console.error("Erro ao buscar módulos com progresso:", error);
     }
-  }, [activeCourse?.slug]);
+  }, [currentActiveCourse?.slug]);
 
   // Coleta todas as lições de todos os módulos e grupos
   const allLessons = useMemo(() => {
@@ -259,9 +265,83 @@ export function LearnPageContent({
     fetchModulesProgress();
   }, [fetchModulesProgress]);
 
+  // Recarrega o roadmap e faz scroll quando o curso ativo muda
+  useEffect(() => {
+    const loadNewRoadmap = async () => {
+      if (!currentActiveCourse?.id) return;
+      
+      // Verifica se o curso mudou comparando com o último curso conhecido
+      if (lastActiveCourseIdRef.current && lastActiveCourseIdRef.current !== currentActiveCourse.id) {
+        // Curso mudou, recarrega o roadmap
+        const updatedRoadmap = await fetchRoadmap();
+        await fetchModulesProgress();
+        // Reseta o scroll e outros estados
+        hasScrolledRef.current = false;
+        setOpenPopover(null);
+        setShowContinue(true);
+
+        // Aguarda um pouco para garantir que o DOM foi atualizado
+        setTimeout(() => {
+          // Busca a lição atual do roadmap atualizado
+          let lessonToScroll: typeof firstIncompleteLesson = undefined;
+
+          // Tenta encontrar a lição atual (isCurrent) primeiro no roadmap atualizado
+          if (updatedRoadmap?.modules) {
+            for (const moduleItem of updatedRoadmap.modules) {
+              if (!moduleItem?.groups) continue;
+              for (const group of moduleItem.groups) {
+                if (!group?.lessons) continue;
+                const current = group.lessons.find((l) => l.isCurrent);
+                if (current) {
+                  lessonToScroll = current;
+                  break;
+                }
+              }
+              if (lessonToScroll) break;
+            }
+          }
+
+          // Se não encontrou a lição atual, usa a primeira incompleta do roadmap atualizado
+          if (!lessonToScroll && updatedRoadmap?.modules) {
+            const allLessons = updatedRoadmap.modules
+              .flatMap((module) => module?.groups || [])
+              .flatMap((group) => group?.lessons || []);
+            lessonToScroll = allLessons.find(
+              (lesson) =>
+                lesson.status !== "completed" && lesson.status !== "locked"
+            );
+          }
+
+          // Faz scroll até a lição encontrada
+          if (lessonToScroll) {
+            const lessonElement = taskRefs.current[lessonToScroll.id];
+            if (lessonElement) {
+              lessonElement.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+            }
+          }
+        }, 500);
+      } else if (!lastActiveCourseIdRef.current && currentActiveCourse.id) {
+        // Primeira vez carregando ou curso inicial
+        lastActiveCourseIdRef.current = currentActiveCourse.id;
+      }
+    };
+
+    loadNewRoadmap();
+  }, [currentActiveCourse?.id, fetchRoadmap, fetchModulesProgress, firstIncompleteLesson]);
+
+  // Atualiza o ref quando o activeCourse muda
+  useEffect(() => {
+    if (currentActiveCourse?.id) {
+      lastActiveCourseIdRef.current = currentActiveCourse.id;
+    }
+  }, [currentActiveCourse?.id]);
+
   // Atualiza o roadmap quando uma lição é marcada como concluída no modal
   useEffect(() => {
-    if (lessonCompletedTimestamp && activeCourse?.id) {
+    if (lessonCompletedTimestamp && currentActiveCourse?.id) {
       // Aguarda um pequeno delay para garantir que a API foi atualizada
       const timeoutId = setTimeout(async () => {
         await fetchRoadmap();
@@ -272,7 +352,7 @@ export function LearnPageContent({
     }
   }, [
     lessonCompletedTimestamp,
-    activeCourse?.id,
+    currentActiveCourse?.id,
     fetchRoadmap,
     fetchModulesProgress,
   ]);
@@ -328,11 +408,11 @@ export function LearnPageContent({
   };
 
   const handleUnlockNext = async () => {
-    if (!nextLockedModule || !activeCourse?.id) return;
+    if (!nextLockedModule || !currentActiveCourse?.id) return;
 
     setIsUnlocking(true);
     try {
-      const result = await unlockNextModule(activeCourse.id);
+      const result = await unlockNextModule(currentActiveCourse.id);
       if (result.success) {
         // Atualiza os módulos e o roadmap
         await fetchModulesProgress();
@@ -377,7 +457,7 @@ export function LearnPageContent({
           />
           <LessonsContent
             roadmap={roadmap}
-            activeCourse={activeCourse}
+            activeCourse={currentActiveCourse}
             openPopover={openPopover}
             togglePopover={togglePopover}
             showContinue={showContinue}

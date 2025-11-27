@@ -20,6 +20,9 @@ export function LessonContent({
   groupTitle,
   courseIcon,
 }: LessonContentProps) {
+
+
+  console.log(lesson)
   return (
     <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
       {/* Header do conteúdo - sticky apenas no scroll do container principal */}
