@@ -59,9 +59,9 @@ export default function ClassroomPage() {
 
           // Encontra a aula atual (isCurrent) ou a primeira desbloqueada
           let targetLesson: Lesson | null = null;
-          const currentLesson = allLessons.find((lesson) => lesson.isCurrent);
-          if (currentLesson) {
-            targetLesson = currentLesson;
+          const foundCurrentLesson = allLessons.find((lesson) => lesson.isCurrent);
+          if (foundCurrentLesson) {
+            targetLesson = foundCurrentLesson;
           } else {
             targetLesson =
               allLessons.find((lesson) => lesson.status !== "locked") || null;

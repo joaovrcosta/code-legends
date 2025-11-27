@@ -20,7 +20,7 @@ export default function DynamicLessonPage() {
   const params = useParams();
   const router = useRouter();
   const { activeCourse } = useActiveCourseStore();
-  const { setLessonForPage, lessonCompletedTimestamp } = useCourseModalStore();
+  const { setLessonForPage, lessonCompletedTimestamp, currentLesson } = useCourseModalStore();
   const { isOpen: isSidebarOpen } = useClassroomSidebarStore();
 
   const moduleSlug = params.module as string;
