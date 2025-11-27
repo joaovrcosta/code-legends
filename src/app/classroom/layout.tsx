@@ -20,8 +20,8 @@ export default async function ClassroomLayout({ children }: DashboardProps) {
         initialUserCourses={enrolledCoursesData.userCourses || []}
         initialActiveCourse={activeCourse}
       />
-      <div className="flex-1 h-[calc(100vh-80px)] overflow-y-auto">
-        <main className="w-full lg:mb-0 mb-[67px]">{children}</main>
+      <div className="flex-1 h-[calc(100vh-63px)] overflow-y-auto">
+        <main className="w-full">{children}</main>
         <FooterFixed />
       </div>
     </div>

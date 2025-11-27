@@ -6,11 +6,13 @@ import type { ModuleWithProgress } from "@/types/roadmap";
 interface ModulesListWrapperProps {
   modules: ModuleWithProgress[];
   courseId: string;
+  courseSlug: string;
 }
 
 export function ModulesListWrapper({
   modules,
   courseId,
+  courseSlug,
 }: ModulesListWrapperProps) {
   const handleToggle = () => {
     // Função vazia, pois nesta página sempre mostramos os módulos
@@ -22,6 +24,7 @@ export function ModulesListWrapper({
 
   return (
     <ModulesList
+      courseSlug={courseSlug}
       modules={modules}
       courseId={courseId}
       onToggle={handleToggle}

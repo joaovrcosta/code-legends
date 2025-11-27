@@ -10,7 +10,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Check } from "@phosphor-icons/react/dist/ssr";
 import { continueCourse } from "@/actions/course";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useActiveCourseStore } from "@/stores/active-course-store";
 import { useCourseModalStore } from "@/stores/course-modal-store";
 
@@ -27,21 +27,41 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
   // Verifica se a lição atual já está marcada como completada
   const isMarked = currentLesson?.status === "completed";
 
+  // Debug: verifica se currentLesson está disponível
+  useEffect(() => {
+  }, [currentLesson]);
+
   const handleMarkAsWatched = async () => {
-    if (!currentLesson?.id || isMarking || isMarked) return;
+    
+    if (!currentLesson?.id) {
+      console.error("currentLesson não tem ID:", currentLesson);
+      alert("Erro: Lição não encontrada. Recarregue a página.");
+      return;
+    }
+    
+    if (isMarking || isMarked) {
+      return;
+    }
 
     try {
       setIsMarking(true);
-      await continueCourse(currentLesson.id, activeCourse?.id);
+      
+      const result = await continueCourse(currentLesson.id, activeCourse?.id);
+      
+      if (!result || !result.success) {
+        throw new Error("A API não retornou sucesso ao completar a lição");
+      }
 
       // Atualiza o status da lição atual no modal imediatamente
       updateCurrentLessonStatus("completed");
 
       // Atualiza o curso ativo para refletir o progresso
       await fetchActiveCourse();
+      ;
     } catch (error) {
       console.error("Erro ao marcar como assistido:", error);
-      alert("Erro ao marcar como assistido. Tente novamente.");
+      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
+      alert(`Erro ao marcar como assistido: ${errorMessage}. Tente novamente.`);
     } finally {
       setIsMarking(false);
     }

@@ -17,7 +17,7 @@ import { Menu, X } from "lucide-react";
 import { LevelProgressBar } from "./level-progress-bar";
 import { SkipForward } from "@phosphor-icons/react";
 import { SkipBack, LockOpen } from "@phosphor-icons/react/dist/ssr";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { getCourseRoadmapFresh, unlockNextModule } from "@/actions/course";
 import type { RoadmapResponse } from "@/types/roadmap";
 import { useRoadmapUpdater } from "@/hooks/use-roadmap-updater";
@@ -54,41 +54,9 @@ export const AulaModal = () => {
   const nextLesson = hasNextLesson ? lessons[currentIndex + 1] : null;
   const isNextLessonLocked = nextLesson?.status === "locked";
 
-  const { currentModule, currentLevel, nextLevel, isLastModule } =
-    useMemo(() => {
-      if (!roadmap || !roadmap.modules || roadmap.modules.length === 0) {
-        return {
-          currentModule: null,
-          currentLevel: 1,
-          nextLevel: null,
-          isLastModule: false,
-        };
-      }
-
-      // Usa os valores diretamente da API
-      const currentModuleNumber = roadmap.course.currentModule || 1;
-      const nextModuleNumber = roadmap.course.nextModule;
-      const totalModules =
-        roadmap.course.totalModules || roadmap.modules.length;
-
-      // Encontra o módulo atual usando o índice (1-based para 0-based)
-      const currentModuleIndex = currentModuleNumber - 1;
-      const currentModule = roadmap.modules[currentModuleIndex] || null;
-
-      // Verifica se é o último módulo
-      const isLastModule = currentModuleNumber === totalModules;
-
-      return {
-        currentModule,
-        currentLevel: currentModuleNumber,
-        nextLevel: nextModuleNumber || null,
-        isLastModule,
-      };
-    }, [roadmap]);
 
   // Usa os valores diretamente do back-end
   const canUnlockNextModule = roadmap?.course.canUnlockNextModule ?? false;
-  const isLastLessonCompleted = roadmap?.course.isLastLessonCompleted ?? false;
 
   const handleUnlockNext = async () => {
     if (!activeCourse?.id) return;
@@ -258,7 +226,7 @@ export const AulaModal = () => {
               <Button
                 variant="outline"
                 onClick={goToNextLesson}
-                disabled={!hasNextLesson || isNextLessonLocked}
+                disabled={!hasNextLesson || isNextLessonLocked || currentLesson?.status !== "completed"}
                 className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-black border-none
       rounded-br-[20px] disabled:opacity-50"
               >

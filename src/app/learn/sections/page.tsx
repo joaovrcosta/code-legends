@@ -4,8 +4,6 @@ import { ModulesListWrapper } from "@/components/learn/modules-list-wrapper";
 export default async function SectionsPage() {
   const activeCourse = await getActiveCourse();
 
-  console.log(activeCourse?.slug);
-
   if (!activeCourse) {
     return (
       <div className="flex items-center justify-center w-full h-[100dvh]">
@@ -19,8 +17,6 @@ export default async function SectionsPage() {
   }
 
   const modulesData = await listModulesProgress(activeCourse?.slug);
-
-  console.log(modulesData);
 
   if (!modulesData?.modules) {
     return (
@@ -36,9 +32,11 @@ export default async function SectionsPage() {
 
   return (
     <div>
+
       <ModulesListWrapper
         modules={modulesData.modules}
         courseId={activeCourse.id}
+        courseSlug={activeCourse.slug}
       />
     </div>
   );

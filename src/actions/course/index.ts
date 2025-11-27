@@ -8,3 +8,5 @@ export { setCurrentModule } from "./set-current-module";
 export { resetCourseProgress } from "./reset-progress";
 export { unlockNextModule } from "./unlock-next-module";
 export { revalidateRoadmapCache } from "./revalidate-roadmap";
+export { getLessonBySlug } from "./get-lesson-by-slug";
+export type { LessonResponse } from "./get-lesson-by-slug";

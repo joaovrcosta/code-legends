@@ -19,6 +19,7 @@ export type Lesson = {
 export type Group = {
   id: number;
   title: string;
+  slug?: string;
   lessons: Lesson[];
 };
 

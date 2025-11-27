@@ -4,20 +4,22 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import type { ModuleWithProgress } from "@/types/roadmap";
 import { PrimaryButton } from "@/components/ui/primary-button";
-import { setCurrentModule, unlockNextModule } from "@/actions/course";
+import { setCurrentModule } from "@/actions/course";
 import { CheckCircle, Lock } from "@phosphor-icons/react/dist/ssr";
 import { ModuleProgressBar } from "./module-progress-bar";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 interface ModulesListProps {
   modules: ModuleWithProgress[];
   courseId: string;
+  courseSlug: string;
   onToggle: () => void;
   onModuleChange?: () => void;
 }
 
-export function ModulesList({ modules, courseId }: ModulesListProps) {
+export function ModulesList({ modules, courseId, courseSlug }: ModulesListProps) {
   const [loadingModuleId, setLoadingModuleId] = useState<string | null>(null);
-  const [isUnlocking, setIsUnlocking] = useState(false);
   const router = useRouter();
 
   // Encontra o próximo módulo bloqueado que pode ser desbloqueado
@@ -44,29 +46,31 @@ export function ModulesList({ modules, courseId }: ModulesListProps) {
     }
   };
 
-  const handleUnlockNext = async () => {
-    if (!nextLockedModule) return;
-
-    setIsUnlocking(true);
-    try {
-      const result = await unlockNextModule(courseId);
-      if (result.success) {
-        // Recarrega a página para atualizar os módulos
-        router.refresh();
-      } else {
-        console.error("Erro ao desbloquear módulo:", result.error);
-        alert(result.error || "Erro ao desbloquear módulo");
-      }
-    } catch (error) {
-      console.error("Erro ao desbloquear módulo:", error);
-      alert("Erro ao desbloquear módulo");
-    } finally {
-      setIsUnlocking(false);
-    }
-  };
 
   return (
     <div className="w-full flex flex-col items-center justify-center lg:mt-16 mt-2">
+      <div className="w-full flex items-center justify-between max-w-[681px] lg:px-0 px-4 lg:mb-0 mb-0 lg:mt-0 mt-4">
+       <Link
+            href="/learn"
+            className=" hover:bg-[#25252A] max-w-[100px] p-1 flex items-start rounded-lg justify-center mb-4 text-[#7e7e89] hover:text-white"
+          >
+            <div className="flex items-center justify-center gap-3">
+              <ArrowLeft size={16} className="" />
+              <p className="text-[12px] ">Voltar</p>
+            </div>
+          </Link>
+
+
+          <Link
+            href={`/learn/paths/${courseSlug}`}
+            className=" hover:bg-[#25252A] max-w-[100px] p-1 flex items-start rounded-lg justify-center mb-4 text-[#7e7e89] hover:text-white"
+          >
+            <div className="flex items-center justify-center gap-3">
+              <p className="text-[12px] ">Ver curso</p>
+              <ArrowRight size={16} className="" />
+            </div>
+          </Link>
+      </div>
       {modules.map((module) => {
         const isLoading = loadingModuleId === module.id;
         return (
