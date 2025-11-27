@@ -1,18 +1,10 @@
 "use client";
 
-import {
-  Article,
-  Brain,
-  CheckCircle,
-  Circle,
-  Lock,
-  PlayCircle,
-} from "@phosphor-icons/react/dist/ssr";
-import type { Lesson, RoadmapResponse } from "@/types/roadmap";
 import { useCourseModalStore } from "@/stores/course-modal-store";
+import type { Lesson, RoadmapResponse } from "@/types/roadmap";
+import { findLessonContext, generateLessonUrl } from "@/utils/lesson-url";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
-import { generateLessonUrl, findLessonContext } from "@/utils/lesson-url";
 
 interface LessonsListProps {
   lessons: Lesson[];
@@ -28,10 +20,8 @@ export function LessonsList({
   const { setLessonsForPage } = useCourseModalStore();
   const router = useRouter();
 
-  // Organiza as aulas por módulo e grupo
   const organizedLessons = useMemo(() => {
     if (!roadmap?.modules) return [];
-
     return roadmap.modules.map((module) => ({
       ...module,
       groups: module.groups.map((group) => ({
@@ -43,120 +33,137 @@ export function LessonsList({
 
   const handleLessonClick = (lesson: Lesson, index: number) => {
     if (lesson.status === "locked") return;
-
     if (!roadmap?.modules) return;
 
-    // Encontra o contexto da aula (módulo e grupo)
     const context = findLessonContext(lesson.id, roadmap.modules);
-    
+
     if (context) {
-      // Gera a URL dinâmica
       const url = generateLessonUrl(lesson, context.module, context.group);
       router.push(url);
     } else {
-      // Fallback: usa a store e navega para /classroom
       setLessonsForPage(lessons, index);
       router.push("/classroom");
     }
   };
 
-  const getLessonIcon = (lesson: Lesson) => {
-    if (lesson.status === "locked") {
-      return <Lock size={16} className="text-gray-500" />;
-    }
-    if (lesson.status === "completed") {
-      return (
-        <CheckCircle size={16} weight="fill" className="text-[#00a277]" />
-      );
-    }
-
-    switch (lesson.type) {
-      case "video":
-        return <PlayCircle size={16} weight="fill" />;
-      case "quiz":
-        return <Brain size={16} weight="fill" />;
-      case "article":
-        return <Article size={16} weight="fill" />;
-      default:
-        return <Circle size={16} weight="bold" />;
-    }
-  };
-
   if (!roadmap || organizedLessons.length === 0) {
     return (
-      <div className="p-4 text-[#C4C4CC] text-sm">
-        Carregando aulas...
+      <div className="p-6 text-zinc-500 text-sm animate-pulse">
+        Carregando estrutura...
       </div>
     );
   }
 
-  return (
-    <div className="h-full overflow-y-auto">
-      <ul className="">
-        {organizedLessons.map((module) => (
-          <li key={module.id}>
-            <div className="p-4 border-b border-[#25252A] shadow-xl">
-              <span className="text-xs text-[#666c6f]">Módulo</span>
-              <span className="block text-base font-semibold text-[#C4C4CC] whitespace-nowrap">
-                {module.title}
-              </span>
-            </div>
+  // Pegando o primeiro módulo
+  const currentModule = organizedLessons[0];
 
-            <ul>
-              {module.groups.map((group) => (
-                <li key={group.id}>
-                  <div className="px-4 py-2 border-b border-[#25252A]">
-                    <span className="bg-blue-gradient-500 bg-clip-text text-transparent text-xs whitespace-nowrap">
-                      {group.title}
-                    </span>
+  return (
+    <div className="h-full overflow-y-auto bg-[#121214] scrollbar-thin scrollbar-thumb-zinc-800">
+      {/* Cabeçalho do Módulo */}
+      <div className="sticky top-0 z-20 bg-[#121214]/95 backdrop-blur px-4 py-6 border-b border-zinc-900">
+        <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1 block">
+          Módulo 01
+        </span>
+        <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-lg">
+        {currentModule?.title || "Carregando..."}
+          </span>
+      </div>
+
+      <div className="px-4 py-6 pb-20">
+        <div className="flex flex-col gap-6">
+          {currentModule?.groups.map((group, groupIndex) => {
+            const isLastGroup = groupIndex === currentModule.groups.length - 1;
+
+            return (
+              <div key={group.id} className="relative">
+                {/* Linha vertical principal que conecta os grupos (se houver mais de um) */}
+                {!isLastGroup && (
+                  <div className="absolute left-[11px] top-8 bottom-[-24px] w-[2px] bg-zinc-800/50 z-0" />
+                )}
+
+                {/* Título do Grupo (Nó Pai) */}
+                <div className="relative z-10 flex items-center gap-4 mb-2">
+                  <div className="relative flex items-center justify-center w-6 h-6 rounded-full bg-zinc-900 border-2 border-zinc-700 shadow-sm shrink-0">
+                    <div className="w-2 h-2 rounded-full bg-zinc-500" />
                   </div>
-                  <ul>
-                    {group.lessons.map((lesson) => {
-                      const lessonIndex = lessons.findIndex(
-                        (l) => l.id === lesson.id
-                      );
+                  <h3 className="text-base font-semibold text-zinc-200">
+                    {group.title}
+                  </h3>
+                  
+                </div>
+
+                {/* Lista de Lições (Filhos) */}
+                <div className="relative pl-[11px]">
+                  {/* Linha Guia Vertical do Grupo para as lições */}
+                  <div 
+                    className={`absolute left-[11px] top-0 bottom-0 w-[2px] bg-zinc-800/50 ${
+                      group.lessons.length === 0 ? "hidden" : ""
+                    }`} 
+                  />
+
+                  <div className="flex flex-col">
+                    {group.lessons.map((lesson, lessonIndex) => {
                       const isActive = currentLessonId === lesson.id;
                       const isLocked = lesson.status === "locked";
+                      const isLastLesson = lessonIndex === group.lessons.length - 1;
+                      
+                      // Encontra o índice global para o fallback de navegação
+                      const lessonIndexInAll = lessons.findIndex((l) => l.id === lesson.id);
 
                       return (
-                        <li key={lesson.id}>
-                          <button
-                            onClick={() => handleLessonClick(lesson, lessonIndex)}
-                            disabled={isLocked}
-                            className={`w-full flex items-center h-[52px] px-4 transition-colors text-left ${
-                              isActive
-                                ? "bg-blue-gradient-500 text-white font-semibold"
-                                : isLocked
-                                ? "text-gray-500 cursor-not-allowed"
-                                : "text-[#C4C4CC] bg-[#1A1A1E] hover:bg-[#2E2E32]"
-                            }`}
-                          >
-                            <span className="mr-2 flex-shrink-0">
-                              {getLessonIcon(lesson)}
-                            </span>
+                        <div key={lesson.id} className="relative pl-8 pt-1">
+                          {/* CONECTOR CURVO (A mágica acontece aqui) */}
+                          {/* 1. Máscara para cobrir a linha vertical se for o último item */}
+                          {isLastLesson && (
+                            <div className="absolute left-0 top-4 bottom-0 w-[4px] bg-[#121214] z-10" />
+                          )}
+                          
+                          {/* 2. O Desenho da Curva (L Shape) */}
+                          <div className="absolute left-0 top-0 h-[24px] w-[24px] border-b-2 border-l-2 border-zinc-800/50 rounded-bl-xl translate-y-[-50%]" />
 
-                            <div className="flex flex-col min-w-0">
-                              <span className="text-[12px] text-white font-semibold whitespace-nowrap truncate">
-                                {lesson.title}
-                              </span>
-                              {lesson.video_duration && (
-                                <span className="text-xs text-[#CCCCCC] whitespace-nowrap">
-                                  {lesson.video_duration}
-                                </span>
-                              )}
-                            </div>
+                          <button
+                            onClick={() => handleLessonClick(lesson, lessonIndexInAll)}
+                            disabled={isLocked}
+                            className={`group relative flex items-center gap-3 w-full py-2 px-3 rounded-[12px] transition-all duration-200 text-left ${
+                              isActive
+                                ? "bg-zinc-800/50"
+                                : "hover:bg-zinc-800/30"
+                            } ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
+                          >
+                            {/* Bolinha da Lição */}
+                            <div className={`w-2 h-2 rounded-full shrink-0 transition-colors ${
+                              isActive
+                                ? "bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]"
+                                : isLocked
+                                  ? "bg-zinc-700"
+                                  : "bg-cyan-400"
+                            }`} />
+
+                            <span
+                              className={`text-sm font-medium truncate transition-colors ${
+                                isActive
+                                  ? "text-cyan-50 font-semibold"
+                                  : "text-zinc-400 group-hover:text-zinc-300"
+                              }`}
+                            >
+                              {lesson.title}
+                            </span>
+                            
+                            {/* Ícone de Play ou Cadeado sutil à direita */}
+                            {isActive && (
+                                <div className="absolute right-3 w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                            )}
                           </button>
-                        </li>
+                        </div>
                       );
                     })}
-                  </ul>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ul>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
-

@@ -252,9 +252,10 @@ export default function ClassroomPage() {
           isSidebarOpen ? "w-64" : "w-0"
         }`}
       >
+
         {isSidebarOpen && (
           <div className="h-full flex flex-col w-64">
-            <div className="p-4 border-b border-[#25252A] bg-[#121214]">
+            <div className="p-4 border-b border-[#25252A] bg-[#060607]">
               <h2 className="text-sm font-semibold text-[#C4C4CC]">Aulas</h2>
             </div>
             <div className="flex-1 overflow-y-auto">

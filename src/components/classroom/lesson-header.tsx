@@ -26,10 +26,9 @@ export function LessonHeader({
     .join(" / ");
 
   return (
-    <div className="w-full lg:px-4 px-0 lg:pt-2 pt-0 ">
-
+    <div className="w-full lg:px-4 px-0 lg:pt-2 pt-0">
       {/* Header principal */}
-      <div className="bg-[#121214] border border-[#19191a] lg:rounded-[16px] rounded-none shadow-lg">
+      <div className="bg-[#121214]/70 backdrop-blur-xl mb-2 border border-white/10 lg:rounded-[16px] rounded-none shadow-2xl shadow-black/20">
         <div className="flex items-center justify-between px-4 py-3">
           {/* Lado esquerdo */}
           <div className="flex items-center gap-3 flex-1 min-w-0">

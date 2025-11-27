@@ -21,25 +21,31 @@ export function LessonContent({
   courseIcon,
 }: LessonContentProps) {
   return (
-    <div className="flex-1 overflow-y-auto lg:px-4 px-0 min-h-0 pb-[142px] lg:pb-[84px]">
-      {/* Header do conteúdo */}
-      <LessonHeader
-        courseTitle={courseTitle}
-        moduleTitle={moduleTitle}
-        groupTitle={groupTitle}
-        courseIcon={courseIcon}
-      />
-      <div className="p-4">
-      {lesson?.type === "video" && (
-        <VideoComponent
-          description={lesson.description}
-          title={lesson.title}
-          src={lesson.video_url}
+    <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+      {/* Header do conteúdo - sticky apenas no scroll do container principal */}
+      <div className="sticky top-0 z-50 lg:px-4 px-0 lg:pt-2 pt-0">
+        <LessonHeader
+          courseTitle={courseTitle}
+          moduleTitle={moduleTitle}
+          groupTitle={groupTitle}
+          courseIcon={courseIcon}
         />
-      )}
-      {lesson?.type === "article" && <ComponentsArticle />}
-      {lesson?.type === "quiz" && <p>Quiz bb</p>}
-      {lesson?.type === "project" && <p>Projeto</p>}
+      </div>
+      
+      {/* Conteúdo com scroll */}
+      <div className="flex-1 overflow-y-auto lg:px-4 px-0 min-h-0 pb-[142px] lg:pb-[84px]">
+        <div className="p-4">
+          {lesson?.type === "video" && (
+            <VideoComponent
+              description={lesson.description}
+              title={lesson.title}
+              src={lesson.video_url}
+            />
+          )}
+          {lesson?.type === "article" && <ComponentsArticle />}
+          {lesson?.type === "quiz" && <p>Quiz bb</p>}
+          {lesson?.type === "project" && <p>Projeto</p>}
+        </div>
       </div>
     </div>
   );
