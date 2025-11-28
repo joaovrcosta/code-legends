@@ -318,13 +318,13 @@ export default function DynamicLessonPage() {
       {/* Sidebar com lista de aulas - apenas no desktop */}
       <aside
         className={`hidden lg:block fixed left-0 top-[63px] bg-[#121214] border-r border-[#25252A] flex-shrink-0 h-[calc(100vh-63px)] overflow-hidden z-40 transition-all duration-300 ease-in-out ${
-          isSidebarOpen ? "w-64" : "w-0"
+          isSidebarOpen ? "w-[378px]" : "w-0"
         }`}
       >
         {isSidebarOpen && (
-          <div className="h-full flex flex-col w-64">
+          <div className="h-full flex flex-col w-[378px]">
             <div className="p-4 border-b border-[#25252A] bg-[#121214]">
-              <h2 className="text-sm font-semibold text-[#C4C4CC]">Trilha</h2>
+              <h2 className="text-[20px] font-semibold text-[#C4C4CC]">Trilha</h2>
             </div>
             <div className="flex-1 overflow-y-auto">
               <LessonsList
@@ -342,7 +342,7 @@ export default function DynamicLessonPage() {
         className={`flex-1 w-full lg:bg-[radial-gradient(circle_at_center,_#627fa1_0%,_#121214_70%)]
              bg-[radial-gradient(circle_at_center,_#344c68_0%,_#121214_70%)]
              text-white h-screen shadow-2xl shadow-[#00C8FF]/10 flex flex-col transition-all duration-300 ease-in-out ${
-               isSidebarOpen ? "lg:ml-64" : "lg:ml-0"
+               isSidebarOpen ? "lg:ml-[378px]" : "lg:ml-0"
              }`}
       >
         {/* Header */}
@@ -372,7 +372,7 @@ export default function DynamicLessonPage() {
         {/* Footer */}
         <footer
           className={`fixed left-0 right-0 lg:bottom-0 bottom-[51px] lg:bg-[#0C0C0F] bg-[#0C0C0F] lg:border-t lg:border-t-[#25252A] border-t border-t-[#25252A] lg:rounded-b-[20px] rounded-b-none p-0 z-50 transition-all duration-300 ease-in-out ${
-            isSidebarOpen ? "lg:left-64" : "lg:left-0"
+            isSidebarOpen ? "lg:left-[378px]" : "lg:left-0"
           }`}
         >
           <div className="flex justify-between w-full m-0 p-0">
