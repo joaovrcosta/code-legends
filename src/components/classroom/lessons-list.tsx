@@ -58,7 +58,11 @@ export function LessonsList({
   const currentModule = organizedLessons[0];
 
   return (
-    <div className="h-full overflow-y-auto bg-[#121214] scrollbar-thin scrollbar-thumb-zinc-800">
+    <div className="h-full overflow-y-auto bg-[#121214] scrollbar-thin [&::-webkit-scrollbar]:w-2
+        [&::-webkit-scrollbar-track]:bg-transparent
+        [&::-webkit-scrollbar-thumb]:bg-zinc-700/40
+        [&::-webkit-scrollbar-thumb]:rounded-full
+        hover:[&::-webkit-scrollbar-thumb]:bg-zinc-600 scrollbar-thumb-zinc-800">
       {/* Cabeçalho do Módulo */}
       <div className="sticky top-0 z-20 bg-[#121214]/95 backdrop-blur px-4 py-6 border-b border-zinc-900">
         <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1 block">

@@ -27,11 +27,13 @@ export function ModuleProgressBar({
           style={{ width: `${progress}%` }}
         >
           {/* Texto do percentual dentro da barra azul */}
-          {progress > 15 && (
+          {/* Desktop: mostra sempre que progress > 0 */}
+          {/* Mobile: mostra apenas quando progress > 15 */}
+          {progress > 0 && (
             <span
               className={`text-[12px] font-semibold text-white/90 ${
                 !showTrophy ? "mr-1" : progress === 100 ? "mr-5" : "mr-1"
-              }`}
+              } ${progress <= 15 ? "hidden lg:block" : ""}`}
             >
               <CountUp
                 key={roundedProgress}

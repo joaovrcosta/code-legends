@@ -332,7 +332,7 @@ export default function DynamicLessonPage() {
         {isSidebarOpen && (
           <div className="h-full flex flex-col w-64">
             <div className="p-4 border-b border-[#25252A] bg-[#121214]">
-              <h2 className="text-sm font-semibold text-[#C4C4CC]">Aulas</h2>
+              <h2 className="text-sm font-semibold text-[#C4C4CC]">Trilha</h2>
             </div>
             <div className="flex-1 overflow-y-auto">
               <LessonsList
@@ -387,7 +387,7 @@ export default function DynamicLessonPage() {
             <Button
               variant="outline"
               className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] bg-black rounded-none text-base border-none 
-      lg:rounded-bl-[20px] rounded-bl-none disabled:opacity-50"
+      rounded-bl-none disabled:opacity-50"
               onClick={() => {
                 if (navigation?.previous) {
                   navigateToLesson(
@@ -399,7 +399,7 @@ export default function DynamicLessonPage() {
               }}
               disabled={!navigation?.previous}
             >
-              <SkipBack weight="fill" size={16} />
+              <SkipBack weight="fill" size={24} />
               Aula anterior
             </Button>
             <div className="w-full lg:flex items-center justify-center px-8 hidden">
@@ -411,7 +411,7 @@ export default function DynamicLessonPage() {
                 onClick={handleUnlockNext}
                 disabled={isUnlocking}
                 className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-blue-gradient-500 border-none
-      lg:rounded-br-[20px] rounded-br-none disabled:opacity-50"
+      rounded-br-none disabled:opacity-50"
               >
                 {isUnlocking ? (
                   "Desbloqueando..."
@@ -434,8 +434,8 @@ export default function DynamicLessonPage() {
                   }
                 }}
                 disabled={!navigation?.next || lessonData.status !== "completed"}
-                className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-black border-none
-      lg:rounded-br-[20px] rounded-br-none disabled:opacity-50"
+                className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] text-base bg-black border-none
+      disabled:opacity-50"
               >
                 Próxima aula <SkipForward weight="fill" size={16} />
               </Button>

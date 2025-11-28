@@ -44,7 +44,7 @@ export default function VideoComponent({
   return (
     <div className="flex flex-col lg:px-0 px-0 h-full">
       {/* Header mobile */}
-      <div className="lg:hidden flex items-center justify-center py-6">
+      <div className="lg:hidden flex items-center justify-center lg:py-6 py-0 mb-6">
         <div className="flex flex-col items-center">
           <p className="text-sm font-light text-[#787878]">Chapter 1</p>
           <h3 className="text-[20px] text-center">{title || "Iniciando com ReactJS"}</h3>
