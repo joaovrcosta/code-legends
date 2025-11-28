@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Play, Pause } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, memo, useMemo } from "react";
 import Image from "next/image";
 
 interface LessonHeaderProps {
@@ -12,7 +12,7 @@ interface LessonHeaderProps {
   courseIcon?: string;
 }
 
-export function LessonHeader({
+export const LessonHeader = memo(function LessonHeader({
   courseTitle,
   moduleTitle,
   groupTitle,
@@ -21,9 +21,11 @@ export function LessonHeader({
   const [isAutoplay, setIsAutoplay] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const breadcrumbPath = [courseTitle, moduleTitle, groupTitle]
-    .filter(Boolean)
-    .join(" / ");
+  const breadcrumbPath = useMemo(() => {
+    return [courseTitle, moduleTitle, groupTitle]
+      .filter(Boolean)
+      .join(" / ");
+  }, [courseTitle, moduleTitle, groupTitle]);
 
   return (
     <div className="w-full lg:px-4 px-0 lg:pt-2 pt-0">
@@ -139,5 +141,5 @@ export function LessonHeader({
       </div>
     </div>
   );
-}
+});
 

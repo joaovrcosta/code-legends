@@ -4,7 +4,7 @@ import { useCourseModalStore } from "@/stores/course-modal-store";
 import type { Lesson, RoadmapResponse } from "@/types/roadmap";
 import { findLessonContext, generateLessonUrl } from "@/utils/lesson-url";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, memo, useCallback } from "react";
 
 interface LessonsListProps {
   lessons: Lesson[];
@@ -12,7 +12,7 @@ interface LessonsListProps {
   roadmap: RoadmapResponse | null;
 }
 
-export function LessonsList({
+export const LessonsList = memo(function LessonsList({
   lessons,
   currentLessonId,
   roadmap,
@@ -31,7 +31,7 @@ export function LessonsList({
     }));
   }, [roadmap]);
 
-  const handleLessonClick = (lesson: Lesson, index: number) => {
+  const handleLessonClick = useCallback((lesson: Lesson, index: number) => {
     if (lesson.status === "locked") return;
     if (!roadmap?.modules) return;
 
@@ -44,18 +44,44 @@ export function LessonsList({
       setLessonsForPage(lessons, index);
       router.push("/classroom");
     }
-  };
+  }, [roadmap?.modules, router, setLessonsForPage, lessons]);
 
-  if (!roadmap || organizedLessons.length === 0) {
+  // Encontra o módulo que contém a aula atual (sempre executado antes de qualquer return)
+  const currentModule = useMemo(() => {
+    if (!organizedLessons || organizedLessons.length === 0) {
+      return null;
+    }
+
+    if (!currentLessonId) {
+      return organizedLessons[0]; // Fallback para o primeiro módulo
+    }
+
+    // Procura em todos os módulos qual contém a aula atual
+    for (const moduleItem of organizedLessons) {
+      for (const group of moduleItem.groups) {
+        if (group.lessons.some((lesson) => lesson.id === currentLessonId)) {
+          return moduleItem;
+        }
+      }
+    }
+
+    // Se não encontrar, retorna o primeiro módulo
+    return organizedLessons[0];
+  }, [organizedLessons, currentLessonId]);
+
+  // Calcula o número do módulo baseado na posição no array (sempre executado)
+  const currentModuleNumber = useMemo(() => {
+    if (!currentModule) return -1;
+    return organizedLessons.findIndex((m) => m.id === currentModule.id);
+  }, [currentModule, organizedLessons]);
+
+  if (!roadmap || organizedLessons.length === 0 || !currentModule) {
     return (
       <div className="p-6 text-zinc-500 text-sm animate-pulse">
         Carregando estrutura...
       </div>
     );
   }
-
-  // Pegando o primeiro módulo
-  const currentModule = organizedLessons[0];
 
   return (
     <div className="h-full overflow-y-auto bg-[#121214] scrollbar-thin [&::-webkit-scrollbar]:w-2
@@ -66,11 +92,13 @@ export function LessonsList({
       {/* Cabeçalho do Módulo */}
       <div className="sticky top-0 z-20 bg-[#121214]/95 backdrop-blur px-4 py-6 border-b border-zinc-900">
         <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1 block">
-          Módulo 01
+          {currentModuleNumber !== -1
+            ? `Módulo ${String(currentModuleNumber + 1).padStart(2, "0")}`
+            : "Módulo"}
         </span>
         <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-lg">
-        {currentModule?.title || "Carregando..."}
-          </span>
+          {currentModule?.title || "Carregando..."}
+        </span>
       </div>
 
       <div className="px-4 py-6 pb-20">
@@ -170,4 +198,4 @@ export function LessonsList({
       </div>
     </div>
   );
-}
+});

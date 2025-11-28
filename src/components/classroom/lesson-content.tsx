@@ -4,6 +4,7 @@ import VideoComponent from "@/components/classroom/video";
 import { ComponentsArticle } from "@/components/classroom/article/components";
 import { LessonHeader } from "@/components/classroom/lesson-header";
 import type { Lesson } from "@/types/roadmap";
+import { memo } from "react";
 
 interface LessonContentProps {
   lesson: Lesson;
@@ -13,16 +14,13 @@ interface LessonContentProps {
   courseIcon?: string;
 }
 
-export function LessonContent({
+export const LessonContent = memo(function LessonContent({
   lesson,
   courseTitle,
   moduleTitle,
   groupTitle,
   courseIcon,
 }: LessonContentProps) {
-
-
-  console.log(lesson)
   return (
     <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
       {/* Header do conteúdo - sticky apenas no scroll do container principal */}
@@ -52,5 +50,5 @@ export function LessonContent({
       </div>
     </div>
   );
-}
+});
 

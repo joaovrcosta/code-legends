@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ModuleWithProgress } from "@/types/roadmap";
 import { PrimaryButton } from "@/components/ui/primary-button";
@@ -21,11 +21,6 @@ interface ModulesListProps {
 export function ModulesList({ modules, courseId, courseSlug }: ModulesListProps) {
   const [loadingModuleId, setLoadingModuleId] = useState<string | null>(null);
   const router = useRouter();
-
-  // Encontra o próximo módulo bloqueado que pode ser desbloqueado
-  const nextLockedModule = useMemo(() => {
-    return modules.find((module) => module.locked && module.canUnlock);
-  }, [modules]);
 
   const handleModuleClick = async (module: ModuleWithProgress) => {
     if (module.locked) return;

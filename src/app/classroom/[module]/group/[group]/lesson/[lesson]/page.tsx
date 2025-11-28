@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getLessonBySlug, type LessonResponse, unlockNextModule, getCourseRoadmapFresh, revalidateRoadmapCache } from "@/actions/course";
 import { LessonContent } from "@/components/classroom/lesson-content";
@@ -117,7 +117,7 @@ export default function DynamicLessonPage() {
     };
 
     loadLesson();
-  }, [activeCourse?.id, lessonSlug, setLessonForPage]);
+  }, [activeCourse?.id, lessonSlug, setLessonForPage, router]);
 
   // Carrega o roadmap para a sidebar
   useEffect(() => {
@@ -137,49 +137,47 @@ export default function DynamicLessonPage() {
     loadRoadmap();
   }, [activeCourse?.id]);
 
-  // Atualiza o roadmap quando uma lição é completada
+  // Consolida a atualização do roadmap e lição quando uma lição é completada
   useEffect(() => {
-    const updateRoadmap = async () => {
+    const updateAfterCompletion = async () => {
       if (!activeCourse?.id || !lessonCompletedTimestamp || !lessonSlug) return;
       
       // Usa o ref para acessar lessonData sem causar loop
       const currentLessonData = lessonDataRef.current;
       if (!currentLessonData) return;
 
-      const currentLessonId = currentLessonData.lesson.id;
-
       try {
-        // Revalida o cache
+        // Revalida o cache primeiro
         await revalidateRoadmapCache(activeCourse.id);
         
-        // Aguarda um delay para garantir que a API foi atualizada
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Aguarda um delay reduzido para garantir que a API foi atualizada
+        await new Promise((resolve) => setTimeout(resolve, 300));
         
-        // Recarrega a lição diretamente da API para obter o status atualizado do nível raiz
-        const refreshedLessonData = await getLessonBySlug(activeCourse.id, lessonSlug);
+        // Busca roadmap e lição em paralelo para melhor performance
+        const [refreshedLessonData, roadmapData] = await Promise.all([
+          getLessonBySlug(activeCourse.id, lessonSlug),
+          getCourseRoadmapFresh(activeCourse.id),
+        ]);
+        
         if (refreshedLessonData) {
-          console.log("Lição recarregada após completar - Status:", refreshedLessonData.status);
           setLessonData(refreshedLessonData);
           // Atualiza o store com o status correto do nível raiz
           const lessonWithStatus = {
             ...refreshedLessonData.lesson,
-            status: refreshedLessonData.status, // Usa o status do nível raiz
+            status: refreshedLessonData.status,
           };
           setLessonForPage(lessonWithStatus);
         }
         
-        // Busca o roadmap atualizado para a sidebar
-        const roadmapData = await getCourseRoadmapFresh(activeCourse.id);
         if (roadmapData) {
           setRoadmap(roadmapData);
         }
       } catch (error) {
-        console.error("Erro ao atualizar roadmap:", error);
+        console.error("Erro ao atualizar após completar lição:", error);
       }
     };
 
-    updateRoadmap();
-    // Removido lessonData e setLessonForPage das dependências para evitar loop
+    updateAfterCompletion();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lessonCompletedTimestamp, activeCourse?.id, lessonSlug]);
 
@@ -187,13 +185,12 @@ export default function DynamicLessonPage() {
   useEffect(() => {
     if (currentLesson && lessonData && currentLesson.id === lessonData.lesson.id) {
       // Se o status mudou para completed, atualiza o lessonData local
-      // Usa o status do nível raiz (lessonData.status) em vez de lessonData.lesson.status
       if (currentLesson.status === "completed" && lessonData.status !== "completed") {
         setLessonData((prev) => {
           if (!prev) return prev;
           return {
             ...prev,
-            status: "completed", // Atualiza o status do nível raiz
+            status: "completed",
             lesson: { ...prev.lesson, status: "completed" },
           };
         });
@@ -201,50 +198,9 @@ export default function DynamicLessonPage() {
     }
   }, [currentLesson, lessonData]);
 
-  // Recarrega a lição quando ela é completada para obter dados atualizados do back-end
-  useEffect(() => {
-    const reloadLesson = async () => {
-      if (!lessonCompletedTimestamp || !activeCourse?.id || !lessonSlug) return;
-      
-      try {
-        // Aguarda um delay para garantir que a API foi atualizada
-        await new Promise((resolve) => setTimeout(resolve, 300));
-        
-        // Recarrega a lição para obter o status atualizado
-        const data = await getLessonBySlug(activeCourse.id, lessonSlug);
-        if (data) {
-          console.log("Lição recarregada após completar:", data.status);
-          setLessonData(data);
-          // Atualiza o store com o status correto do nível raiz
-          const lessonWithStatus = {
-            ...data.lesson,
-            status: data.status, // Usa o status do nível raiz
-          };
-          setLessonForPage(lessonWithStatus);
-        }
-      } catch (error) {
-        console.error("Erro ao recarregar lição após completar:", error);
-      }
-    };
-
-    reloadLesson();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lessonCompletedTimestamp]);
-
-  // Debug: verifica se navigation está disponível (sempre chamado, mesmo que lessonData seja null)
-  useEffect(() => {
-    if (lessonData?.navigation) {
-      console.log("Navigation disponível:", {
-        previous: lessonData.navigation.previous,
-        next: lessonData.navigation.next,
-      });
-    } else if (lessonData) {
-      console.warn("Navigation não disponível no lessonData");
-    }
-  }, [lessonData]);
 
   // Função para navegar para uma aula
-  const navigateToLesson = (
+  const navigateToLesson = useCallback((
     lessonSlug: string,
     targetModuleSlug: string,
     targetGroupSlug: string
@@ -252,71 +208,23 @@ export default function DynamicLessonPage() {
     router.push(
       `/classroom/${targetModuleSlug}/group/${targetGroupSlug}/lesson/${lessonSlug}`
     );
-  };
+  }, [router]);
 
-  // Coleta todas as aulas para a sidebar (sempre executado, mesmo se lessonData for null)
-  const allLessons = roadmap?.modules
-    .flatMap((m) => m?.groups || [])
-    .flatMap((g) => g?.lessons || []) || [];
+  // Coleta todas as aulas para a sidebar (memoizado)
+  const allLessons = useMemo(() => {
+    if (!roadmap?.modules) return [];
+    return roadmap.modules
+      .flatMap((m) => m?.groups || [])
+      .flatMap((g) => g?.lessons || []);
+  }, [roadmap?.modules]);
 
-  // Encontra o módulo atual e verifica se está completo (sempre executado)
-  const currentModuleData = useMemo(() => {
-    if (!roadmap || !lessonData?.module) return null;
-    
-    const moduleData = lessonData.module;
-    // Tenta encontrar o módulo por ID ou slug
-    const foundModule = roadmap.modules.find(
-      (m) => m.id === moduleData.id || m.slug === moduleData.slug || m.slug === moduleSlug
-    );
-    return foundModule || null;
-  }, [roadmap, lessonData?.module, moduleSlug]);
 
-  const canUnlockNextModule = roadmap?.course.canUnlockNextModule ?? false;
+  const canUnlockNextModule = useMemo(() => {
+    return roadmap?.course.canUnlockNextModule ?? false;
+  }, [roadmap?.course.canUnlockNextModule]);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="text-center text-white">
-          <p className="text-muted-foreground">Carregando aula...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !lessonData) {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="text-center text-white">
-          <p className="text-muted-foreground mb-4">
-            {error || "Aula não encontrada"}
-          </p>
-          <Link href="/learn">
-            <Button>Voltar</Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  if (!activeCourse) {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="text-center text-white">
-          <p className="text-muted-foreground mb-4">
-            Nenhum curso ativo encontrado.
-          </p>
-          <Link href="/learn/catalog">
-            <Button>Explorar cursos</Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  const { lesson, navigation } = lessonData;
-
-  // Handler para desbloquear o próximo módulo
-  const handleUnlockNext = async () => {
+  // Handler para desbloquear o próximo módulo (deve estar antes dos returns)
+  const handleUnlockNext = useCallback(async () => {
     if (!activeCourse?.id) return;
 
     setIsUnlocking(true);
@@ -359,7 +267,51 @@ export default function DynamicLessonPage() {
     } finally {
       setIsUnlocking(false);
     }
-  };
+  }, [activeCourse?.id, lessonSlug, navigateToLesson]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center w-full h-full">
+        <div className="text-center text-white">
+          <p className="text-muted-foreground">Carregando aula...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !lessonData) {
+    return (
+      <div className="flex items-center justify-center w-full h-full">
+        <div className="text-center text-white">
+          <p className="text-muted-foreground mb-4">
+            {error || "Aula não encontrada"}
+          </p>
+          <Link href="/learn">
+            <Button>Voltar</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!activeCourse) {
+    return (
+      <div className="flex items-center justify-center w-full h-full">
+        <div className="text-center text-white">
+          <p className="text-muted-foreground mb-4">
+            Nenhum curso ativo encontrado.
+          </p>
+          <Link href="/learn/catalog">
+            <Button>Explorar cursos</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // lessonData não pode ser null aqui devido ao check anterior
+  const lesson = lessonData!.lesson;
+  const navigation = lessonData!.navigation;
 
   return (
     <div className="flex h-screen w-full">

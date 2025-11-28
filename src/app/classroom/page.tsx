@@ -8,7 +8,7 @@ import { LessonContent } from "@/components/classroom/lesson-content";
 import { LevelProgressBar } from "@/components/learn/level-progress-bar";
 import { SkipForward } from "@phosphor-icons/react";
 import { SkipBack, LockOpen } from "@phosphor-icons/react/dist/ssr";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { getCourseRoadmapFresh, unlockNextModule } from "@/actions/course";
 import type { RoadmapResponse, Lesson } from "@/types/roadmap";
 import { useRoadmapUpdater } from "@/hooks/use-roadmap-updater";
@@ -102,14 +102,25 @@ export default function ClassroomPage() {
     loadLessons();
   }, [activeCourse?.id, setLessonsForPage, lessons.length, router]);
 
-  const hasNextLesson = currentIndex < lessons.length - 1;
-  const hasPreviousLesson = currentIndex > 0;
-  const nextLesson = hasNextLesson ? lessons[currentIndex + 1] : null;
-  const previousLesson = hasPreviousLesson ? lessons[currentIndex - 1] : null;
-  const isNextLessonLocked = nextLesson?.status === "locked";
+  // Memoiza cálculos de navegação
+  const { hasNextLesson, hasPreviousLesson, nextLesson, previousLesson, isNextLessonLocked } = useMemo(() => {
+    const hasNext = currentIndex < lessons.length - 1;
+    const hasPrevious = currentIndex > 0;
+    const next = hasNext ? lessons[currentIndex + 1] : null;
+    const previous = hasPrevious ? lessons[currentIndex - 1] : null;
+    const isNextLocked = next?.status === "locked";
+    
+    return {
+      hasNextLesson: hasNext,
+      hasPreviousLesson: hasPrevious,
+      nextLesson: next,
+      previousLesson: previous,
+      isNextLessonLocked: isNextLocked,
+    };
+  }, [currentIndex, lessons]);
 
   // Função para navegar para uma aula usando URL dinâmica
-  const navigateToLesson = (lesson: Lesson) => {
+  const navigateToLesson = useCallback((lesson: Lesson) => {
     if (!roadmap?.modules) return;
 
     const context = findLessonContext(lesson.id, roadmap.modules);
@@ -117,9 +128,9 @@ export default function ClassroomPage() {
       const url = generateLessonUrl(lesson, context.module, context.group);
       router.push(url);
     }
-  };
+  }, [roadmap?.modules, router]);
 
-  const handleNextLesson = () => {
+  const handleNextLesson = useCallback(() => {
     // Só permite navegar se a aula atual estiver completa
     if (currentLesson?.status !== "completed") {
       return;
@@ -127,19 +138,42 @@ export default function ClassroomPage() {
     if (nextLesson && !isNextLessonLocked) {
       navigateToLesson(nextLesson);
     }
-  };
+  }, [currentLesson?.status, nextLesson, isNextLessonLocked, navigateToLesson]);
 
-  const handlePreviousLesson = () => {
+  const handlePreviousLesson = useCallback(() => {
     if (previousLesson) {
       navigateToLesson(previousLesson);
     }
-  };
+  }, [previousLesson, navigateToLesson]);
 
 
   // Usa os valores diretamente do back-end
-  const canUnlockNextModule = roadmap?.course.canUnlockNextModule ?? false;
+  const canUnlockNextModule = useMemo(() => {
+    return roadmap?.course.canUnlockNextModule ?? false;
+  }, [roadmap?.course.canUnlockNextModule]);
 
-  const handleUnlockNext = async () => {
+  // Memoiza a busca de moduleTitle e groupTitle para evitar loop a cada render
+  const { moduleTitle, groupTitle } = useMemo(() => {
+    let moduleTitleValue: string | undefined;
+    let groupTitleValue: string | undefined;
+    
+    if (roadmap?.modules && currentLesson) {
+      for (const moduleItem of roadmap.modules) {
+        for (const groupItem of moduleItem.groups || []) {
+          if (groupItem.lessons?.some((l) => l.id === currentLesson.id)) {
+            moduleTitleValue = moduleItem.title;
+            groupTitleValue = groupItem.title;
+            break;
+          }
+        }
+        if (moduleTitleValue && groupTitleValue) break;
+      }
+    }
+    
+    return { moduleTitle: moduleTitleValue, groupTitle: groupTitleValue };
+  }, [roadmap?.modules, currentLesson]);
+
+  const handleUnlockNext = useCallback(async () => {
     if (!activeCourse?.id) return;
 
     setIsUnlocking(true);
@@ -149,12 +183,9 @@ export default function ClassroomPage() {
         // Notifica que um módulo foi desbloqueado para atualizar a barra de progresso
         setModuleUnlockedTimestamp();
 
-        // Aguarda um pouco para garantir que o revalidateTag foi processado
-        await new Promise((resolve) => setTimeout(resolve, 200));
-
-        // Aguarda mais tempo para que a barra de progresso tenha tempo de atualizar e voltar para zero
-        // A barra de progresso tem um delay de 300ms, então aguardamos um pouco mais para garantir
-        await new Promise((resolve) => setTimeout(resolve, 400));
+        // Aguarda um delay reduzido (300ms total) para garantir que o revalidateTag foi processado
+        // e a barra de progresso tenha tempo de atualizar
+        await new Promise((resolve) => setTimeout(resolve, 300));
 
         // Atualiza o roadmap usando versão sem cache
         const roadmapData = await getCourseRoadmapFresh(activeCourse.id);
@@ -220,7 +251,7 @@ export default function ClassroomPage() {
     } finally {
       setIsUnlocking(false);
     }
-  };
+  }, [activeCourse?.id, setModuleUnlockedTimestamp, setLessonsForPage]);
 
   // Se não há curso ativo ou aulas, mostra mensagem
   if (!activeCourse) {
@@ -297,34 +328,15 @@ export default function ClassroomPage() {
         </header>
 
         {/* Conteúdo */}
-        {currentLesson && (() => {
-          // Encontra o módulo e grupo da lição atual
-          let moduleTitle: string | undefined;
-          let groupTitle: string | undefined;
-          
-          if (roadmap?.modules) {
-            for (const moduleItem of roadmap.modules) {
-              for (const group of moduleItem.groups || []) {
-                if (group.lessons?.some((l) => l.id === currentLesson.id)) {
-                  moduleTitle = moduleItem.title;
-                  groupTitle = group.title;
-                  break;
-                }
-              }
-              if (moduleTitle && groupTitle) break;
-            }
-          }
-          
-          return (
-            <LessonContent
-              lesson={currentLesson}
-              courseTitle={activeCourse?.title}
-              moduleTitle={moduleTitle}
-              groupTitle={groupTitle}
-              courseIcon={activeCourse?.icon}
-            />
-          );
-        })()}
+        {currentLesson && (
+          <LessonContent
+            lesson={currentLesson}
+            courseTitle={activeCourse?.title}
+            moduleTitle={moduleTitle}
+            groupTitle={groupTitle}
+            courseIcon={activeCourse?.icon}
+          />
+        )}
 
         {/* Footer */}
         <footer

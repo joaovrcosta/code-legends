@@ -46,14 +46,24 @@ export function useRoadmapUpdater({
 
     const fetchUpdatedRoadmap = async (
       useFresh: boolean = false,
-      delay: number = 200
+      delay: number = 0
     ) => {
       try {
-        // Revalida o cache
-        await revalidateRoadmapCache(courseId);
-
-        // Aguarda delay para garantir que o cache foi revalidado
-        await new Promise((resolve) => setTimeout(resolve, delay));
+        // Revalida o cache em paralelo com a busca (se necessário)
+        const revalidatePromise = revalidateRoadmapCache(courseId);
+        
+        // Se há delay, aguarda; caso contrário, busca imediatamente
+        if (delay > 0) {
+          await Promise.all([
+            revalidatePromise,
+            new Promise((resolve) => setTimeout(resolve, delay))
+          ]);
+        } else {
+          // Não bloqueia a busca esperando revalidação
+          revalidatePromise.catch(() => {
+            // Ignora erros de revalidação silenciosamente
+          });
+        }
 
         // Busca roadmap (com ou sem cache dependendo do parâmetro)
         const roadmapData = useFresh
@@ -81,14 +91,16 @@ export function useRoadmapUpdater({
       lessonCompletedTimestamp !== lastCompletedTimestampRef.current
     ) {
       lastCompletedTimestampRef.current = lessonCompletedTimestamp;
-      fetchUpdatedRoadmap(true, 500); // Delay maior para garantir que API foi atualizada
+      // Delay reduzido: 300ms é suficiente para a maioria dos casos
+      fetchUpdatedRoadmap(true, 300);
       return;
     }
 
-    // 3. Atualiza quando muda de aula
+    // 3. Atualiza quando muda de aula (sem delay, usa cache quando possível)
     if (currentLessonId && currentLessonId !== lastLessonIdRef.current) {
       lastLessonIdRef.current = currentLessonId;
-      fetchUpdatedRoadmap(true, 200);
+      // Usa cache para mudanças de aula (mais rápido)
+      fetchUpdatedRoadmap(false, 0);
     }
   }, [
     isOpen,
