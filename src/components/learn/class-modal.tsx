@@ -17,10 +17,11 @@ import { Menu, X } from "lucide-react";
 import { LevelProgressBar } from "./level-progress-bar";
 import { SkipForward } from "@phosphor-icons/react";
 import { SkipBack, LockOpen } from "@phosphor-icons/react/dist/ssr";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { getCourseRoadmapFresh, unlockNextModule } from "@/actions/course";
 import type { RoadmapResponse } from "@/types/roadmap";
 import { useRoadmapUpdater } from "@/hooks/use-roadmap-updater";
+import { findLessonContext } from "@/utils/lesson-url";
 
 export const AulaModal = () => {
   const {
@@ -48,6 +49,23 @@ export const AulaModal = () => {
     lessonCompletedTimestamp,
     onRoadmapUpdate: setRoadmap,
   });
+
+  // Calcula o número do módulo atual baseado na aula atual
+  const currentLevel = useMemo(() => {
+    if (!roadmap?.modules || !currentLesson) {
+      return roadmap?.course.currentModule || 1;
+    }
+
+    const context = findLessonContext(currentLesson.id, roadmap.modules);
+    if (context) {
+      const moduleIndex = roadmap.modules.findIndex(
+        (m) => m.id === context.module.id
+      );
+      return moduleIndex !== -1 ? moduleIndex + 1 : roadmap.course.currentModule || 1;
+    }
+
+    return roadmap.course.currentModule || 1;
+  }, [roadmap, currentLesson]);
 
   const hasNextLesson = currentIndex < lessons.length - 1;
   const hasPreviousLesson = currentIndex > 0;

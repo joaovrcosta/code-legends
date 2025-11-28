@@ -24,7 +24,7 @@ export default function DynamicLessonPage() {
   const { setLessonForPage, lessonCompletedTimestamp, currentLesson } = useCourseModalStore();
   const { isOpen: isSidebarOpen } = useClassroomSidebarStore();
 
-  const moduleSlug = params.module as string;
+  const _moduleSlug = params.module as string;
   const lessonSlug = params.lesson as string;
 
   const [lessonData, setLessonData] = useState<LessonResponse | null>(null);
