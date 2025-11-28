@@ -10,8 +10,10 @@ import { PrimaryButton } from "../ui/primary-button";
 import { FastForward, Lock } from "@phosphor-icons/react/dist/ssr";
 import { CirclePlay } from "lucide-react";
 import Link from "next/link";
-import type { Lesson } from "@/types/roadmap";
+import { useRouter } from "next/navigation";
+import type { Lesson, RoadmapResponse } from "@/types/roadmap";
 import { useCourseModalStore } from "@/stores/course-modal-store";
+import { generateLessonUrl, findLessonContext } from "@/utils/lesson-url";
 
 export const LessonPopover = ({
   lesson,
@@ -22,6 +24,7 @@ export const LessonPopover = ({
   completed,
   locked,
   allLessons,
+  roadmap,
 }: {
   lesson: Lesson;
   openPopover: number | null;
@@ -32,24 +35,36 @@ export const LessonPopover = ({
   locked: boolean;
   currentCourseSlug: string;
   allLessons?: Lesson[];
+  roadmap?: RoadmapResponse;
   isFirstInModule?: boolean;
 }) => {
   const {
-    openModalWithLessons,
-    openModalWithLesson,
+    setLessonsForPage,
+    setLessonForPage,
     isOpen: isModalOpen,
   } = useCourseModalStore();
+  const router = useRouter();
 
   const handleWatchClick = () => {
     if (!locked) {
-      // Se temos todas as lições, abre o modal com todas para permitir navegação
+      // Tenta gerar URL dinâmica se tiver roadmap
+      if (roadmap?.modules) {
+        const context = findLessonContext(lesson.id, roadmap.modules);
+        if (context) {
+          const url = generateLessonUrl(lesson, context.module, context.group);
+          router.push(url);
+          return;
+        }
+      }
+
+      // Fallback: atualiza a store e navega para /classroom
       if (allLessons && allLessons.length > 0) {
         const currentIndex = allLessons.findIndex((l) => l.id === lesson.id);
-        openModalWithLessons(allLessons, currentIndex >= 0 ? currentIndex : 0);
+        setLessonsForPage(allLessons, currentIndex >= 0 ? currentIndex : 0);
       } else {
-        // Fallback: abre apenas a lição atual
-        openModalWithLesson(lesson);
+        setLessonForPage(lesson);
       }
+      router.push("/classroom");
     }
   };
 

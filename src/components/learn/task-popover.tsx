@@ -12,6 +12,7 @@ import { PrimaryButton } from "../ui/primary-button";
 import { FastForward, Lock } from "@phosphor-icons/react/dist/ssr";
 import { CirclePlay } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCourseModalStore } from "@/stores/course-modal-store";
 
 const firstIncompleteTask =
@@ -32,7 +33,8 @@ export const TaskPopover = ({
   showContinue: boolean;
   setShowContinue: (state: boolean) => void;
 }) => {
-  const { openModalWithTask } = useCourseModalStore();
+  const { setTaskForPage } = useCourseModalStore();
+  const router = useRouter();
 
   return (
     <div>
@@ -88,7 +90,9 @@ export const TaskPopover = ({
               disabled={task.locked}
               onClick={() => {
                 if (!task.locked) {
-                  openModalWithTask(task);
+                  // Atualiza a store sem abrir o modal e navega para a página
+                  setTaskForPage(task);
+                  router.push("/classroom");
                 }
               }}
             >

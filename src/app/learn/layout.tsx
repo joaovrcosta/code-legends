@@ -1,4 +1,3 @@
-import { AulaModal } from "@/components/learn/class-modal";
 import { FooterFixed } from "@/components/learn/footer-fixed";
 import LearnHeader from "@/components/learn/header";
 import Sidebar from "@/components/learn/sidebar";
@@ -32,7 +31,7 @@ export default async function LearnLayout({
           <main className="w-full">{children}</main>
           <FooterFixed />
 
-          <AulaModal />
+          {/* <AulaModal /> */}
         </div>
       </div>
     </div>

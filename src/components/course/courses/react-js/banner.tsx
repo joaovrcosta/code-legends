@@ -2,7 +2,6 @@
 
 // import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -228,22 +227,25 @@ export function CourseBanner({ course, userProgress }: CourseBannerProps) {
         <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none" />
         <div className="flex-col flex-1 relative z-10 w-full">
           <div className="w-full lg:hidden block">
-            <Link href="/learn/catalog" className="lg:hidden block ">
+            <button
+              onClick={() => router.back()}
+              className="lg:hidden block"
+            >
               <div className="flex items-center gap-2 cursor-pointer mb-2 text-sm text-[#7e7e89]">
                 <ArrowLeft size={16} className="text-[#7e7e89]" />
                 Voltar
               </div>
-            </Link>
+            </button>
           </div>
-          <Link
-            href="/learn/catalog"
-            className="lg:block hidden hover:bg-[#25252A] max-w-[80px] p-1 flex items-start rounded-lg justify-center mb-4 text-[#7e7e89] hover:text-white"
+          <button
+            onClick={() => router.back()}
+            className="lg:flex hidden hover:bg-[#25252A] max-w-[80px] p-1 items-start rounded-lg justify-center mb-4 text-[#7e7e89] hover:text-white"
           >
             <div className="flex items-center justify-center gap-3">
               <ArrowLeft size={16} className="" />
               <p className="text-[12px] ">Voltar</p>
             </div>
-          </Link>
+          </button>
           <div className="lg:block lg:mr-6 mr-0 flex items-center justify-center">
             <Image
               src={course.icon}
@@ -329,10 +331,12 @@ export function CourseBanner({ course, userProgress }: CourseBannerProps) {
 
                             if (result.success) {
                               setShowResetModal(false);
-                              // Recarrega a página para atualizar o progresso
-                              router.refresh();
+                              // Aguarda um pouco para garantir que o backend processou o reset
+                              await new Promise((resolve) => setTimeout(resolve, 500));
                               // Atualiza a lista de cursos inscritos
                               await refreshEnrolledCourses();
+                              // Recarrega a página para atualizar o progresso e roadmap
+                              router.refresh();
                             } else {
                               alert(
                                 result.error ||
