@@ -43,6 +43,12 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
       return;
     }
 
+    // Verifica se a aula está bloqueada antes de tentar completá-la
+    if (currentLesson.status === "locked") {
+      alert("Esta aula está bloqueada. Complete as aulas anteriores para desbloqueá-la.");
+      return;
+    }
+
     try {
       setIsMarking(true);
       
@@ -61,7 +67,13 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
     } catch (error) {
       console.error("Erro ao marcar como assistido:", error);
       const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
-      alert(`Erro ao marcar como assistido: ${errorMessage}. Tente novamente.`);
+      
+      // Se o erro for sobre aula bloqueada, mostra mensagem mais clara
+      if (errorMessage.includes("locked") || errorMessage.includes("bloqueada")) {
+        alert("Esta aula está bloqueada. Complete as aulas anteriores para desbloqueá-la. Se você acabou de resetar o curso, aguarde alguns segundos e recarregue a página.");
+      } else {
+        alert(`Erro ao marcar como assistido: ${errorMessage}. Tente novamente.`);
+      }
     } finally {
       setIsMarking(false);
     }

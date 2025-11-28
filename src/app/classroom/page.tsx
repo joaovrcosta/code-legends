@@ -58,11 +58,15 @@ export default function ClassroomPage() {
             .flatMap((group) => group?.lessons || []);
 
           // Encontra a aula atual (isCurrent) ou a primeira desbloqueada
+          // IMPORTANTE: Só usa a aula atual se ela não estiver bloqueada
           let targetLesson: Lesson | null = null;
           const foundCurrentLesson = allLessons.find((lesson) => lesson.isCurrent);
-          if (foundCurrentLesson) {
+          
+          // Só usa a aula atual se ela não estiver bloqueada
+          if (foundCurrentLesson && foundCurrentLesson.status !== "locked") {
             targetLesson = foundCurrentLesson;
           } else {
+            // Procura a primeira aula desbloqueada
             targetLesson =
               allLessons.find((lesson) => lesson.status !== "locked") || null;
           }

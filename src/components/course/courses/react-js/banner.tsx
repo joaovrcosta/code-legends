@@ -331,10 +331,12 @@ export function CourseBanner({ course, userProgress }: CourseBannerProps) {
 
                             if (result.success) {
                               setShowResetModal(false);
-                              // Recarrega a página para atualizar o progresso
-                              router.refresh();
+                              // Aguarda um pouco para garantir que o backend processou o reset
+                              await new Promise((resolve) => setTimeout(resolve, 500));
                               // Atualiza a lista de cursos inscritos
                               await refreshEnrolledCourses();
+                              // Recarrega a página para atualizar o progresso e roadmap
+                              router.refresh();
                             } else {
                               alert(
                                 result.error ||

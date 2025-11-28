@@ -15,6 +15,7 @@ import { useActiveCourseStore } from "@/stores/active-course-store";
 import { useCourseModalStore } from "@/stores/course-modal-store";
 import useClassroomSidebarStore from "@/stores/classroom-sidebar";
 import type { RoadmapResponse } from "@/types/roadmap";
+import { generateLessonUrl, findLessonContext } from "@/utils/lesson-url";
 
 export default function DynamicLessonPage() {
   const params = useParams();
@@ -56,8 +57,47 @@ export default function DynamicLessonPage() {
       try {
         const data = await getLessonBySlug(activeCourse.id, lessonSlug);
         if (data) {
-          setLessonData(data);
+          // VALIDAÇÃO: Se a aula estiver bloqueada, redireciona para a primeira desbloqueada
+          if (data.status === "locked") {
+            // Carrega o roadmap para encontrar a primeira aula desbloqueada
+            const roadmapData = await getCourseRoadmapFresh(activeCourse.id);
+            if (roadmapData) {
+              setRoadmap(roadmapData);
+              
+              // Encontra a primeira aula desbloqueada
+              const allLessons = roadmapData.modules
+                .flatMap((module) => module?.groups || [])
+                .flatMap((group) => group?.lessons || []);
+              
+              const firstUnlockedLesson = allLessons.find(
+                (lesson) => lesson.status !== "locked"
+              );
+              
+              if (firstUnlockedLesson) {
+                // Encontra o contexto da aula
+                const context = findLessonContext(
+                  firstUnlockedLesson.id,
+                  roadmapData.modules
+                );
+                
+                if (context) {
+                  const url = generateLessonUrl(
+                    firstUnlockedLesson,
+                    context.module,
+                    context.group
+                  );
+                  router.replace(url); // Usa replace para não adicionar ao histórico
+                  return;
+                }
+              }
+            }
+            
+            // Se não encontrou aula desbloqueada, redireciona para /classroom
+            router.replace("/classroom");
+            return;
+          }
           
+          setLessonData(data);
           
           // Atualiza o store com a lição atual, incluindo o status do nível raiz
           const lessonWithStatus = {
