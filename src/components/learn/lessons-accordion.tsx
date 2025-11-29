@@ -81,6 +81,55 @@ export function LessonsAccordion() {
     return organizedLessons.findIndex((m) => m.id === currentModule.id);
   }, [currentModule, organizedLessons]);
 
+  // Encontra o próximo módulo e calcula suas informações
+  const nextModuleInfo = useMemo(() => {
+    if (!organizedLessons || currentModuleNumber === -1) return null;
+    
+    const nextModuleIndex = currentModuleNumber + 1;
+    if (nextModuleIndex >= organizedLessons.length) return null;
+    
+    const nextModule = organizedLessons[nextModuleIndex];
+    
+    // Calcula total de aulas e tempo
+    const allLessons = nextModule.groups.flatMap((group) => group.lessons || []);
+    const totalLessons = allLessons.length;
+    
+    // Calcula tempo total em segundos
+    let totalSeconds = 0;
+    allLessons.forEach((lesson) => {
+      if (lesson.video_duration) {
+        // Formato esperado: "HH:MM:SS" ou "MM:SS"
+        const parts = lesson.video_duration.split(":").map(Number);
+        if (parts.length === 3) {
+          // HH:MM:SS
+          totalSeconds += parts[0] * 3600 + parts[1] * 60 + parts[2];
+        } else if (parts.length === 2) {
+          // MM:SS
+          totalSeconds += parts[0] * 60 + parts[1];
+        }
+      }
+    });
+    
+    // Converte para formato legível
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    
+    let durationText = "";
+    if (hours > 0) {
+      durationText = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    } else {
+      durationText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }
+    
+    return {
+      module: nextModule,
+      moduleNumber: nextModuleIndex + 1,
+      totalLessons,
+      duration: durationText,
+    };
+  }, [organizedLessons, currentModuleNumber]);
+
   // Coleta todas as aulas para encontrar índices
   const allLessons = useMemo(() => {
     return organizedLessons
@@ -163,6 +212,27 @@ export function LessonsAccordion() {
                   </div>
                 </div>
               ))}
+
+              {/* Seção do Próximo Módulo */}
+              {nextModuleInfo && (
+                <div className="pt-4 border-t border-zinc-900 mt-4">
+                  <div className="border border-[#25252A] rounded-[12px] p-4">
+                    <div className="flex items-center gap-4">
+                      {/* Informações do módulo */}
+                      <div className="flex-1 min-w-0">
+                        <p className="bg-blue-gradient-500 bg-clip-text text-transparent lg:text-xs text-[14px] font-semibold mb-1">Próximo módulo</p>
+                        <h3 className="text-white font-semibold text-base mb-1 truncate">
+                          {nextModuleInfo.module.title}
+                        </h3>
+                        <div className="flex items-center gap-4 text-zinc-400 text-xs">
+                          <span>{nextModuleInfo.totalLessons} aulas</span>
+                          <span>{nextModuleInfo.duration}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </AccordionContent>
         </div>
