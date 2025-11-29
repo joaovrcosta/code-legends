@@ -142,7 +142,7 @@ export function LessonsAccordion() {
   }
 
   return (
-    <Accordion type="single" collapsible defaultValue="lessons" className="mb-4 lg:hidden block">
+    <Accordion type="single" collapsible defaultValue="lessons" className="lg:hidden block">
       <AccordionItem value="lessons" className="p-0">
         <div className="w-full mx-auto lg:rounded-[20px] rounded-none bg-[#0C0C0F] border border-[#2A2A2A] shadow-xl">
           <AccordionTrigger className="group w-full lg:px-8 px-6 lg:py-8 py-6">

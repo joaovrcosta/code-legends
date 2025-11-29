@@ -34,7 +34,7 @@ export const LessonContent = memo(function LessonContent({
       </div>
       
       {/* Conteúdo com scroll */}
-      <div className="flex-1 overflow-y-auto lg:px-4 px-0 min-h-0 lg:pb-[84px] pb-[64px]">
+      <div className="flex-1 overflow-y-auto lg:px-4 px-0 min-h-0 lg:pb-[84px] pb-[54px]">
         <div className="lg:px-4 px-0 lg:pt-4 pt-0">
           {lesson?.type === "video" && (
             <VideoComponent
