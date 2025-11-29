@@ -308,7 +308,7 @@ export default function ClassroomPage() {
       <div
         className={`flex-1 w-full lg:bg-[radial-gradient(circle_at_center,_#627fa1_0%,_#121214_70%)]
              bg-[radial-gradient(circle_at_center,_#344c68_0%,_#121214_70%)]
-             text-white h-[100dvh] shadow-2xl shadow-[#00C8FF]/10 flex flex-col transition-all duration-300 ease-in-out pt-[112px] lg:pt-0 ${
+             text-white shadow-2xl shadow-[#00C8FF]/10 flex flex-col transition-all duration-300 ease-in-out pt-[112px] lg:pt-0 ${
                isSidebarOpen ? "lg:ml-[378px]" : "lg:ml-0"
              }`}
       >

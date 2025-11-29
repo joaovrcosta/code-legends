@@ -22,7 +22,7 @@ export const LessonContent = memo(function LessonContent({
   courseIcon,
 }: LessonContentProps) {
   return (
-    <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+    <div className="flex-1 flex flex-col min-h-0">
       {/* Header do conteúdo - apenas no desktop */}
       <div className="sticky top-0 z-50 lg:px-4 px-0 lg:pt-2 pt-0 hidden lg:block">
         <LessonHeader
@@ -33,9 +33,9 @@ export const LessonContent = memo(function LessonContent({
         />
       </div>
       
-      {/* Conteúdo com scroll */}
-      <div className="flex-1 overflow-y-auto lg:px-4 px-0 min-h-0 lg:pb-[84px] pb-[54px]">
-        <div className="lg:px-4 px-0 lg:pt-4 pt-0">
+      {/* Conteúdo */}
+      <div className="flex-1 lg:px-4 px-0 min-h-0">
+        <div className="lg:px-4 px-0 lg:pt-4 pt-0 pb-[54px] lg:pb-[84px]">
           {lesson?.type === "video" && (
             <VideoComponent
               description={lesson.description}
