@@ -105,16 +105,16 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
                     className={`lg:flex hidden items-center gap-2 border px-3 py-2 rounded-full text-sm text-white whitespace-nowrap mr-4 font-normal transition-all ${
                       isMarking || isMarked || !currentLesson
                         ? "opacity-50 cursor-not-allowed"
-                        : "cursor-pointer hover:border-green-500"
+                        : "cursor-pointer hover:border-[#00b3e4]"
                     } ${
                       isMarked
-                        ? "border-green-500 bg-green-500/10"
+                        ? "border-[#00b3e4] bg-green-500/10"
                         : "border-[#25252A]"
                     }`}
                   >
                     <Check
-                      size={16}
-                      className={isMarked ? "text-green-500" : "text-green-500"}
+                        weight="bold"
+                        className={isMarked ? "text-[#00b3e4]" : "text-[#00b3e4]"}
                     />{" "}
                     {isMarking
                       ? "Marcando..."
@@ -141,7 +141,8 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
                   >
                     <Check
                       size={16}
-                      className={isMarked ? "text-green-500" : "text-green-500"}
+                      weight="bold"
+                      className={isMarked ? "text-[#00b3e4]" : "text-[#00b3e4]"}
                     />
                    <p className="font-semibold"> {isMarking
                       ? "Marcando..."
