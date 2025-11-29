@@ -1,5 +1,4 @@
 import ClassroomHeader from "@/components/classroom/header";
-import { FooterFixed } from "@/components/learn/footer-fixed";
 import { getUserEnrolledList } from "@/actions";
 import { getActiveCourse } from "@/actions/user/get-active-course";
 
@@ -22,7 +21,6 @@ export default async function ClassroomLayout({ children }: DashboardProps) {
       />
       <div className="flex-1 h-[calc(100vh-63px)] overflow-y-auto">
         <main className="w-full">{children}</main>
-        <FooterFixed />
       </div>
     </div>
   );
