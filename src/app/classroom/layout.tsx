@@ -14,12 +14,12 @@ export default async function ClassroomLayout({ children }: DashboardProps) {
   ]);
 
   return (
-    <div className="h-screen w-full flex flex-col">
+    <div className="h-[100dvh] w-full flex flex-col">
       <ClassroomHeader
         initialUserCourses={enrolledCoursesData.userCourses || []}
         initialActiveCourse={activeCourse}
       />
-      <div className="flex-1 lg:h-[calc(100vh-63px)] h-[calc(100vh-112px)] overflow-y-auto">
+      <div className="flex-1 lg:h-[calc(100dvh-63px)] h-[calc(100dvh-112px)] overflow-y-auto">
         <main className="w-full">{children}</main>
       </div>
     </div>

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Menu } from "lucide-react";
 import useClassroomSidebarStore from "@/stores/classroom-sidebar";
 import { SkipBack, SkipForward } from "@phosphor-icons/react/dist/ssr";
-import codeLegendsLogoMobile from "../../../public/code-legends-logo-mobile.svg";
+import codeLegendsLogoMobile from "../../../public/logo-mobile.png";
 import { UserDropdown } from "../user-dropdown";
 import { StrikeSection } from "../strike-section";
 import { CourseDropdownMenu } from "../learn/course-menu";

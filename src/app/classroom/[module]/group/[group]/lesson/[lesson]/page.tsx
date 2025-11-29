@@ -314,10 +314,10 @@ export default function DynamicLessonPage() {
   const navigation = lessonData!.navigation;
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="flex h-[100dvh] w-full">
       {/* Sidebar com lista de aulas - apenas no desktop */}
       <aside
-        className={`hidden lg:block fixed left-0 top-[63px] bg-[#121214] border-r border-[#25252A] flex-shrink-0 h-[calc(100vh-63px)] overflow-hidden z-40 transition-all duration-300 ease-in-out ${
+        className={`hidden lg:block fixed left-0 top-[63px] bg-[#121214] border-r border-[#25252A] flex-shrink-0 h-[calc(100dvh-63px)] overflow-hidden z-40 transition-all duration-300 ease-in-out ${
           isSidebarOpen ? "w-[378px]" : "w-0"
         }`}
       >
@@ -341,7 +341,7 @@ export default function DynamicLessonPage() {
       <div
         className={`flex-1 w-full lg:bg-[radial-gradient(circle_at_center,_#627fa1_0%,_#121214_70%)]
              bg-[radial-gradient(circle_at_center,_#344c68_0%,_#121214_70%)]
-             text-white h-screen shadow-2xl shadow-[#00C8FF]/10 flex flex-col transition-all duration-300 ease-in-out pt-[112px] lg:pt-0 ${
+             text-white h-[100dvh] shadow-2xl shadow-[#00C8FF]/10 flex flex-col transition-all duration-300 ease-in-out pt-[112px] lg:pt-0 ${
                isSidebarOpen ? "lg:ml-[378px]" : "lg:ml-0"
              }`}
       >
