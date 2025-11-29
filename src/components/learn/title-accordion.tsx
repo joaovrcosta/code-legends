@@ -82,8 +82,10 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
     <>
       <Accordion type="single" collapsible className="mt-4">
         <AccordionItem value="item-1">
-          <div className="w-full mx-auto lg:rounded-[20px] rounded-none bg-[#0C0C0F] border border-[#2A2A2A] shadow-xl mb-4">
-            <AccordionTrigger className="group w-full lg:px-8 px-6 lg:py-8 py-6">
+          <div className="w-full mx-auto lg:rounded-[20px] rounded-none bg-[#0C0C0F] border border-[#2A2A2A] shadow-xl mb-4
+            border-l-0 border-r-0 lg:border-l lg:border-r"
+          >
+            <AccordionTrigger className="group w-full lg:px-8 px-6 lg:py-8 py-4">
               <div className="flex justify-between w-full items-center">
                 <div>
                   <span className="lg:block hidden bg-blue-gradient-500 bg-clip-text text-transparent lg:text-[20px] text-[16px] font-bold">
@@ -127,13 +129,13 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
                       e.stopPropagation();
                       handleMarkAsWatched();
                     }}
-                    className={`flex-1 flex items-center justify-center gap-2 border px-3 py-2 rounded-full text-sm text-white whitespace-nowrap font-normal transition-all ${
+                    className={`flex-1 flex items-center shadow-2xl justify-center gap-2 border px-3 py-2 rounded-[14px] text-sm text-white whitespace-nowrap font-normal transition-all ${
                       isMarking || isMarked || !currentLesson
                         ? "opacity-50 cursor-not-allowed"
                         : "cursor-pointer hover:border-green-500"
                     } ${
                       isMarked
-                        ? "border-green-500 bg-green-500/10"
+                        ? "bg-[#25252a] border-none"
                         : "border-[#25252A]"
                     }`}
                   >
@@ -141,13 +143,13 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
                       size={16}
                       className={isMarked ? "text-green-500" : "text-green-500"}
                     />
-                    {isMarking
+                   <p className="font-semibold"> {isMarking
                       ? "Marcando..."
                       : isMarked
                       ? "Completa"
-                      : "Completar"}
+                      : "Completar"}</p>
                   </div>
-                  <div className="flex items-center gap-2 border border-[#25252A] px-3 py-2 rounded-full text-sm text-white whitespace-nowrap font-normal shrink-0">
+                  <div className="flex items-center gap-2 border border-[#25252A] px-3 py-2 rounded-[14px] text-sm text-white whitespace-nowrap font-normal shrink-0">
                     <MessageCircle size={20} />
                   </div>
                 </div>

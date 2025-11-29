@@ -378,7 +378,7 @@ export default function DynamicLessonPage() {
           <div className="flex justify-between w-full m-0 p-0">
             <Button
               variant="outline"
-              className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] bg-black rounded-none text-base border-none 
+              className="h-[54px] lg:min-h-[84px] w-1/2 max-w-[320px] bg-black rounded-none text-base border-none 
       rounded-bl-none disabled:opacity-50"
               onClick={() => {
                 if (navigation?.previous) {
@@ -402,7 +402,7 @@ export default function DynamicLessonPage() {
                 variant="outline"
                 onClick={handleUnlockNext}
                 disabled={isUnlocking}
-                className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-blue-gradient-500 border-none
+                className="h-[54px] lg:min-h-[84px] w-1/2 max-w-[320px] rounded-none text-base bg-blue-gradient-500 border-none
       rounded-br-none disabled:opacity-50"
               >
                 {isUnlocking ? (
@@ -426,7 +426,7 @@ export default function DynamicLessonPage() {
                   }
                 }}
                 disabled={!navigation?.next || lessonData.status !== "completed"}
-                className="h-[64px] lg:min-h-[84px] w-1/2 max-w-[320px] text-base bg-black border-none
+                className="h-[54px] lg:min-h-[84px] w-1/2 max-w-[320px] text-base bg-black border-none
       disabled:opacity-50"
               >
                 Próxima aula <SkipForward weight="fill" size={16} />

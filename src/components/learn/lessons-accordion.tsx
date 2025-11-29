@@ -109,7 +109,7 @@ export function LessonsAccordion() {
             </div>
           </AccordionTrigger>
 
-          <AccordionContent className="lg:px-8 px-6 pb-8 text-white max-h-[400px] overflow-y-auto">
+          <AccordionContent className="lg:px-8 px-6 pb-8 text-white overflow-y-auto">
             <div className="flex flex-col gap-4">
               {currentModule?.groups.map((group) => (
                 <div key={group.id} className="space-y-2">
