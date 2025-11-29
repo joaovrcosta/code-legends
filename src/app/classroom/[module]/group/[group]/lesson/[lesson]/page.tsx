@@ -341,12 +341,12 @@ export default function DynamicLessonPage() {
       <div
         className={`flex-1 w-full lg:bg-[radial-gradient(circle_at_center,_#627fa1_0%,_#121214_70%)]
              bg-[radial-gradient(circle_at_center,_#344c68_0%,_#121214_70%)]
-             text-white h-screen shadow-2xl shadow-[#00C8FF]/10 flex flex-col transition-all duration-300 ease-in-out ${
+             text-white h-screen shadow-2xl shadow-[#00C8FF]/10 flex flex-col transition-all duration-300 ease-in-out pt-[112px] lg:pt-0 ${
                isSidebarOpen ? "lg:ml-[378px]" : "lg:ml-0"
              }`}
       >
         {/* Header */}
-        <header className="h-[63px] py-4 pb-0 bg-transparent rounded-t-[20px] lg:border-b lg:border-[#25252A] border-none lg:mb-2 mb-0 flex-shrink-0">
+        <header className="h-[63px] py-4 pb-0 bg-transparent rounded-t-[20px] lg:border-b lg:border-[#25252A] border-none lg:mb-2 mb-0 flex-shrink-0 lg:block hidden">
           <div className="flex items-center justify-between w-full px-4">
             <div className="lg:hidden flex">
               <Menu size={32} className="text-white" />

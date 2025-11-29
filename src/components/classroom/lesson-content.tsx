@@ -23,8 +23,8 @@ export const LessonContent = memo(function LessonContent({
 }: LessonContentProps) {
   return (
     <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-      {/* Header do conteúdo - sticky apenas no scroll do container principal */}
-      <div className="sticky top-0 z-50 lg:px-4 px-0 lg:pt-2 pt-0">
+      {/* Header do conteúdo - apenas no desktop */}
+      <div className="sticky top-0 z-50 lg:px-4 px-0 lg:pt-2 pt-0 hidden lg:block">
         <LessonHeader
           courseTitle={courseTitle}
           moduleTitle={moduleTitle}

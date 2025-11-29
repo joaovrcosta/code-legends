@@ -41,7 +41,7 @@ export function LessonsAccordion() {
   }, [roadmap]);
 
   const handleLessonClick = useCallback(
-    (lesson: Lesson, index: number) => {
+    (lesson: Lesson, _: number) => {
       if (lesson.status === "locked") return;
       if (!roadmap?.modules) return;
 
