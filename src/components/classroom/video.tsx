@@ -2,6 +2,7 @@ import Image from "next/image";
 import notFoundImg from "../../../public/not-found.png";
 import { TitleAccordion } from "../learn/title-accordion";
 import { LevelAccordion } from "../learn/level-accordion";
+import { LessonsAccordion } from "../learn/lessons-accordion";
 
 interface VideoComponentProps {
   src?: string | null;
@@ -44,7 +45,7 @@ export default function VideoComponent({
   return (
     <div className="flex flex-col lg:px-0 px-0 h-full">
       {/* Header mobile */}
-      <div className="lg:hidden flex items-center justify-center lg:py-6 py-0 mb-6">
+      <div className="lg:hidden flex items-center justify-center lg:py-6 py-0 my-6 px-2">
         <div className="flex flex-col items-center">
           <p className="text-sm font-light text-[#787878]">Chapter 1</p>
           <h3 className="text-[20px] text-center">{title || "Iniciando com ReactJS"}</h3>
@@ -77,8 +78,11 @@ export default function VideoComponent({
       </div>
 
       {/* Acordeões */}
-      <TitleAccordion title={title} description={description} />
-      <LevelAccordion />
+    <div className="">
+    <TitleAccordion title={title} description={description} />
+    <LevelAccordion />
+    <LessonsAccordion />
+    </div>
       
     </div>
   );

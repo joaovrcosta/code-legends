@@ -82,17 +82,17 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
     <>
       <Accordion type="single" collapsible className="mt-4">
         <AccordionItem value="item-1">
-          <div className="w-full mx-auto rounded-[20px] bg-[#0C0C0F] border border-[#2A2A2A] shadow-xl mb-4">
+          <div className="w-full mx-auto lg:rounded-[20px] rounded-none bg-[#0C0C0F] border border-[#2A2A2A] shadow-xl mb-4">
             <AccordionTrigger className="group w-full lg:px-8 px-6 lg:py-8 py-6">
               <div className="flex justify-between w-full items-center">
                 <div>
-                  <span className="bg-blue-gradient-500 bg-clip-text text-transparent lg:text-[20px] text-[16px] font-bold">
+                  <span className="lg:block hidden bg-blue-gradient-500 bg-clip-text text-transparent lg:text-[20px] text-[16px] font-bold">
                     {title}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-1">
-                  <div className="lg:flex hidden items-center gap-2 border border-[#25252A] px-3 py-1 rounded-full text-sm text-white whitespace-nowrap mr-4 font-normal">
+                  <div className="lg:flex hidden items-center gap-2 border border-[#25252A] px-3 py-2 rounded-full text-sm text-white whitespace-nowrap mr-4 font-normal">
                     <MessageCircle size={16} /> 3 comentários
                   </div>
                   <div
@@ -100,7 +100,7 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
                       e.stopPropagation();
                       handleMarkAsWatched();
                     }}
-                    className={`lg:flex hidden items-center gap-2 border px-3 py-1 rounded-full text-sm text-white whitespace-nowrap mr-4 font-normal transition-all ${
+                    className={`lg:flex hidden items-center gap-2 border px-3 py-2 rounded-full text-sm text-white whitespace-nowrap mr-4 font-normal transition-all ${
                       isMarking || isMarked || !currentLesson
                         ? "opacity-50 cursor-not-allowed"
                         : "cursor-pointer hover:border-green-500"
@@ -117,20 +117,17 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
                     {isMarking
                       ? "Marcando..."
                       : isMarked
-                      ? "Completado"
+                      ? "Completa"
                       : "Completar lição"}
                   </div>
                 </div>
-                <div className="lg:hidden flex flex-col items-center gap-2">
-                  {/* <div className="flex items-center gap-2 border border-[#25252A] px-3 py-1 rounded-full text-sm text-white whitespace-nowrap font-normal">
-                    <MessageCircle size={16} />
-                  </div> */}
+                <div className="lg:hidden flex flex-row items-center gap-2 w-full">
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
                       handleMarkAsWatched();
                     }}
-                    className={`flex items-center gap-2 border px-3 py-1 rounded-full text-sm text-white whitespace-nowrap font-normal transition-all ${
+                    className={`flex-1 flex items-center justify-center gap-2 border px-3 py-2 rounded-full text-sm text-white whitespace-nowrap font-normal transition-all ${
                       isMarking || isMarked || !currentLesson
                         ? "opacity-50 cursor-not-allowed"
                         : "cursor-pointer hover:border-green-500"
@@ -147,15 +144,18 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
                     {isMarking
                       ? "Marcando..."
                       : isMarked
-                      ? "Completado"
+                      ? "Completa"
                       : "Completar"}
+                  </div>
+                  <div className="flex items-center gap-2 border border-[#25252A] px-3 py-2 rounded-full text-sm text-white whitespace-nowrap font-normal shrink-0">
+                    <MessageCircle size={20} />
                   </div>
                 </div>
               </div>
             </AccordionTrigger>
 
             <AccordionContent className="lg:px-8 px-6 pb-8 text-white">
-              <p className="lg:text-sm text-xs text-muted-foreground font-normal mb-4">
+              <p className="lg:text-sm text-xs text-muted-foreground font-normal mb-6">
                 {description}
               </p>
               <div className="flex items-center gap-3 mt-4">
