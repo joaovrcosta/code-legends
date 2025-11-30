@@ -138,19 +138,24 @@ export const LessonsList = memo(function LessonsList({
         [&::-webkit-scrollbar-thumb]:bg-zinc-700/40
         [&::-webkit-scrollbar-thumb]:rounded-full
         hover:[&::-webkit-scrollbar-thumb]:bg-zinc-600 scrollbar-thumb-zinc-800">
-      {/* Cabeçalho do Módulo */}
-      <div className="sticky top-0 z-20 bg-[#121214]/95 backdrop-blur px-4 py-6 border-b border-zinc-900">
-        <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1 block">
-          {currentModuleNumber !== -1
-            ? `Módulo ${String(currentModuleNumber + 1).padStart(2, "0")}`
-            : "Módulo"}
-        </span>
-        <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-[24px]">
-          {currentModule?.title || "Carregando..."}
-        </span>
+      {/* Container do cabeçalho com fade */}
+      <div className="sticky top-0 z-20">
+        {/* Cabeçalho do Módulo */}
+        <div className="bg-[#121214]/95 backdrop-blur px-4 py-6 lg border-b border-zinc-900">
+          <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1 block">
+            {currentModuleNumber !== -1
+              ? `Módulo ${String(currentModuleNumber + 1).padStart(2, "0")}`
+              : "Módulo"}
+          </span>
+          <span className="bg-blue-gradient-500 bg-clip-text text-transparent font-bold text-[24px]">
+            {currentModule?.title || "Carregando..."}
+          </span>
+        </div>
+        {/* Fade escuro na parte inferior do cabeçalho */}
+        <div className="pointer-events-none h-8 w-full bg-gradient-to-t from-transparent to-[#101010]" />
       </div>
 
-      <div className="px-4 py-6">
+      <div className="px-4 pt-0 pb-6">
         <div className="flex flex-col gap-6">
           {currentModule?.groups.map((group, groupIndex) => {
             const isLastGroup = groupIndex === currentModule.groups.length - 1;
