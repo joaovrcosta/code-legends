@@ -186,7 +186,7 @@ export function CatalogCard({
       </div>
 
       <div className="flex items-center justify-between pr-4 pl-4 pb-4">
-        <div className="flex items-center gap-2  text-green-500 text-xs">
+        <div className="flex items-center gap-2  text-[#00c0f5] text-xs">
           <ChartNoAxesColumnIncreasing size={16} />
           <p className="">
             Para{" "}
@@ -209,7 +209,7 @@ export function CatalogCard({
             <div className="flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:text-[#35BED5]">
               <Check
                 size={20}
-                className="text-green-500 hover:text-[#35BED5]"
+                className="text-[#00c0f5] hover:text-[#35BED5]"
               />
             </div>
           ) : (

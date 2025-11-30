@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Loader2 } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -9,10 +9,11 @@ import {
 } from "../ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Check } from "@phosphor-icons/react/dist/ssr";
-import { continueCourse } from "@/actions/course";
+import { continueCourse, type CompleteLessonResponse } from "@/actions/course";
 import { useState, useEffect } from "react";
 import { useActiveCourseStore } from "@/stores/active-course-store";
 import { useCourseModalStore } from "@/stores/course-modal-store";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface TitleAccordinProps {
   title: string | undefined;
@@ -21,6 +22,8 @@ interface TitleAccordinProps {
 
 export function TitleAccordion({ title, description }: TitleAccordinProps) {
   const [isMarking, setIsMarking] = useState(false);
+  const [showXpPopup, setShowXpPopup] = useState(false);
+  const [xpData, setXpData] = useState<CompleteLessonResponse | null>(null);
   const { activeCourse, fetchActiveCourse } = useActiveCourseStore();
   const { currentLesson, updateCurrentLessonStatus } = useCourseModalStore();
 
@@ -58,12 +61,23 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
         throw new Error("A API não retornou sucesso ao completar a lição");
       }
 
+      // Armazena os dados de XP
+      setXpData(result);
+
+      // Mostra popup de XP se houver XP ganho
+      if (result.xpGained && result.xpGained > 0) {
+        setShowXpPopup(true);
+        // Remove o popup após 2 segundos
+        setTimeout(() => {
+          setShowXpPopup(false);
+        }, 2000);
+      }
+
       // Atualiza o status da lição atual no modal imediatamente
       updateCurrentLessonStatus("completed");
 
       // Atualiza o curso ativo para refletir o progresso
       await fetchActiveCourse();
-      ;
     } catch (error) {
       console.error("Erro ao marcar como assistido:", error);
       const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
@@ -85,7 +99,24 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
           <div className="w-full mx-auto lg:rounded-[20px] rounded-none bg-[#0C0C0F] border border-[#2A2A2A] shadow-xl mb-4
             border-l-0 border-r-0 lg:border-l lg:border-r"
           >
-            <AccordionTrigger className="group w-full lg:px-8 px-6 lg:py-8 py-4">
+            <AccordionTrigger className="group w-full lg:px-8 px-6 lg:py-8 py-4 relative">
+              {/* Popup de XP único - posicionado acima do botão correto */}
+              <AnimatePresence>
+                {showXpPopup && xpData?.xpGained && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, y: -40, scale: 1 }}
+                    exit={{ opacity: 0, y: -60, scale: 0.8 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="absolute z-50 pointer-events-none lg:right-[120px] lg:top-4 right-1/2 top-4 translate-x-1/2 lg:translate-x-0"
+                  >
+                    <div className="bg-[#00c0f5] text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg shadow-[#00c0f5]/50 whitespace-nowrap">
+                      +{xpData.xpGained} XP
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              
               <div className="flex justify-between w-full items-center">
                 <div>
                   <span className="lg:block hidden bg-blue-gradient-500 bg-clip-text text-transparent lg:text-[20px] text-[16px] font-bold">
@@ -97,58 +128,123 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
                   <div className="lg:flex hidden items-center gap-2 border border-[#25252A] px-3 py-2 rounded-full text-sm text-white whitespace-nowrap mr-4 font-normal">
                     <MessageCircle size={16} /> 3 comentários
                   </div>
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleMarkAsWatched();
-                    }}
-                    className={`lg:flex hidden items-center gap-2 border px-3 py-2 rounded-full text-sm text-white whitespace-nowrap mr-4 font-normal transition-all ${
-                      isMarking || isMarked || !currentLesson
-                        ? "opacity-50 cursor-not-allowed"
-                        : "cursor-pointer hover:border-[#00b3e4]"
-                    } ${
-                      isMarked
-                        ? "border-[#00b3e4] bg-green-500/10"
-                        : "border-[#25252A]"
-                    }`}
-                  >
-                    <Check
-                        weight="bold"
-                        className={isMarked ? "text-[#00b3e4]" : "text-[#00b3e4]"}
-                    />{" "}
-                    {isMarking
-                      ? "Marcando..."
-                      : isMarked
-                      ? "Completa"
-                      : "Completar lição"}
+                  <div className="relative">
+                    <motion.div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMarkAsWatched();
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                      animate={{
+                        backgroundColor: isMarked
+                          ? "rgba(0, 192, 245, 0.1)"
+                          : isMarking
+                          ? "rgba(6, 182, 212, 0.1)"
+                          : "transparent",
+                        borderColor: isMarked
+                          ? "#00c0f5"
+                          : isMarking
+                          ? "#06b6d4"
+                          : "#25252A",
+                        boxShadow: isMarked
+                          ? "0 0 20px rgba(0, 192, 245, 0.3)"
+                          : isMarking
+                          ? "0 0 15px rgba(6, 182, 212, 0.2)"
+                          : "none",
+                      }}
+                      transition={{ duration: 0.2 }}
+                      className={`lg:flex hidden items-center gap-2 border px-3 py-2 rounded-full text-sm text-white whitespace-nowrap mr-4 font-normal relative ${
+                        isMarking || isMarked || !currentLesson
+                          ? "opacity-50 cursor-not-allowed"
+                          : "cursor-pointer hover:border-[#00b3e4]"
+                      }`}
+                    >
+                      <motion.div
+                        animate={{
+                          rotate: isMarked ? [0, 360] : 0,
+                        }}
+                        transition={{
+                          duration: 0.5,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        {isMarking ? (
+                          <Loader2 size={16} className="animate-spin text-[#00b3e4]" />
+                        ) : (
+                          <Check
+                            weight="bold"
+                            size={16}
+                            className={isMarked ? "text-[#00c0f5]" : "text-[#00b3e4]"}
+                          />
+                        )}
+                      </motion.div>
+                      {isMarking
+                        ? "Marcando..."
+                        : isMarked
+                        ? "Completa"
+                        : "Completar lição"}
+                    </motion.div>
                   </div>
                 </div>
                 <div className="lg:hidden flex flex-row items-center gap-2 w-full">
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleMarkAsWatched();
-                    }}
-                    className={`flex-1 flex items-center shadow-2xl justify-center gap-2 border px-3 py-2 rounded-[14px] text-sm text-white whitespace-nowrap font-normal transition-all ${
-                      isMarking || isMarked || !currentLesson
-                        ? "opacity-50 cursor-not-allowed"
-                        : "cursor-pointer hover:border-green-500"
-                    } ${
-                      isMarked
-                        ? "bg-[#25252a] border-none"
-                        : "border-[#25252A]"
-                    }`}
-                  >
-                    <Check
-                      size={16}
-                      weight="bold"
-                      className={isMarked ? "text-[#00b3e4]" : "text-[#00b3e4]"}
-                    />
-                   <p className="font-semibold"> {isMarking
-                      ? "Marcando..."
-                      : isMarked
-                      ? "Completa"
-                      : "Completar"}</p>
+                  <div className="relative flex-1">
+                    <motion.div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMarkAsWatched();
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                      animate={{
+                        backgroundColor: isMarked
+                          ? "rgba(0, 192, 245, 0.1)"
+                          : isMarking
+                          ? "rgba(6, 182, 212, 0.1)"
+                          : "transparent",
+                        borderColor: isMarked
+                          ? "#00c0f5"
+                          : isMarking
+                          ? "#06b6d4"
+                          : "#25252A",
+                        boxShadow: isMarked
+                          ? "0 0 20px rgba(0, 192, 245, 0.3)"
+                          : isMarking
+                          ? "0 0 15px rgba(6, 182, 212, 0.2)"
+                          : "none",
+                      }}
+                      transition={{ duration: 0.2 }}
+                      className={`flex items-center shadow-2xl justify-center gap-2 border px-3 py-2 rounded-[14px] text-sm text-white whitespace-nowrap font-normal relative ${
+                        isMarking || isMarked || !currentLesson
+                          ? "opacity-50 cursor-not-allowed"
+                          : "cursor-pointer hover:border-[#00c0f5]"
+                      }`}
+                    >
+                      <motion.div
+                        animate={{
+                          rotate: isMarked ? [0, 360] : 0,
+                        }}
+                        transition={{
+                          duration: 0.5,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        {isMarking ? (
+                          <Loader2 size={16} className="animate-spin text-[#00b3e4]" />
+                        ) : (
+                          <Check
+                            size={16}
+                            weight="bold"
+                            className={isMarked ? "text-[#00c0f5]" : "text-[#00b3e4]"}
+                          />
+                        )}
+                      </motion.div>
+                      <p className="font-semibold">
+                        {isMarking
+                          ? "Marcando..."
+                          : isMarked
+                          ? "Completa"
+                          : "Completar"}
+                      </p>
+                    </motion.div>
                   </div>
                   <div className="flex items-center gap-2 border border-[#25252A] px-3 py-2 rounded-[14px] text-sm text-white whitespace-nowrap font-normal shrink-0">
                     <MessageCircle size={20} />

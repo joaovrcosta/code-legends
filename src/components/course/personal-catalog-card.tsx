@@ -79,7 +79,7 @@ export function PersonalCatalog({
                   isLoading ? "opacity-50 cursor-not-allowed" : ""
                 } ${
                   isCurrent
-                    ? "bg-green-600 text-white hover:bg-green-500"
+                    ? "bg-green-600 text-white hover:bg-[#00c0f5]"
                     : "border-[#25252A] bg-[#25252A] hover:border-[#35BED5] hover:bg-[#35BED5]"
                 }`}
                 onClick={handleStartCourse}

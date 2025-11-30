@@ -50,9 +50,9 @@ export default async function CertificatePage({
         <Card className="border-[#25252a] mb-6">
           <CardContent className="p-6">
             <div className="flex items-center justify-left space-x-3">
-              <CheckCircle2 className="w-8 h-8 text-green-500" />
+              <CheckCircle2 className="w-8 h-8 text-[#00c0f5]" />
               <div>
-                <p className="text-green-500 font-semibold text-lg">
+                <p className="text-[#00c0f5] font-semibold text-lg">
                   Certificado Válido
                 </p>
                 <p className="text-muted-foreground text-sm">

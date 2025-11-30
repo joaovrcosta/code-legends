@@ -58,7 +58,7 @@ const getLevelLabel = (level: string): string => {
 
 const getLevelColor = (level: string): string => {
   const colorMap: Record<string, string> = {
-    beginner: "text-green-500",
+    beginner: "text-[#00c0f5]",
     intermediate: "text-orange-500",
     advanced: "text-red-500",
   };

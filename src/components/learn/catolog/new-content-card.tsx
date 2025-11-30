@@ -35,7 +35,7 @@ export function NewContentCard() {
               </div>
               <div className="flex text-xs gap-2">
                 <p className="text-muted-foreground">Curso</p>
-                <p className="text-green-500">Para Iniciantes</p>
+                <p className="text-[#00c0f5]">Para Iniciantes</p>
               </div>
             </div>
 

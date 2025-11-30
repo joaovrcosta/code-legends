@@ -4,13 +4,23 @@ import { getAuthToken } from "../auth/session";
 import { revalidateTag, revalidatePath } from "next/cache";
 import { getActiveCourse } from "../user/get-active-course";
 
+export type CompleteLessonResponse = {
+  success: boolean;
+  xpGained?: number;
+  userXp?: {
+    totalXp: number;
+    level: number;
+    xpToNextLevel: number;
+  };
+};
+
 /**
  * Marca a lição atual como concluída e avança para a próxima
  */
 export async function continueCourse(
   lessonId: number,
   courseId?: string
-): Promise<{ success: boolean }> {
+): Promise<CompleteLessonResponse> {
   try {
     const token = await getAuthToken();
 
@@ -49,6 +59,9 @@ export async function continueCourse(
       );
     }
 
+    // Parse da resposta JSON com dados de XP
+    const data: CompleteLessonResponse = await response.json();
+
     // Invalida o cache do roadmap após marcar a lição como completa
     try {
       // Se courseId não foi fornecido, busca o curso ativo
@@ -65,7 +78,7 @@ export async function continueCourse(
       console.warn("Erro ao invalidar cache do roadmap:", cacheError);
     }
 
-    return { success: true };
+    return data;
   } catch (error) {
     console.error("Erro ao continuar curso:", error);
     throw error instanceof Error ? error : new Error("Erro ao continuar curso");
