@@ -17,6 +17,10 @@ import { useState, useMemo } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useRoadmapUpdater } from "@/hooks/use-roadmap-updater";
 import type { RoadmapResponse } from "@/types/roadmap";
+import { getCourseRoadmapFresh } from "@/actions/course";
+import { findLessonContext, generateLessonUrl } from "@/utils/lesson-url";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 interface ClassroomHeaderProps {
   initialUserCourses: EnrolledCourse[];
@@ -32,6 +36,7 @@ export default function ClassroomHeader({
   const { currentLesson } = useCourseModalStore();
   const [isAutoplay, setIsAutoplay] = useState(false);
   const [roadmap, setRoadmap] = useState<RoadmapResponse | null>(null);
+  const router = useRouter();
   
   // Custom hook gerencia toda a lógica de atualização do roadmap
   useRoadmapUpdater({
@@ -79,6 +84,62 @@ export default function ClassroomHeader({
       .filter(Boolean)
       .join(" / ");
   }, [currentActiveCourse?.title, moduleTitle, groupTitle]);
+
+  // Função para redirecionar para a primeira aula disponível
+  const handleBackClick = useCallback(async (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (!currentActiveCourse?.id) {
+      router.push("/learn");
+      return;
+    }
+
+    try {
+      // Busca o roadmap atualizado
+      const roadmapData = await getCourseRoadmapFresh(currentActiveCourse.id);
+      
+      if (roadmapData?.modules) {
+        // Coleta todas as aulas do roadmap
+        const allLessons = roadmapData.modules
+          .flatMap((module) => module?.groups || [])
+          .flatMap((group) => group?.lessons || []);
+
+        // PRIORIDADE 1: Encontra a aula atual (isCurrent) se não estiver bloqueada
+        let targetLesson = allLessons.find(
+          (lesson) => lesson.isCurrent && lesson.status !== "locked"
+        );
+        
+        // PRIORIDADE 2: Se não encontrou aula atual, busca a primeira desbloqueada
+        if (!targetLesson) {
+          targetLesson = allLessons.find((lesson) => lesson.status !== "locked");
+        }
+
+        if (targetLesson) {
+          // Encontra o contexto da aula
+          const context = findLessonContext(
+            targetLesson.id,
+            roadmapData.modules
+          );
+          
+          if (context) {
+            const url = generateLessonUrl(
+              targetLesson,
+              context.module,
+              context.group
+            );
+            router.push(url);
+            return;
+          }
+        }
+      }
+      
+      // Fallback: vai para /learn se não conseguir encontrar aula
+      router.push("/learn");
+    } catch (error) {
+      console.error("Erro ao buscar primeira aula disponível:", error);
+      router.push("/learn");
+    }
+  }, [currentActiveCourse?.id, router]);
 
   return (
     <div className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
@@ -150,11 +211,12 @@ export default function ClassroomHeader({
             <div className="flex items-center justify-between px-4 py-2">
               {/* Lado esquerdo */}
               <div className="flex items-center gap-3 flex-1 min-w-0 mr-3">
-                <Link href="/learn" className="flex items-center justify-center">
-                  <button className="flex-shrink-0 text-white hover:text-[#00C8FF] transition-colors">
-                    <ArrowLeft size={20} />
-                  </button>
-                </Link>
+                <button 
+                  onClick={handleBackClick}
+                  className="flex-shrink-0 text-white hover:text-[#00C8FF] transition-colors"
+                >
+                  <ArrowLeft size={20} />
+                </button>
 
                 <div className="h-6 w-px bg-[#25252A]" />
 

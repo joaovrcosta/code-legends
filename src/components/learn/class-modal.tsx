@@ -22,6 +22,7 @@ import { getCourseRoadmapFresh, unlockNextModule } from "@/actions/course";
 import type { RoadmapResponse } from "@/types/roadmap";
 import { useRoadmapUpdater } from "@/hooks/use-roadmap-updater";
 import { findLessonContext } from "@/utils/lesson-url";
+import { XpPopupOverlay } from "@/components/classroom/xp-popup-overlay";
 
 export const AulaModal = () => {
   const {
@@ -166,8 +167,10 @@ export const AulaModal = () => {
         className="w-full
              lg:bg-[radial-gradient(circle_at_center,_#627fa1_0%,_#121214_70%)]
              bg-[radial-gradient(circle_at_center,_#344c68_0%,_#121214_70%)]
-             text-white p-0 h-full shadow-2xl shadow-[#00C8FF]/10"
+             text-white p-0 h-full shadow-2xl shadow-[#00C8FF]/10 relative"
       >
+        {/* Overlay e popup de XP que cobre todo o modal */}
+        <XpPopupOverlay container="absolute" />
         {currentLesson && (
           <>
             <DialogHeader className="py-4 pb-0 bg-transparent rounded-t-[20px] lg:border-b lg:border-[#25252A] border-none lg:mb-2 mb-0">

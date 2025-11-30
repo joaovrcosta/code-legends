@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import notFoundImg from "../../../public/not-found.png";
 import { TitleAccordion } from "../learn/title-accordion";
@@ -75,6 +77,7 @@ export default function VideoComponent({
             />
           </div>
         )}
+        
       </div>
 
       {/* Acordeões */}

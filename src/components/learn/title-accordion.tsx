@@ -9,11 +9,12 @@ import {
 } from "../ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Check } from "@phosphor-icons/react/dist/ssr";
-import { continueCourse, type CompleteLessonResponse } from "@/actions/course";
+import { continueCourse } from "@/actions/course";
 import { useState, useEffect } from "react";
 import { useActiveCourseStore } from "@/stores/active-course-store";
 import { useCourseModalStore } from "@/stores/course-modal-store";
-import { motion, AnimatePresence } from "framer-motion";
+import { useXpPopupStore } from "@/stores/xp-popup-store";
+import { motion } from "framer-motion";
 
 interface TitleAccordinProps {
   title: string | undefined;
@@ -22,10 +23,9 @@ interface TitleAccordinProps {
 
 export function TitleAccordion({ title, description }: TitleAccordinProps) {
   const [isMarking, setIsMarking] = useState(false);
-  const [showXpPopup, setShowXpPopup] = useState(false);
-  const [xpData, setXpData] = useState<CompleteLessonResponse | null>(null);
   const { activeCourse, fetchActiveCourse } = useActiveCourseStore();
   const { currentLesson, updateCurrentLessonStatus } = useCourseModalStore();
+  const { showPopup } = useXpPopupStore();
 
   // Verifica se a lição atual já está marcada como completada
   const isMarked = currentLesson?.status === "completed";
@@ -61,16 +61,9 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
         throw new Error("A API não retornou sucesso ao completar a lição");
       }
 
-      // Armazena os dados de XP
-      setXpData(result);
-
       // Mostra popup de XP se houver XP ganho
       if (result.xpGained && result.xpGained > 0) {
-        setShowXpPopup(true);
-        // Remove o popup após 2 segundos
-        setTimeout(() => {
-          setShowXpPopup(false);
-        }, 2000);
+        showPopup(result);
       }
 
       // Atualiza o status da lição atual no modal imediatamente
@@ -100,23 +93,6 @@ export function TitleAccordion({ title, description }: TitleAccordinProps) {
             border-l-0 border-r-0 lg:border-l lg:border-r"
           >
             <AccordionTrigger className="group w-full lg:px-8 px-6 lg:py-8 py-4 relative">
-              {/* Popup de XP único - posicionado acima do botão correto */}
-              <AnimatePresence>
-                {showXpPopup && xpData?.xpGained && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, y: -40, scale: 1 }}
-                    exit={{ opacity: 0, y: -60, scale: 0.8 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="absolute z-50 pointer-events-none lg:right-[120px] lg:top-4 right-1/2 top-4 translate-x-1/2 lg:translate-x-0"
-                  >
-                    <div className="bg-[#00c0f5] text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg shadow-[#00c0f5]/50 whitespace-nowrap">
-                      +{xpData.xpGained} XP
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              
               <div className="flex justify-between w-full items-center">
                 <div>
                   <span className="lg:block hidden bg-blue-gradient-500 bg-clip-text text-transparent lg:text-[20px] text-[16px] font-bold">

@@ -16,6 +16,7 @@ import { useCourseModalStore } from "@/stores/course-modal-store";
 import useClassroomSidebarStore from "@/stores/classroom-sidebar";
 import type { RoadmapResponse } from "@/types/roadmap";
 import { generateLessonUrl, findLessonContext } from "@/utils/lesson-url";
+import { XpPopupOverlay } from "@/components/classroom/xp-popup-overlay";
 
 export default function DynamicLessonPage() {
   const params = useParams();
@@ -57,35 +58,44 @@ export default function DynamicLessonPage() {
       try {
         const data = await getLessonBySlug(activeCourse.id, lessonSlug);
         if (data) {
-          // VALIDAÇÃO: Se a aula estiver bloqueada, redireciona para a primeira desbloqueada
+          // VALIDAÇÃO: Se a aula estiver bloqueada, redireciona para a aula atual ou primeira desbloqueada
           if (data.status === "locked") {
-            // Carrega o roadmap para encontrar a primeira aula desbloqueada
+            // Carrega o roadmap para encontrar a aula atual ou primeira desbloqueada
             const roadmapData = await getCourseRoadmapFresh(activeCourse.id);
             if (roadmapData) {
               setRoadmap(roadmapData);
               
-              // Encontra a primeira aula desbloqueada
+              // Coleta todas as aulas do roadmap
               const allLessons = roadmapData.modules
                 .flatMap((module) => module?.groups || [])
                 .flatMap((group) => group?.lessons || []);
               
-              const firstUnlockedLesson = allLessons.find(
-                (lesson) => lesson.status !== "locked"
+              // PRIORIDADE 1: Encontra a aula atual (isCurrent) se não estiver bloqueada
+              let targetLesson = allLessons.find(
+                (lesson) => lesson.isCurrent && lesson.status !== "locked"
               );
               
-              if (firstUnlockedLesson) {
+              // PRIORIDADE 2: Se não encontrou aula atual, busca a primeira desbloqueada
+              if (!targetLesson) {
+                targetLesson = allLessons.find(
+                  (lesson) => lesson.status !== "locked"
+                );
+              }
+              
+              if (targetLesson) {
                 // Encontra o contexto da aula
                 const context = findLessonContext(
-                  firstUnlockedLesson.id,
+                  targetLesson.id,
                   roadmapData.modules
                 );
                 
                 if (context) {
                   const url = generateLessonUrl(
-                    firstUnlockedLesson,
+                    targetLesson,
                     context.module,
                     context.group
                   );
+                  // Redireciona para a aula atual/desbloqueada
                   router.replace(url); // Usa replace para não adicionar ao histórico
                   return;
                 }
@@ -106,6 +116,44 @@ export default function DynamicLessonPage() {
           };
           setLessonForPage(lessonWithStatus);
         } else {
+          // Se a aula não foi encontrada, tenta redirecionar para a aula atual
+          const roadmapData = await getCourseRoadmapFresh(activeCourse.id);
+          if (roadmapData) {
+            setRoadmap(roadmapData);
+            
+            const allLessons = roadmapData.modules
+              .flatMap((module) => module?.groups || [])
+              .flatMap((group) => group?.lessons || []);
+            
+            // Encontra a aula atual (isCurrent) se não estiver bloqueada
+            let targetLesson = allLessons.find(
+              (lesson) => lesson.isCurrent && lesson.status !== "locked"
+            );
+            
+            if (!targetLesson) {
+              targetLesson = allLessons.find(
+                (lesson) => lesson.status !== "locked"
+              );
+            }
+            
+            if (targetLesson) {
+              const context = findLessonContext(
+                targetLesson.id,
+                roadmapData.modules
+              );
+              
+              if (context) {
+                const url = generateLessonUrl(
+                  targetLesson,
+                  context.module,
+                  context.group
+                );
+                router.replace(url);
+                return;
+              }
+            }
+          }
+          
           setError("Aula não encontrada");
         }
       } catch (err) {
@@ -341,10 +389,12 @@ export default function DynamicLessonPage() {
       <div
         className={`flex-1 w-full lg:bg-[radial-gradient(circle_at_center,_#627fa1_0%,_#121214_70%)]
              bg-[radial-gradient(circle_at_center,_#344c68_0%,_#121214_70%)]
-             text-white shadow-2xl shadow-[#00C8FF]/10 flex flex-col transition-all duration-300 ease-in-out pt-[112px] lg:pt-0 ${
+             text-white shadow-2xl shadow-[#00C8FF]/10 flex flex-col transition-all duration-300 ease-in-out pt-[112px] lg:pt-0 relative ${
                isSidebarOpen ? "lg:ml-[378px]" : "lg:ml-0"
              }`}
       >
+        {/* Overlay e popup de XP que cobre apenas o conteúdo principal */}
+        <XpPopupOverlay container="absolute" />
         {/* Header */}
         <header className="h-[63px] py-4 pb-0 bg-transparent rounded-t-[20px] lg:border-b lg:border-[#25252A] border-none lg:mb-2 mb-0 flex-shrink-0 lg:block hidden">
           <div className="flex items-center justify-between w-full px-4">

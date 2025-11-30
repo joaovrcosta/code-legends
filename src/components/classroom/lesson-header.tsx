@@ -38,7 +38,7 @@ export const LessonHeader = memo(function LessonHeader({
             <button
               className="flex-shrink-0 text-white hover:text-[#00C8FF] transition-colors"
             >
-              <ArrowLeft size={20} />
+              <ArrowLeft size={24} />
             </button>
             </Link>
 
