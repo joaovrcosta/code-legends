@@ -1,4 +1,5 @@
-import { getActiveCourse, listModulesProgress } from "@/actions";
+import { listModulesProgress } from "@/actions/course";
+import { getActiveCourse } from "@/actions/user";
 import { ModulesListWrapper } from "@/components/learn/modules-list-wrapper";
 
 export default async function SectionsPage() {

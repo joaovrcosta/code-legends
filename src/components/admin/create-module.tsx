@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createModule } from "@/actions/actions";
+import { createModule } from "@/actions/admin";
 import { Card } from "../ui/card";
 
 export default function CreateModuleForm() {

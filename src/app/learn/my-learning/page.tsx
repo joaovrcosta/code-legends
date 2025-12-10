@@ -4,7 +4,7 @@ import { BookBookmarkIcon } from "@phosphor-icons/react/dist/ssr";
 import { Tabs } from "@/components/ui/tabs";
 import { LearningCard } from "@/components/learn/learning-card";
 import { useState, useEffect, useCallback } from "react";
-import { getMyLearning } from "@/actions";
+import { getMyLearning } from "@/actions/progress";
 import { getCourseRoadmap } from "@/actions/course";
 import type { MyLearningCourse } from "@/actions/progress/my-learning";
 import type { Lesson } from "@/types/roadmap";

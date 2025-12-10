@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createSubmodule } from "@/actions/actions"; // Importa a ação de criar submódulo
+import { createSubmodule } from "@/actions/admin";
 import { Card } from "../ui/card";
 
 export default function CreateSubmoduleForm() {
