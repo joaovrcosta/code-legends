@@ -38,7 +38,7 @@ export function MyCatalogCarousel({
         {/* Botão Adicionar */}
         <CarouselItem className="basis-auto">
           <Link href="/learn/catalog">
-            <div className="flex items-center justify-center rounded-[20px] transition-all duration-300 hover:scale-105 hover:backdrop-blur-lg cursor-pointer border bg-transparent border-[#25252A] gap-3 border-dashed text-sm px-6 hover:bg-[#25252A] h-full">
+            <div className="flex items-center justify-center rounded-[20px] transition-transform transition-colors duration-300 hover:scale-105 cursor-pointer border bg-transparent border-[#25252A] gap-3 border-dashed text-sm px-6 hover:bg-[#25252A] h-full">
               <Plus />
               <p>Adicionar</p>
             </div>

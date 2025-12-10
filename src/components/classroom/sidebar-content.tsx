@@ -17,7 +17,7 @@ export default function SidebarContent({ course }: SidebarContentProps) {
 
   return (
     <aside
-      className={`flex flex-col bg-[#121214] border-r-[1px] border-[#25252A] text-white transition-all duration-300 ease-in-out h-screen ${
+      className={`flex flex-col bg-[#121214] border-r-[1px] border-[#25252A] text-white transition-transform duration-300 ease-in-out h-screen ${
         isOpen ? "w-64" : "w-0"
       }`}
     >

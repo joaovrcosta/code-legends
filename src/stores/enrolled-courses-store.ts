@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { getUserEnrolledList } from "@/actions";
 import type { EnrolledCourse } from "@/types/user-course.ts";
+import { getUserEnrolledList } from "@/actions/progress";
 
 interface EnrolledCoursesStore {
   userCourses: EnrolledCourse[];

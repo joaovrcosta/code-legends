@@ -1,8 +1,8 @@
 import { FooterFixed } from "@/components/learn/footer-fixed";
 import LearnHeader from "@/components/learn/header";
 import Sidebar from "@/components/learn/sidebar";
-import { getUserEnrolledList } from "@/actions";
 import { getActiveCourse } from "@/actions/user/get-active-course";
+import { getUserEnrolledList } from "@/actions/progress";
 
 export default async function LearnLayout({
   children,

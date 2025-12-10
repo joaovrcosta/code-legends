@@ -49,7 +49,7 @@ export function PersonalCatalog({
 
   return (
     <div
-      className={`relative w-full lg:max-w-[416px] rounded-[16px] transition-all duration-300 hover:backdrop-blur-lg cursor-pointer
+      className={`relative w-full lg:max-w-[416px] rounded-[16px] transition-colors duration-300 cursor-pointer
     ${
       isCurrent
         ? "bg-blue-gradient-second border-[#35BED5]"

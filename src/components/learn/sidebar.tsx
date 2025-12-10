@@ -77,7 +77,7 @@ const Sidebar = () => {
                       {isActive && <CaretRight size={28} />}
                     </div>
                     {isActive && (
-                      <div className="absolute right-0 top-0 h-full w-10 bg-blue-500 blur-xl opacity-50 z-50"></div>
+                      <div className="absolute right-0 top-0 h-full w-10 bg-blue-500 blur-xl opacity-50 z-50 will-change-[opacity]"></div>
                     )}
                   </Link>
                 </li>

@@ -40,6 +40,35 @@ export function CourseDropdownMenu({
     }
   }, [initialActiveCourse, activeCourse, setActiveCourse]);
 
+  // Fecha o dropdown durante o resize para evitar reposicionamento constante do Popper
+  useEffect(() => {
+    let timeoutRef: NodeJS.Timeout | null = null;
+    
+    const handleResize = () => {
+      // Fecha o dropdown imediatamente ao detectar resize
+      if (open) {
+        setOpen(false);
+      }
+    };
+
+    // Debounce para evitar fechar múltiplas vezes durante resize contínuo
+    const debouncedHandleResize = () => {
+      if (timeoutRef) {
+        clearTimeout(timeoutRef);
+      }
+      timeoutRef = setTimeout(handleResize, 100);
+    };
+
+    window.addEventListener("resize", debouncedHandleResize);
+    
+    return () => {
+      window.removeEventListener("resize", debouncedHandleResize);
+      if (timeoutRef) {
+        clearTimeout(timeoutRef);
+      }
+    };
+  }, [open]);
+
   // Usa o activeCourse do store se disponível, senão usa o inicial
   const currentActiveCourse = activeCourse || initialActiveCourse;
 

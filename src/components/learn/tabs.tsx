@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
@@ -18,20 +18,11 @@ const tabs = [
 export function Tabs() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(tabs[0].id);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
-    <div className="w-full flex items-center lg:block hidden z-50">
-      {isMobile ? (
+    <div className="w-full flex items-center z-50">
+      {/* Sheet para mobile (sm e md) */}
+      <div className="md:hidden block">
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" className="ml-4">
@@ -56,33 +47,34 @@ export function Tabs() {
             </div>
           </SheetContent>
         </Sheet>
-      ) : (
-        <div className="w-full flex lg:space-x-[5.4rem] md:space-x-3 ml-4">
-          {tabs.map((tab) => (
-            <div key={tab.id} className="relative group">
-              <Button
-                variant={activeTab === tab.id ? "ghost" : "outline"}
-                onClick={() => {
-                  setActiveTab(tab.id);
-                  router.push(tab.path);
-                }}
-                className={`relative z-10 px-4 py-2 rounded-xl transition duration-300 ${
-                  activeTab === tab.id
-                    ? "text-white hover:bg-transparent hover:text-white"
-                    : "text-white border-none bg-transparent hover:bg-transparent hover:text-white font-normal"
-                }`}
-              >
-                {tab.label}
-              </Button>
-              <div
-                className={`absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500 ${
-                  activeTab === tab.id ? "opacity-100" : "opacity-0"
-                }`}
-              ></div>
-            </div>
-          ))}
-        </div>
-      )}
+      </div>
+
+      {/* Tabs para desktop (md e acima) */}
+      <div className="w-full hidden md:flex lg:space-x-[5.4rem] md:space-x-3 ml-4">
+        {tabs.map((tab) => (
+          <div key={tab.id} className="relative group">
+            <Button
+              variant={activeTab === tab.id ? "ghost" : "outline"}
+              onClick={() => {
+                setActiveTab(tab.id);
+                router.push(tab.path);
+              }}
+              className={`relative z-10 px-4 py-2 rounded-xl transition duration-300 ${
+                activeTab === tab.id
+                  ? "text-white hover:bg-transparent hover:text-white"
+                  : "text-white border-none bg-transparent hover:bg-transparent hover:text-white font-normal"
+              }`}
+            >
+              {tab.label}
+            </Button>
+            <div
+              className={`absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500 will-change-[opacity] ${
+                activeTab === tab.id ? "opacity-100" : "opacity-0"
+              }`}
+            ></div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

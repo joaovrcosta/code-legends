@@ -27,7 +27,7 @@ export default function Header() {
     <div
       className={`fixed top-0 left-0 w-full z-50 lg:py-4 py-3 transition-colors duration-300 lg:px-0 px-4 ${
         scrolled
-          ? "bg-[#121214]/50 backdrop-blur-md border-b border-white/10 shadow-md"
+          ? "bg-[#121214]/80 border-b border-white/10 shadow-md"
           : "lg:bg-transparent bg-[#121214]"
       }`}
     >
@@ -94,7 +94,7 @@ export default function Header() {
                 href=""
                 className="relative p-3 flex space-x-2 rounded-xl px-8 hover:text-white group"
               >
-                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500"></span>
+                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500 will-change-[opacity]"></span>
                 <Image src={circleIcon} alt="" />
                 <span className="text-sm text-[#c4c4cc]">
                   Conteúdos gratuitos
@@ -106,7 +106,7 @@ export default function Header() {
                 href=""
                 className="relative p-3 flex space-x-2 rounded-xl px-8 hover:text-white group"
               >
-                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500"></span>
+                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500 will-change-[opacity]"></span>
                 <span className="text-sm text-[#c4c4cc]">Cursos</span>
               </a>
             </li>
@@ -115,7 +115,7 @@ export default function Header() {
                 href=""
                 className="relative p-3 flex space-x-2 rounded-xl px-8 hover:text-white group"
               >
-                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500"></span>
+                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500 will-change-[opacity]"></span>
                 <span className="text-sm text-[#c4c4cc]">Contato</span>
               </a>
             </li>
@@ -124,7 +124,7 @@ export default function Header() {
             <li className="ml-4">
               <Link href="/login" className="flex gap-2 px-4">
                 <User size={20} />
-                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500"></span>
+                <span className="absolute inset-0 -z-10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl bg-gradient-to-r from-[#00c8ff] via-[rgb(0 78 99)] to-blue-500 will-change-[opacity]"></span>
                 <span className="text-sm text-[#c4c4cc]">LOGIN</span>
               </Link>
             </li>

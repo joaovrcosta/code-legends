@@ -141,7 +141,7 @@ export const LessonsList = memo(function LessonsList({
       {/* Container do cabeçalho com fade */}
       <div className="sticky top-0 z-20">
         {/* Cabeçalho do Módulo */}
-        <div className="bg-[#121214]/95 backdrop-blur px-4 py-6 lg border-b border-zinc-900">
+        <div className="bg-[#121214]/98 px-4 py-6 lg border-b border-zinc-900">
           <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-1 block">
             {currentModuleNumber !== -1
               ? `Módulo ${String(currentModuleNumber + 1).padStart(2, "0")}`
@@ -210,7 +210,7 @@ export const LessonsList = memo(function LessonsList({
                           <button
                             onClick={() => handleLessonClick(lesson, lessonIndexInAll)}
                             disabled={isLocked}
-                            className={`group relative flex items-center gap-3 w-full py-2 px-3 rounded-[12px] transition-all duration-200 text-left ${
+                            className={`group relative flex items-center gap-3 w-full py-2 px-3 rounded-[12px] transition-colors duration-200 text-left ${
                               isActive
                                 ? "bg-zinc-800/50"
                                 : "hover:bg-zinc-800/30"

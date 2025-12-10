@@ -407,6 +407,35 @@ export function LearnPageContent({
     setOpenPopover((prev) => (prev === id ? null : id));
   };
 
+  // Fecha popovers durante o resize para evitar reposicionamento constante do Popper
+  useEffect(() => {
+    let timeoutRef: NodeJS.Timeout | null = null;
+    
+    const handleResize = () => {
+      // Fecha o popover imediatamente ao detectar resize
+      if (openPopover !== null) {
+        setOpenPopover(null);
+      }
+    };
+
+    // Debounce para evitar fechar múltiplas vezes durante resize contínuo
+    const debouncedHandleResize = () => {
+      if (timeoutRef) {
+        clearTimeout(timeoutRef);
+      }
+      timeoutRef = setTimeout(handleResize, 100);
+    };
+
+    window.addEventListener("resize", debouncedHandleResize);
+    
+    return () => {
+      window.removeEventListener("resize", debouncedHandleResize);
+      if (timeoutRef) {
+        clearTimeout(timeoutRef);
+      }
+    };
+  }, [openPopover]);
+
   const handleUnlockNext = async () => {
     if (!nextLockedModule || !currentActiveCourse?.id) return;
 

@@ -1,8 +1,9 @@
 import { AccountAsideMenu } from "@/components/account/aside-menu";
 import { FooterFixed } from "@/components/learn/footer-fixed";
 import LearnHeader from "@/components/learn/header";
-import { getUserEnrolledList } from "@/actions";
 import { getActiveCourse } from "@/actions/user/get-active-course";
+import { getUserEnrolledList } from "@/actions/progress";
+
 
 export default async function AccountLayout({
   children,

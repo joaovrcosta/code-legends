@@ -87,7 +87,7 @@ export default function ClassroomHeader({
           <li className="flex items-center lg:space-x-6">
             <button
               onClick={toggleSidebar}
-              className="text-white p-1 border border-[#25252a] rounded-lg lg:block hidden hover:bg-[#25252a] transition-all duration-150 ease-in-out"
+              className="text-white p-1 border border-[#25252a] rounded-lg lg:block hidden hover:bg-[#25252a] transition-colors duration-150 ease-in-out"
             >
               <Menu size={24} />
             </button>
@@ -116,7 +116,7 @@ export default function ClassroomHeader({
             </div>
             {currentActiveCourse && (
               <Link href={coursePath}>
-                <div className="border rounded-[8px] border-[#25252a] py-2 lg:block hidden px-3 hover:bg-[#25252a] cursor-pointer transition-all duration-150 ease-in-out">
+                <div className="border rounded-[8px] border-[#25252a] py-2 lg:block hidden px-3 hover:bg-[#25252a] cursor-pointer transition-colors duration-150 ease-in-out">
                   <span className="text-[14px]">{courseName}</span>
                 </div>
               </Link>
@@ -146,7 +146,7 @@ export default function ClassroomHeader({
 
         {/* Lesson Header - abaixo do header principal, apenas no mobile */}
         <div className="lg:hidden block border-t border-[#25252A]">
-          <div className="bg-[#121214]/70 backdrop-blur-xl">
+          <div className="bg-[#121214]/90">
             <div className="flex items-center justify-between px-4 py-2">
               {/* Lado esquerdo */}
               <div className="flex items-center gap-3 flex-1 min-w-0 mr-3">

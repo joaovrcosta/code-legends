@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 import { Flame } from "@phosphor-icons/react/dist/ssr";
@@ -12,6 +12,35 @@ import {
 
 export function StrikeSection() {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Fecha o dropdown durante o resize para evitar reposicionamento constante do Popper
+  useEffect(() => {
+    let timeoutRef: NodeJS.Timeout | null = null;
+    
+    const handleResize = () => {
+      // Fecha o dropdown imediatamente ao detectar resize
+      if (isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    // Debounce para evitar fechar múltiplas vezes durante resize contínuo
+    const debouncedHandleResize = () => {
+      if (timeoutRef) {
+        clearTimeout(timeoutRef);
+      }
+      timeoutRef = setTimeout(handleResize, 100);
+    };
+
+    window.addEventListener("resize", debouncedHandleResize);
+    
+    return () => {
+      window.removeEventListener("resize", debouncedHandleResize);
+      if (timeoutRef) {
+        clearTimeout(timeoutRef);
+      }
+    };
+  }, [isOpen]);
 
   return (
     <>

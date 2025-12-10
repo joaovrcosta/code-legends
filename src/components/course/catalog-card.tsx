@@ -147,7 +147,7 @@ export function CatalogCard({
   const { label, className: statusClass } = getStatusInfo(status);
   return (
     <div
-      className={`relative shadow-2xl w-full rounded-[16px] transition-all duration-300 hover:backdrop-blur-lg cursor-pointer hover:border-[#3f3f48]
+      className={`relative shadow-2xl w-full rounded-[16px] transition-colors duration-300 cursor-pointer hover:border-[#3f3f48]
     ${
       isCurrent
         ? "bg-blue-gradient-second border-[#35BED5]"

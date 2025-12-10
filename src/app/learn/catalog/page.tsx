@@ -2,7 +2,8 @@ import { NewContentCaroussel } from "@/components/learn/catolog/new-content-caro
 import { RecommendationsCarousel } from "@/components/learn/catolog/recommendations-carousel";
 import { CategoriesCarousel } from "@/components/learn/catolog/categories-carousel";
 import { MyCatalogWrapper } from "@/components/learn/catolog/my-catalog-wrapper";
-import { getUserEnrolledList, listCourses } from "@/actions";
+import { getUserEnrolledList } from "@/actions/progress";
+import { listCourses } from "@/actions/course";
 
 export default async function CoursesPage() {
   const courses = await listCourses();

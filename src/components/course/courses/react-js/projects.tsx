@@ -58,7 +58,7 @@ export function CourseProjects() {
         >
           {/* Glow/color blur externo */}
           <div
-            className={`pointer-events-none absolute -inset-3 z-0 rounded-[inherit] blur-xl opacity-60 bg-gradient-to-br ${project.glow}`}
+            className={`pointer-events-none absolute -inset-3 z-0 rounded-[inherit] blur-xl opacity-60 bg-gradient-to-br will-change-[opacity] ${project.glow}`}
             aria-hidden="true"
           />
           {/* Imagem de fundo ocupando todo o card */}

@@ -13,10 +13,12 @@ import {
 import { Headset, LogOut, User, Zap } from "lucide-react";
 import { logout } from "@/actions/auth";
 import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 
 export function UserDropdown() {
   const { data: session } = useSession();
   const user = session?.user;
+  const [open, setOpen] = useState(false);
 
   // Obtém as iniciais do nome para o fallback
   const getInitials = (name?: string | null) => {
@@ -28,9 +30,38 @@ export function UserDropdown() {
     return name[0].toUpperCase();
   };
 
+  // Fecha o dropdown durante o resize para evitar reposicionamento constante do Popper
+  useEffect(() => {
+    let timeoutRef: NodeJS.Timeout | null = null;
+    
+    const handleResize = () => {
+      // Fecha o dropdown imediatamente ao detectar resize
+      if (open) {
+        setOpen(false);
+      }
+    };
+
+    // Debounce para evitar fechar múltiplas vezes durante resize contínuo
+    const debouncedHandleResize = () => {
+      if (timeoutRef) {
+        clearTimeout(timeoutRef);
+      }
+      timeoutRef = setTimeout(handleResize, 100);
+    };
+
+    window.addEventListener("resize", debouncedHandleResize);
+    
+    return () => {
+      window.removeEventListener("resize", debouncedHandleResize);
+      if (timeoutRef) {
+        clearTimeout(timeoutRef);
+      }
+    };
+  }, [open]);
+
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <div className="hover:bg-[#25252A] p-1 rounded-full cursor-pointer">
             <Avatar className="h-[38px] w-[38px]">

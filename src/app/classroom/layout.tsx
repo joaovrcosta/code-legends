@@ -1,6 +1,6 @@
 import ClassroomHeader from "@/components/classroom/header";
-import { getUserEnrolledList } from "@/actions";
 import { getActiveCourse } from "@/actions/user/get-active-course";
+import { getUserEnrolledList } from "@/actions/progress";
 
 interface DashboardProps {
   children: React.ReactNode;
